@@ -1,0 +1,110 @@
+.active{
+    background-color: #ffc107 !important;
+}
+.nav-link{
+    color: black !important;
+}
+.nav-link.active, .footer{
+    color: white !important;
+}
+.text-yellow{
+    color: #ffc107;
+}
+
+.text-white{
+    color: white !important;
+}
+
+.header{
+    padding-left: 10% !important;
+    padding-right: 10% !important;
+}
+/* .footer{
+    background-color: rgba(0, 0, 0, 0.768) !important;
+    color: white !important;
+} */
+.back {
+    width: 100%;
+    /* position: absolute; */
+    top: 0;
+    bottom: 0;
+  }
+
+  .div-center {
+    width: 400px;
+    height: 400px;
+    background-color: #fff;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    max-width: 100%;
+    max-height: 100%;
+    overflow: auto;
+    padding: 1em 2em;
+    border-bottom: 2px solid #ccc;
+    display: table;
+  }
+
+  div.content {
+    display: table-cell;
+    vertical-align: middle;
+  }
+
+  .input-round{
+      border-radius: 10px;
+  }
+
+  input[type="checkbox"] {
+    /* Add if not using autoprefixer */
+    -webkit-appearance: none;
+    /* Remove most all native input styles */
+    appearance: none;
+    /* For iOS < 15 */
+    background-color: transparent !important;
+    /* Not removed via appearance */
+    margin: 0;
+
+    font: inherit;
+    color: black;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.15em solid black;
+    border-radius: 0.15em;
+    transform: translateY(-0.075em);
+
+    display: grid;
+    place-content: center;
+  }
+
+  input[type="checkbox"]::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    transform: scale(0);
+    transform-origin: bottom left;
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em black;
+    /* Windows High Contrast Mode */
+    background-color: CanvasText;
+  }
+
+  input[type="checkbox"]:checked::before {
+    transform: scale(1);
+    color: #ffc107 !important;
+  }
+
+  input[type="checkbox"]:focus {
+    outline: max(2px, 0.15em) solid black;
+    outline-offset: max(2px, 0.15em);
+  }
+
+  input[type="checkbox"]:disabled {
+    --form-control-color: var(--form-control-disabled);
+
+    color: var(--form-control-disabled);
+    cursor: not-allowed;
+  }
