@@ -14,18 +14,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/cv', function () {
+    return view('v1.user.cv');
+});
+
+Route::get('/cv/add', function () {
+    return view('v1.user.addcv');
+});
+
+Route::get('/profile', function () {
+    return view('v1.user.profile');
+});
 
 // Auth::routes();
 
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
-Route::get('/login', function () {
-    return view('v1.auth.login');
-});
 
 
 Auth::routes();
@@ -33,5 +42,7 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::group(['middleware' => ['auth']], function() {
-    Route::resource('cv', CVController::class);
+    // Route::resource('cv', CVController::class);
+
+
 });
