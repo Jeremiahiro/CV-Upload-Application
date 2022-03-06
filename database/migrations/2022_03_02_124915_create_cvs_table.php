@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('preferred_employment_industry');
             $table->json('hobbies');
-            $table->longText('additaionl_information');
+            $table->longText('additional_information');
             $table->string('no_of_secondary_school');
             $table->foreignId('user_id')->constrained();
             $table->foreignId('preferred_employment_city')->constrained('cities');
