@@ -134,6 +134,9 @@ class CVController extends Controller
      */
     public function destroy(CV $cV)
     {
-        //
+        if(!$cV->delete()) {
+            return 'false';
+        }
+        return 'true';
     }
 }
