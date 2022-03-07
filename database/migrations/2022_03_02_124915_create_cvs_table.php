@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\CvStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -25,6 +26,7 @@ return new class extends Migration
             $table->string('mobile_phone')->nullable();
             $table->string('home_phone')->nullable();
             $table->string('email');
+            $table->string('status')->default(CvStatus::active());
             $table->string('preferred_employment_industry');
             $table->json('hobbies');
             $table->longText('additional_information');

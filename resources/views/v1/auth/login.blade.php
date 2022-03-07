@@ -3,76 +3,53 @@
 
 
 @section('main')
-
-
-
 <div class="back">
-
-
     <div class="div-center">
+        <div class="content">
 
+            <div class="text-center">
+                <h5 class="head-text">Sign In to <span class="fs-">Logo<span class="text-yellow">Name</span></span></h5>
+            </div>
 
-      <div class="content">
+            <div>
+                <div class="boxes">
+                </div>
+            </div>
 
+            <form method="POST" class="mt-4" action="{{ route('login') }}">
+              @csrf
+                <div class="mb-3">
+                  <input id="email" type="email" class="form-control input-round @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Mail">
 
-        <div class="text-center">
-            <h5 class="head-text">Sign In to <span class="fs-">Logo<span class="text-yellow">Name</span></span></h3>
-            {{-- <div class="container mt-4">
-                <div class="row">
-                  <div class="col firstcol">
-                <span>
-                <input type="checkbox" id="box-1">
-                <label for="box-1">Jobseeker</label>
+                  @error('email')
+                      <span class="invalid-feedback" role="alert">
+                          <strong>{{ $message }}</strong>
+                      </span>
+                  @enderror
+                </div>
+                <div class="mb-3">
+                  <input id="password" type="password" class="form-control input-round @error('password') is-invalid @enderror" name="password" placeholder="Password" required autocomplete="current-password">
 
-                </span>
-                  </div>
-                  <div class="col">
-                    <input type="checkbox" id="box-3">
-                    <label for="box-3">Recruitment</label>
-                  </div>
-                  </div>
-              </div> --}}
+                  @error('password')
+                      <span class="invalid-feedback" role="alert">
+                          <strong>{{ $message }}</strong>
+                      </span>
+                  @enderror
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-custom">{{ __('Log In') }}</button>
+                </div>
+            </form>
+
+            @if (Route::has('password.request'))
+            <div class="text-center mt-4">
+                <small>{{ __('Forgot Password?') }}
+                  <a class="text-yellow" href="{{ route('password.request') }}">Check</a>
+                </small>
+            </div>
+            @endif
 
         </div>
-        <div>
-		{{-- <div class="tag">Checkbox Big</div> --}}
-		<div class="boxes">
-  {{-- <input type="checkbox" id="box-1"> --}}
-
-
-  {{-- <input type="checkbox" id="box-2" checked> --}}
-  {{-- <label for="box-2">Gentrify pickled kale chips </label> --}}
-
-  {{-- <input type="checkbox" id="box-3"> --}}
-
-</div>
-	</div>
-        <form class="mt-4">
-            <div class="mb-3">
-              <input placeholder="Mail" class="form-control  input-round" autocomplete="off" id="exampleInputEmail1" aria-describedby="emailHelp">
-            </div>
-            <div class="mb-3">
-              <input type="password" placeholder="Password" class="form-control input-round" id="exampleInputPassword1">
-            </div>
-            {{-- <div class="mb-3">
-                <input type="password" placeholder="Confirm Password" class="form-control input-round" id="exampleInputPassword1">
-              </div> --}}
-
-            <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-primary btn-custom">Log in</button>
-            </div>
-          </form>
-          <div class="text-center mt-4">
-
-      <small>Forgot Password? <a class="text-yellow" href="{{ route('password.request') }}">Check</a></small>
-          </div>
-        </div>
-
-
-      </span>
     </div>
-
-
+</div>
 @endsection
-
-

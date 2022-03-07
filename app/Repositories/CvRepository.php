@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\Enums\CvStatus;
+use App\Http\Resources\CVResource;
 use App\Models\Cv;
 use App\Models\JobExperience;
 use App\Models\JobExperienceRoles;
@@ -14,6 +16,13 @@ use Illuminate\Http\Request;
 
 class CvRepository
 {
+
+    public function handle_get_data(Request $request)
+    {
+        $cv = Cv::where('status', CvStatus::active())->where('user_id', auth()->user()->id);
+        return new CVResource($cv);
+    }
+    
     public function handle_create_cv(Request $request)
     {   
         $cv = new Cv();

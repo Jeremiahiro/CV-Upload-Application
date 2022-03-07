@@ -34,3 +34,9 @@
 html{
     font-family: 'Roboto', sans-serif;
 }
+
+.btn-outline-secondary:hover {
+  background-color: #ffc107 !important;
+  color: #000 !important;
+  border-color: #ffc107 !important;
+}
