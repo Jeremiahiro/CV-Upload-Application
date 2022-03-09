@@ -5,3 +5,47 @@
 main > .container {
   padding: 60px 15px 0;
 }
+
+.br {
+  border-right: 1px solid #333146;
+}
+
+.base_icons {
+  margin: 4px;
+  padding: 2px 4px;
+  color: white;
+}
+
+.base_icons:hover{
+  margin: 4px;
+  color: #ffc107;
+}
+
+.base_icon_container {
+  overflow: hidden;
+  text-align: center;
+}
+
+.base_icon_container:before,
+.base_icon_container:after {
+  background-color: #fff;
+  content: "";
+  display: inline-block;
+  height: 1px;
+  position: relative;
+  vertical-align: middle;
+  width: 50%;
+}
+
+.base_icon_container:before {
+  right: 0.5em;
+  margin-left: -50%;
+  top: 0.6em;
+}
+
+.base_icon_container:after {
+  left: 0.5em;
+  margin-right: -50%;
+  top: 0.6em;
+}
+

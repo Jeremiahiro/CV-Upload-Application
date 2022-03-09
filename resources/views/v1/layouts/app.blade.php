@@ -11,8 +11,6 @@
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/sticky-footer-navbar/">
 
-
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -20,7 +18,7 @@
         rel="stylesheet">
     <!-- Bootstrap core CSS -->
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-
+    <script src="https://kit.fontawesome.com/cce62db690.js" crossorigin="anonymous"></script>
     <style>
         .bd-placeholder-img {
             font-size: 1.125rem;
@@ -30,19 +28,17 @@
             user-select: none;
         }
 
-        @media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
-            }
+        <blade media|%20(min-width%3A%20768px)%20%7B%0D>.bd-placeholder-img-lg {
+            font-size: 3.5rem;
+        }
         }
 
         body {
-            font-size:small;
+            font-size: small;
             font-weight: 600;
         }
 
     </style>
-
 
     <!-- Custom styles for this template -->
     <link href="{{ asset('css/sticky-footer-navbar.css') }}" rel="stylesheet">
@@ -54,29 +50,32 @@
 
     <header>
         <!-- Fixed navbar -->
-        <nav class="navbar-dark fixed-top">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light" style="z-index: 100000;">
             @include('v1.layouts.header')
         </nav>
+
+        {{-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+        </nav> --}}
+
+
     </header>
+
 
     <!-- Begin page content -->
     <main class="m">
-
-
-
         @yield('main')
-        </main>
+    </main>
 
-        <footer class="footer mt-auto py-3 bg-dark">
-            <div class="">
-                @include('v1.layouts.footer')
-            </div>
-        </footer>
+    <footer class="footer mt-auto py-3 bg-dark">
+        <div class="">
+            @include('v1.layouts.footer')
+        </div>
+    </footer>
+
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 
 
-        <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+</body>
 
-
-    </body>
-
-    </html>
+</html>

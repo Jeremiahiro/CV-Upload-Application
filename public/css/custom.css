@@ -71,9 +71,9 @@
 
 
 /*Checkboxes styles*/
-input[type="checkbox"] { display: none; }
+input[type="radio"] { display: none; }
 
-input[type="checkbox"] + label {
+input[type="radio"] + label {
   display: block;
   position: relative;
   margin-bottom: 20px;
@@ -85,9 +85,9 @@ input[type="checkbox"] + label {
   -ms-user-select: none;
 }
 
-input[type="checkbox"] + label:last-child { margin-bottom: 0; }
+input[type="radio"] + label:last-child { margin-bottom: 0; }
 
-input[type="checkbox"] + label:before {
+input[type="radio"] + label:before {
   content: '';
   display: block;
   width: 15px;
@@ -102,7 +102,7 @@ input[type="checkbox"] + label:before {
   transition: all .12s, border-color .08s;
 }
 
-input[type="checkbox"]:checked + label:before {
+input[type="radio"]:checked + label:before {
   width: 10px;
   top: -5px;
   left: 5px;
@@ -115,3 +115,19 @@ input[type="checkbox"]:checked + label:before {
   transform: rotate(45deg);
 }
 
+
+@media screen and (max-width: 780px) {
+    .sign_up_btn{
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .register-page{
+        margin-top: 100px;
+    }
+  }
+
+
+.nav-item{
+    margin-right: 10px;
+}

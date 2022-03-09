@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CVController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,12 +15,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::get('/cv', function () {
     return view('v1.user.cv');
+});
+
+Route::get('/cv/all', function () {
+    return view('v1.user.cv_all');
 });
 
 Route::get('/cv/add', function () {
@@ -30,19 +32,18 @@ Route::get('/profile', function () {
     return view('v1.user.profile');
 });
 
-// Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-
-
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::group(['middleware' => ['auth']], function() {
+    Route::get('/', function () {
+        return view('welcome');
+    });
+    // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     // Route::resource('cv', CVController::class);
+    // Route::post('/update/{type}', [App\Http\Controllers\CVController::class, 'update'])->name('update.cv.data');
 
 
 });
