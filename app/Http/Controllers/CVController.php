@@ -8,13 +8,13 @@ use Illuminate\Http\Request;
 
 class CVController extends Controller
 {
-
     private $cvServices;
 
     public function __construct(CvRepository $cvServices)
     {
         $this->cvServices = $cvServices;
-        $this->middleware('permission:view-cv|create-cv|update-cv|delete-cv', ['only' => ['index','show']]);
+        $this->middleware('is_profile_complete');
+        $this->middleware('permission:view-cv', ['only' => ['index','show']]);
         $this->middleware('permission:create-cv', ['only' => ['create','store']]);
         $this->middleware('permission:update-cv', ['only' => ['edit','update']]);
         $this->middleware('permission:delete-cv', ['only' => ['destroy']]);
@@ -30,7 +30,7 @@ class CVController extends Controller
     {
         $data = $this->cvServices->handle_get_data($request);
         return $data;
-        // return view('')
+        return view('v1.cv.index');
     }
 
     /**
@@ -40,7 +40,7 @@ class CVController extends Controller
      */
     public function create()
     {
-        //
+        return view('v1.cv.create');
     }
 
     /**

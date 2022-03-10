@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CVController;
+use App\Http\Controllers\UserContorller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -32,18 +33,16 @@ Route::get('/profile', function () {
     return view('v1.user.profile');
 });
 
+Auth::routes(['verify' => true]);
 
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Route::group(['middleware' => ['auth']], function() {
-    Route::get('/', function () {
-        return view('welcome');
-    });
-    // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    // Route::resource('cv', CVController::class);
-    // Route::post('/update/{type}', [App\Http\Controllers\CVController::class, 'update'])->name('update.cv.data');
-
-
+Route::group(['middleware' => ['auth', 'verified']], function() {
+    // Route::group(['middleware' => ['is_profile_complete']], function() {
+        Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+        Route::resource('cv', CVController::class);
+        Route::resource('user', UserContorller::class);
+        Route::post('user/password', [UserContorller::class, 'update_password'])->name('update.password');
+        Route::post('user/image', [UserContorller::class, 'update_image']);
+        // Route::post('/update/{type}', [App\Http\Controllers\CVController::class, 'update'])->name('update.cv.data');
+    // });
 });
+

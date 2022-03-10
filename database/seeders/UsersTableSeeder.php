@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\UserType;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -16,26 +17,38 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         /** @var User */
-        $super_admin = User::create([
-            'email' => 'admin@cvupload.text',
-            'type' => UserType::Admin(),
-            'password' => '$2y$10$LQjAQ9xYxKE8Zn9SMeTFTuwKwjlV7/.CagzTblKen9BDfU4QSr4mm',
-            'email_verified_at' => now()
+
+        // super admin
+        $admin = User::factory()
+            ->create([
+                'email' => 'admin@cvupload.text',
+                'type' => UserType::Admin(),
+                'password' => '$2y$10$LQjAQ9xYxKE8Zn9SMeTFTuwKwjlV7/.CagzTblKen9BDfU4QSr4mm',
+                'email_verified_at' => now()
         ]);
 
-        $recruiter = User::create([
-            'email' => 'recruiter@cvupload.text',
-            'type' => UserType::Recruiter(),
-            'password' => '$2y$10$LQjAQ9xYxKE8Zn9SMeTFTuwKwjlV7/.CagzTblKen9BDfU4QSr4mm',
-            'email_verified_at' => now()
+        $admin->assignRole(Role::where('name', 'admin')->get());
+
+        $recruiter = User::factory()
+            ->create([
+                'email' => 'recruiter@cvupload.text',
+                'type' => UserType::Recruiter(),
+                'password' => '$2y$10$LQjAQ9xYxKE8Zn9SMeTFTuwKwjlV7/.CagzTblKen9BDfU4QSr4mm',
+                'email_verified_at' => now()
         ]);
 
-        $jobseeker = User::create([
-            'email' => 'jobseeker@cvupload.text',
-            'type' => UserType::Jobseeker(),
-            'password' => '$2y$10$LQjAQ9xYxKE8Zn9SMeTFTuwKwjlV7/.CagzTblKen9BDfU4QSr4mm',
-            'email_verified_at' => now()
+        $recruiter->assignRole(Role::where('name', 'recruiter')->get());
+
+        $jobseeker = User::factory()
+            ->create([
+                'email' => 'jobseeker@cvupload.text',
+                'type' => UserType::Recruiter(),
+                'password' => '$2y$10$LQjAQ9xYxKE8Zn9SMeTFTuwKwjlV7/.CagzTblKen9BDfU4QSr4mm',
+                'email_verified_at' => now()
         ]);
+
+        $jobseeker->assignRole(Role::where('name', 'jobseeker')->get());
+
 
     }
 }

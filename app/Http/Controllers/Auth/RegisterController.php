@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\UserType;
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class RegisterController extends Controller
 {
@@ -31,7 +34,7 @@ class RegisterController extends Controller
      */
     public function showRegistrationForm()
     {
-        return view('v1.auth.register');
+        return view('auth.register');
     }
 
     /**
@@ -39,7 +42,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = RouteServiceProvider::PROFILE;
 
     /**
      * Create a new controller instance.
@@ -60,7 +63,7 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+            'user_type' => ['required', Rule::in(UserType::getValues())],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -74,10 +77,22 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
+        $user = User::create([
+            'type' => $data['user_type'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+
+        switch ($data['user_type']) {
+            case UserType::Recruiter():
+                $user->assignRole(Role::where('name', 'recruiter')->get());
+                break;
+            
+            default:
+                $user->assignRole(Role::where('name', 'jobseeker')->get());
+                break;
+        }
+
+        return $user;
     }
 }

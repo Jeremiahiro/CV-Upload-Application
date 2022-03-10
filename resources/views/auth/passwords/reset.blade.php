@@ -1,5 +1,7 @@
 @extends('v1.layouts.app')
-
+@section('title')
+    Reset Password
+@endsection
 @section('main')
 <div class="back">
     <div class="div-center">
@@ -13,6 +15,13 @@
             </div>
             <form method="POST" action="{{ route('password.update') }}">
                 @csrf
+                <div>
+                    <small class="text-danger">
+                        @foreach($errors->all() as $error)
+                            {{ $error  }}
+                        @endforeach
+                    </small>
+                </div>
                 <div class="mb-3">
                     <input id="email" type="email" placeholder="Mail"
                         class="form-control input-round @error('email') is-invalid @enderror" name="email"
@@ -21,7 +30,7 @@
 
                     @error('email')
                         <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
+                        <small>{{ $message }}</small>
                         </span>
                     @enderror
                 </div>
@@ -32,7 +41,7 @@
 
                     @error('password')
                         <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
+                        <small>{{ $message }}</small>
                         </span>
                     @enderror
                 </div>
@@ -44,7 +53,7 @@
 
                 <div class="d-grid gap-2">
                     <button type="submit"
-                        class="btn btn-primary btn-custom">{{ __('Reset Password') }}</button>
+                        class="btn btn-warning btn-custom">{{ __('Reset Password') }}</button>
                 </div>
             </form>
         </div>

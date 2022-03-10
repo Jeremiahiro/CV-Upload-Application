@@ -24,6 +24,7 @@ class User extends Authenticatable
         'last_name',
         'email',
         'password',
+        'type'
     ];
 
     /**
@@ -48,5 +49,11 @@ class User extends Authenticatable
     public function cv(): HasOne
     {
         return $this->hasone(Cv::class, 'user_id');
+    }
+
+    public function full_name()
+    {
+        $name = $this->first_name . ' ' . $this->last_name;
+        return $name;
     }
 }

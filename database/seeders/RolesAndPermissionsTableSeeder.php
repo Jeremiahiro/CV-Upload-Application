@@ -20,7 +20,7 @@ class RolesAndPermissionsTableSeeder extends Seeder
             'recruiter',
             'jobseeker',
          ];
-    
+
         foreach ($roles as $role) {
             Role::create(['name' => $role]);
         }
