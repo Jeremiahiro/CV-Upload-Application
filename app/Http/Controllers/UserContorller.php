@@ -41,7 +41,6 @@ class UserContorller extends Controller
         $request->validate([
             'first_name'    => ['required', 'string'],
             'last_name'     => ['required', 'string'],
-            'photo_url'     => ['required', 'image', 'mimes:jpg,png,jpeg'],
         ]);
 
         $user = auth()->user();
@@ -71,14 +70,14 @@ class UserContorller extends Controller
     public function update_image(Request $request)
     {
         $request->validate([
-            'avatar_url' => ['required', 'image', 'max:5120'],
+            'photo_url'     => ['required', 'image', 'max:5120'],
         ]);
 
         $uploadManager = new UploadManager();
-        $path = $uploadManager->saveFile($request['avatar_url']);
+        $path = $uploadManager->saveFile($request['photo_url']);
 
         auth()->user()->update(['avatar_url' => $path]);
 
-        return back()->with('success', 'Profile Image Successfully');
+        return back()->with('success', 'Profile Image Updated Successfully');
     }
 }

@@ -24,7 +24,8 @@ class User extends Authenticatable
         'last_name',
         'email',
         'password',
-        'type'
+        'type',
+        'avatar_url'
     ];
 
     /**
@@ -56,4 +57,5 @@ class User extends Authenticatable
         $name = $this->first_name . ' ' . $this->last_name;
         return $name;
     }
+
 }

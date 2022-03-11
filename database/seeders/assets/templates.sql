@@ -1,0 +1,9 @@
+SET FOREIGN_KEY_CHECKS=0;
+
+INSERT INTO `template` (`id`, `name`) VALUES
+
+
+
+
+
+SET FOREIGN_KEY_CHECKS=1;

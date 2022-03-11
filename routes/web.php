@@ -45,7 +45,7 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
         Route::resource('cv', CVController::class);
         Route::resource('user', UserContorller::class);
         Route::post('user/password', [UserContorller::class, 'update_password'])->name('update.password');
-        Route::post('user/image', [UserContorller::class, 'update_image']);
+        Route::post('user/image', [UserContorller::class, 'update_image'])->name('update.image');
         // Route::post('/update/{type}', [App\Http\Controllers\CVController::class, 'update'])->name('update.cv.data');
     // });
 });

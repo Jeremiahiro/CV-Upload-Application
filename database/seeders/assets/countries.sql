@@ -1,6 +1,7 @@
 SET FOREIGN_KEY_CHECKS=0;
 
 INSERT INTO `countries` (`id`, `sortname`, `name`, `phonecode`) VALUES
+
 (1, 'AF', 'Afghanistan', 93),
 (2, 'AL', 'Albania', 355),
 (3, 'DZ', 'Algeria', 213),

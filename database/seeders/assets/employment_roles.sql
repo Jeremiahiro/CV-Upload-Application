@@ -1,6 +1,7 @@
 SET FOREIGN_KEY_CHECKS=0;
 
 INSERT INTO `employement_roles` (`id`, `name`) VALUES
+
 (1, 'Administrative and Clerical');
 (2, 'Business Development');
 (3, 'Management and Planning');

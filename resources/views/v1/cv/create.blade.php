@@ -4,7 +4,7 @@ Add CV
 @endsection
 @section('main')
 
-<div class="d-flex flex-column" id="content-wrapper">
+<dgitiv class="d-flex flex-column" id="content-wrapper">
     <div id="content" style="background: #ffffff;">
         <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top"
             style="border-bottom: 1px solid var(--bs-yellow);">
@@ -903,6 +903,6 @@ Add CV
             </section>
         </div>
     </div>
-</div>
+</dgitiv>
 
 @endsection
