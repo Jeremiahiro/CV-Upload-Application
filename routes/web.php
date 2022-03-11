@@ -25,6 +25,10 @@ Route::get('/cv/all', function () {
     return view('v1.user.cv_all');
 });
 
+Route::get('/cv/view', function () {
+    return view('v1.user.cv_view');
+});
+
 Route::get('/cv/add', function () {
     return view('v1.user.addcv');
 });
