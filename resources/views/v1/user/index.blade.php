@@ -29,7 +29,13 @@
                     <div style="text-align: left;">
                         <div class="row align-items-center">
                             <div class="col col-4">
-                                <form class="position-relative text-center" method="POST" action="{{ route('update.image') }}"  enctype="multipart/form-data">
+                                <form
+                                    class="position-relative text-center"
+                                    method="POST"
+                                    action="{{ route('update.image') }}" 
+                                    enctype="multipart/form-data"
+                                    onsubmit="$('#profile_photo-btn').attr('disabled', true)"
+                                >
                                     @csrf
                                     <div class="position-relative">
                                         <label for="profile_photo">
@@ -65,7 +71,13 @@
                                         </svg>&nbsp;Edit
                                     </a>
                                 </div>
-                                <form method="POST" action="{{ route('user.update', $user->id) }}" class="text-dark my-3" id="update_profile_form">
+                                <form
+                                    method="POST"
+                                    action="{{ route('user.update', $user->id) }}"
+                                    class="text-dark my-3"
+                                    id="update_profile_form"
+                                    onsubmit="$('#info_submit-btn').attr('disabled', true)"
+                                >
                                     @csrf
                                     @method('PUT')
                                     <div class="d-flex justify-content-between align-items-start">
@@ -102,13 +114,19 @@
                                     <button
                                         class="btn btn btn-warning px-4"
                                         type="submit"
+                                        id="info_submit-btn"
                                     >
                                         Save
                                     </button>
                                 </form>
                             </div>
                         </div>
-                        <form method="POST" action="{{ route('update.password') }}" class="text-dark my-3">
+                        <form
+                            method="POST"
+                            action="{{ route('update.password') }}"
+                            class="text-dark my-3"
+                            onsubmit="$('#update_password-btn').attr('disabled', true)"
+                        >
                             @csrf
                             <h5 class="font-weight-bold">
                                 Edit Password
@@ -147,6 +165,7 @@
                             <button
                                 class="btn btn btn-warning px-4"
                                 type="submit"
+                                id="update_password-btn"
                             >
                                 Save
                             </button>
