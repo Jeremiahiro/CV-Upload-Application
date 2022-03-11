@@ -21,7 +21,7 @@ class UsersTableSeeder extends Seeder
         // super admin
         $admin = User::factory()
             ->create([
-                'email' => 'admin@cvupload.text',
+                'email' => 'admin@cvupload.test',
                 'type' => UserType::Admin(),
                 'password' => '$2y$10$LQjAQ9xYxKE8Zn9SMeTFTuwKwjlV7/.CagzTblKen9BDfU4QSr4mm',
                 'email_verified_at' => now()
@@ -31,7 +31,7 @@ class UsersTableSeeder extends Seeder
 
         $recruiter = User::factory()
             ->create([
-                'email' => 'recruiter@cvupload.text',
+                'email' => 'recruiter@cvupload.test',
                 'type' => UserType::Recruiter(),
                 'password' => '$2y$10$LQjAQ9xYxKE8Zn9SMeTFTuwKwjlV7/.CagzTblKen9BDfU4QSr4mm',
                 'email_verified_at' => now()
@@ -41,7 +41,7 @@ class UsersTableSeeder extends Seeder
 
         $jobseeker = User::factory()
             ->create([
-                'email' => 'jobseeker@cvupload.text',
+                'email' => 'jobseeker@cvupload.test',
                 'type' => UserType::Recruiter(),
                 'password' => '$2y$10$LQjAQ9xYxKE8Zn9SMeTFTuwKwjlV7/.CagzTblKen9BDfU4QSr4mm',
                 'email_verified_at' => now()
