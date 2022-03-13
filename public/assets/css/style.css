@@ -10,7 +10,12 @@ body{
     color: var(--bs-yellow);
 }
 
-a {
+.font-bold {
+    font-weight: bold;
+}
+
+.form-control, .form-select {
+    height: 40px;
 }
 
 .js-btn-prev, .js-btn-prev:hover{

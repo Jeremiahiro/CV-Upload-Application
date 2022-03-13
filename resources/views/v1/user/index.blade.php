@@ -1,21 +1,12 @@
-@extends('v1.user.layouts.app')
+@extends('v1.layouts.app')
 @section('title')
     Settings
 @endsection
 @section('main')
 
 <div class="d-flex flex-column" id="content-wrapper">
-    <div id="content" style="background: rgb(255,255,255);">
-        <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top"
-            style="border-bottom: 1px solid var(--bs-yellow);">
-            <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3"
-                    id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
-                <h3 class="fw-bold" style="color: black;font-weight: bold;width: auto;">Settings</h3>
-                <form class="d-none d-sm-inline-block me-auto ms-md-3 my-2 my-md-0 mw-100 navbar-search">
-                    <div class="input-group"></div>
-                </form>
-            </div>
-        </nav>
+    <div id="content">
+        <x-top-nav title="Settings" />
         <div class="container-fluid px-5 w-100">
             @if (!$user->full_name())
                 <div class="alert alert-warning alert-dismissible fade show alert-fixed" role="alert">
