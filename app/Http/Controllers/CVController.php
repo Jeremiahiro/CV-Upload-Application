@@ -4,11 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ContactDetailsRequest;
 use App\Http\Requests\CVRequest;
+use App\Http\Requests\SecondaryEducationRequest;
+use App\Http\Requests\TertiaryInstitutionRequest;
 use App\Models\CV;
 use App\Models\JobExperience;
+use App\Models\SecondaryEducation;
+use App\Models\TertiaryEducation;
+use App\Models\TertiaryInstitutionTypes;
 use App\Repositories\CvRepository;
 use App\Repositories\OtherDataRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CVController extends Controller
 {
@@ -46,7 +52,9 @@ class CVController extends Controller
      */
     public function create()
     {
-        $cv = null;
+        if(!$cv = Auth::user()->cv) {
+            $cv = null;
+        }
         return view('v1.cv.create', compact(['cv']));
     }
 
@@ -58,12 +66,24 @@ class CVController extends Controller
      */
     public function store(CVRequest $request)
     {
-        return redirect()->route('cv.contact-details', 1);
-
-        if(!$response = $this->cvServices->handle_create_cv($request)){
-            return 'false';
+        if(!$cv = $this->cvServices->handle_create_cv($request)){
+            return back()->with('error', 'An error occured! Refresh and try again');
         }
-        return 'true';
+        return redirect()->route('cv.contact-details', $cv);
+    }
+
+    /**
+     * Update a newly created resource in storage.
+     *
+     * @param  \App\Http\Requests\CVRequest  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function update(CVRequest $request, CV $cv)
+    {
+        if(!$cv = $this->cvServices->handle_update_cv($request, $cv)){
+            return back()->with('error', 'An error occured! Refresh and try again');
+        }
+        return redirect()->route('cv.contact-details', $cv);
     }
 
     /**
@@ -72,7 +92,7 @@ class CVController extends Controller
      * @param  \App\Models\CV  $cV
      * 
     */
-    public function contact_details($cv) 
+    public function contact_details(Cv $cv) 
     {
         $countries = $this->otherServices->get_countries();
         return view('v1.cv.contact-details', compact(['cv', 'countries']));
@@ -85,9 +105,13 @@ class CVController extends Controller
      * @param  \App\Models\CV  $cV
      * 
     */
-    public function update_contact_details(ContactDetailsRequest $request, $cv) 
+    public function update_contact_details(ContactDetailsRequest $request, CV $cv) 
     {
-             return redirect()->route('cv.secondary-education', $cv);
+        if(!$cv = $this->cvServices->handle_update_contact_details($request, $cv)){
+            return back()->with('error', 'An error occured! Refresh and try again');
+        }
+        return redirect()->route('cv.secondary-education', $cv);
+
     }
 
     /**
@@ -96,22 +120,155 @@ class CVController extends Controller
      * @param  \App\Models\CV  $cV
      * 
     */
-    public function secondary_education($cv) 
+    public function secondary_education(CV $cv) 
     {
-        return view('v1.cv.contact-details', compact(['cv']));
+        $qualifications = $this->otherServices->get_secondary_qualifications();
+        return view('v1.cv.secondary-education', compact(['cv', 'qualifications']));
     }
 
     /**
-     * Update for contact details
+     * Create for secondary education details
      * 
      * @param  \App\Http\Requests\ContactDetailsRequest  $request
      * @param  \App\Models\CV  $cV
      * 
     */
-    public function update_secondary_education(ContactDetailsRequest $request, $cv) 
+    public function create_secondary_education(SecondaryEducationRequest $request, CV $cv) 
     {
-        return view('v1.cv.secondary-education', compact(['cv']));
+        if(!$this->cvServices->handle_create_secondary_education($request, $cv)){
+            return back()->with('error', 'An error occured! Refresh and try again');
+        }
+
+        return redirect()->back()->with('success', 'Operation Successful');
     }
+
+    /**
+     * Update for secondary education details
+     * 
+     * @param  \App\Http\Requests\ContactDetailsRequest  $request
+     * @param  \App\Models\CV  $cV
+     * 
+    */
+    public function update_secondary_education(SecondaryEducationRequest $request, CV $cv, SecondaryEducation $secondary_education) 
+    {
+        if(!$this->cvServices->handle_update_secondary_education($request, $cv, $secondary_education)){
+            return back()->with('error', 'An error occured! Refresh and try again');
+        }
+
+        return redirect()->back()->with('success', 'Operation Successful');
+    }
+
+        
+    /**
+     * Delete for secondary education details
+     * 
+     * @param  \App\Models\CV  $cV
+     * @param  \App\Models\SecondaryEducation  $secondary_edu
+     * 
+    */
+    public function delete_secondary_education(CV $cv, SecondaryEducation $secondary_edu) 
+    {
+        if(!$secondary_edu->delete()) {
+            return redirect()->back()->with('success', 'OOPS Something went wrong');
+        }
+        return redirect()->back()->with('success', 'Operation Successful');
+    }
+
+    /**
+     * Display view for tertiary institution
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\CV  $cV
+     * 
+    */
+    public function tertiary_institution(Cv $cv) 
+    {
+        $tertiary_types = $this->otherServices->get_tertiary_institutions_types();
+        $qualifications = $this->otherServices->get_tertiary_qualifications();
+
+        return view('v1.cv.tertiary-institution', compact(['cv', 'tertiary_types', 'qualifications']));
+    }
+
+    
+    /**
+     * Create for tertiary institution
+     * 
+     * @param  \App\Http\Requests\ContactDetailsRequest  $request
+     * @param  \App\Models\CV  $cV
+     * 
+    */
+    public function create_tertiary_institution(TertiaryInstitutionRequest $request, CV $cv) 
+    {
+        if(!$this->cvServices->handle_create_tertiary_education($request, $cv)){
+            return back()->with('error', 'An error occured! Refresh and try again');
+        }
+
+        return redirect()->back()->with('success', 'Operation Successful');
+    }
+
+    /**
+     * Update for tertiary institution
+     * 
+     * @param  \App\Http\Requests\ContactDetailsRequest  $request
+     * @param  \App\Models\CV  $cV
+     * 
+    */
+    public function update_tertiary_institution(TertiaryInstitutionRequest $request, CV $cv, TertiaryEducation $tertiary_edu) 
+    {
+        if(!$this->cvServices->handle_update_tertiary_education($request, $cv, $tertiary_edu)){
+            return back()->with('error', 'An error occured! Refresh and try again');
+        }
+
+        return redirect()->back()->with('success', 'Operation Successful');
+    }
+
+        
+    /**
+     * Delete for tertiary education details
+     * 
+     * @param  \App\Models\CV  $cV
+     * @param  \App\Models\TertiaryEducation  $tertiary_edu
+     * 
+    */
+    public function delete_tertiary_institution(CV $cv, TertiaryEducation $tertiary_edu) 
+    {
+        if(!$tertiary_edu->delete()) {
+            return redirect()->back()->with('success', 'OOPS Something went wrong');
+        }
+        return redirect()->back()->with('success', 'Operation Successful');
+    }
+
+    
+    /**
+     * Display view for Employment History
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\CV  $cV
+     * 
+    */
+    public function employement_history(Cv $cv) 
+    {
+        $sectors = $this->otherServices->get_industry_sector();
+        return view('v1.cv.employment-history', compact(['cv', 'sectors']));
+    }
+
+    /**
+     * Update for Employment History
+     * 
+     * @param  \App\Http\Requests\ContactDetailsRequest  $request
+     * @param  \App\Models\CV  $cV
+     * 
+    */
+    public function update_employement_history(ContactDetailsRequest $request, CV $cv) 
+    {
+        
+
+        // if(!$cv = $this->cvServices->handle_update_contact_details($request, $cv)){
+        //     return back()->with('error', 'An error occured! Refresh and try again');
+        // }
+        // return redirect()->route('cv.secondary-education', $cv);
+
+    }
+
+
 
     /**
      * Display the specified resource.

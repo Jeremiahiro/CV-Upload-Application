@@ -20,4 +20,9 @@ class JobExperience extends Model
     {
         return $this->hasMany(JobExperienceRoles::class);
     }
+
+    public function sector(): BelongsTo
+    {
+        return $this->belongsTo(IndustrialSector::class);
+    }
 }

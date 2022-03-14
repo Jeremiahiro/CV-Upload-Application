@@ -13,15 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tertiary_education', function (Blueprint $table) {
+        Schema::create('tertiary_institution_courses_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('type');
-            $table->string('other_type')->nullable();
-            $table->date('start_date');
-            $table->date('end_date');
-            $table->string('qualification');
-            $table->foreignId('cv_id')->constrained();
+            $table->foreignId('institution_type_id')->constrained('tertiary_institution_types');
             $table->timestamps();
         });
     }
@@ -33,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tertiary_education');
+        Schema::dropIfExists('tertiary_institution_courses_types');
     }
 };

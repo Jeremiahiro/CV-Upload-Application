@@ -16,7 +16,6 @@ CREATE TABLE IF NOT EXISTS `states` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4121 ;
 
 
-
 INSERT INTO `states` (`id`, `name`, `country_id`) VALUES
 (1, 'Andaman and Nicobar Islands', 101),
 (2, 'Andhra Pradesh', 101),

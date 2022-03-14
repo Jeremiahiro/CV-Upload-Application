@@ -10,6 +10,8 @@ class TertiaryEducation extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function cv(): BelongsTo
     {
         return $this->belongsTo(Cv::class);

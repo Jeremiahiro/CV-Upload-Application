@@ -13,9 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tertiary_institution_types', function (Blueprint $table) {
+        Schema::create('tertiary_institutions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->foreignId('tertiary_institution_type_id')->constrained();
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tertiary_institution_types');
+        Schema::dropIfExists('tertiary_institutions');
     }
 };

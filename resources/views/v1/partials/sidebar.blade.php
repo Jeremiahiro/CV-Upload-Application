@@ -1,4 +1,4 @@
-<nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0"
+<nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 h-100"
     style="background: var(--bs-dark);">
     <div class="container-fluid p-0">
         <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0 bg-black w-100"

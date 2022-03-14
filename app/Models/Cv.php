@@ -13,19 +13,25 @@ class Cv extends Model
 {
     use HasFactory, HasUUID;
 
+    protected $guarded = [];
+
+    protected $casts = [
+        'tertiary_institution' => 'boolean'
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function country(): HasOne
+    public function country(): BelongsTo
     {
-        return $this->hasOne(Country::class, 'country_id');
+        return $this->belongsTo(Country::class);
     }
 
-    public function state(): HasOne
+    public function state(): BelongsTo
     {
-        return $this->hasOne(State::class, 'state_id');
+        return $this->belongsTo(State::class);
     }
 
     public function city(): HasOne

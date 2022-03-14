@@ -4,8 +4,9 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
-class RefereesSeeder extends Seeder
+class IndustrialSectorSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,6 +15,6 @@ class RefereesSeeder extends Seeder
      */
     public function run()
     {
-        //
+        DB::unprepared(file_get_contents(__DIR__. '/assets/industrial_sectors.sql'));
     }
 }

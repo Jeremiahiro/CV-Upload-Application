@@ -18,6 +18,11 @@ body{
     height: 40px;
 }
 
+.disabled-link, .disabled {
+    pointer-events: none;
+    cursor: default;
+}
+
 .js-btn-prev, .js-btn-prev:hover{
     color: black !important;
     margin-right: 20px;

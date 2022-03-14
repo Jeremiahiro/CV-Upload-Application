@@ -36,65 +36,102 @@ class CvRepository
         $cv->first_name = $request['first_name'];
         $cv->middle_name = $request['middle_name'];
         $cv->last_name = $request['last_name'];
-        $cv->dob = $request['dob'];
+        $cv->dob = $request['date_of_birth'];
         $cv->sex = $request['sex'];
-        $cv->town = $request['town'];
-        $cv->street = $request['street'];
-        $cv->mobile_phone = $request['mobile_phone'];
-        $cv->home_phone = $request['home_phone'];
-        $cv->email = $request['email'];
-        $cv->preferred_employment_industry = $request['preferred_employment_industry'];
-        $cv->hobbies = $request['hobbies'];
-        $cv->additional_information = $request['additional_information'];
-        $cv->no_of_secondary_school = $request['no_of_secondary_school'];
-        $cv->preferred_employment_city = $request['preferred_employment_city'];
-        $cv->country_id = $request['country_id'];
-        $cv->state_id = $request['state_id'];
-        $cv->city_id = $request['city_id'];
+        // $cv->town = $request['town'];
+        // $cv->street = $request['street'];
+        // $cv->mobile_phone = $request['mobile_phone'];
+        // $cv->home_phone = $request['home_phone'];
+        // $cv->email = $request['email'];
+        // $cv->preferred_employment_industry = $request['preferred_employment_industry'];
+        // $cv->hobbies = $request['hobbies'];
+        // $cv->additional_information = $request['additional_information'];
+        // $cv->no_of_secondary_school = $request['no_of_secondary_school'];
+        // $cv->preferred_employment_city = $request['preferred_employment_city'];
+        // $cv->country_id = $request['country_id'];
+        // $cv->state_id = $request['state_id'];
+        // $cv->city_id = $request['city_id'];
         $cv->user_id = auth()->user()->id;
-        return $cv->save();
+        $cv->save();
+        return $cv;
     }
 
-    public function handle_update_secondary_education(Request $request, Cv $cv, $secondary_education_id = null)
+    public function handle_update_contact_details(Request $request, Cv $cv)
     {   
-        $secondary_education = SecondaryEducation::updateOrCreate(
-            [
-                'id' => $secondary_education_id,
-                'cv_id' => $cv->id,
-            ],
-            [
+        $cv->town = $request['town'];
+        $cv->country_id = $request['country'];
+        $cv->state_id = $request['state'];
+        $cv->street = $request['street'];
+        $cv->mobile_phone = $request['mobile_phone'] ?? '';
+        $cv->home_phone = $request['home_phone'] ?? '';
+        $cv->email = $request['email'];
+        $cv->save();
+        return $cv;
+    }
+
+    public function handle_create_secondary_education(Request $request, Cv $cv)
+    {   
+        $secondary_education = SecondaryEducation::create([
                 'name' => $request['name'],
                 'start_date' => $request['start_date'],
                 'end_date' => $request['end_date'],
-                'qualification' => $request['qualification'],
-                'status' => $request['status'],
+                'secondary_school_qualifications_id' => $request['qualification'],
                 'cv_id' => $cv['id'],
-            ]
-        );
+        ]);
+
+        $cv->update([
+            'tertiary_institution' => $request['tertiary_institution'],
+            'no_of_secondary_school' => $request['no_of_secondary_school']
+        ]);
 
         return $secondary_education;
     }
 
-    public function handle_update_tertiary_education(Request $request, Cv $cv, $tertiary_education_id = null)
+    public function handle_update_secondary_education(Request $request, Cv $cv, SecondaryEducation $secondary_education)
     {   
-        $tertiary_education = TertiaryEducation::updateOrCreate(
-            [
-                'id' => $tertiary_education_id,
-                'cv_id' => $cv->id,
-            ],
-            [
-                'name' => $request['name'],
-                'type' => $request['type'],
-                'other_type' => $request['other_type'],
+        $secondary_education->update([
+            'name' => $request['name'],
+            'start_date' => $request['start_date'],
+            'end_date' => $request['end_date'],
+            'secondary_school_qualifications_id' => $request['qualification'],
+        ]);
+
+
+        return $secondary_education;
+    }
+
+    public function handle_create_tertiary_education(Request $request, Cv $cv)
+    {   
+        $secondary_education = TertiaryEducation::create([
+                'name' => $request['name_of_institution'],
+                'type' => $request['type_of_institution'],
+                'other_type' => $request['other_tertiary_institution'],
                 'start_date' => $request['start_date'],
                 'end_date' => $request['end_date'],
                 'qualification' => $request['qualification'],
-                'professional_qualification' => $request['professional_qualification'],
                 'cv_id' => $cv['id'],
-            ]
-        );
+        ]);
 
-        return $tertiary_education;
+        $cv->update([
+            'professional_qualification' => $request['professional_qualification'],
+        ]);
+
+        return $secondary_education;
+    }
+
+    public function handle_update_tertiary_education(Request $request, Cv $cv, TertiaryEducation $secondary_education)
+    {   
+        $secondary_education->update([
+            'name' => $request['name_of_institution'],
+            'type' => $request['type_of_institution'],
+            'other_type' => $request['other_tertiary_institution'],
+            'start_date' => $request['start_date'],
+            'end_date' => $request['end_date'],
+            'qualification' => $request['qualification'],
+        ]);
+
+
+        return $secondary_education;
     }
 
     public function handle_update_qualification(Request $request, Cv $cv, $qualification_id = null)

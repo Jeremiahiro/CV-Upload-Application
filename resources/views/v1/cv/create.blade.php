@@ -14,7 +14,10 @@ Add CV
             </section>
             <section>
                 <div class="">
-                    <form action="{{ route('cv.store') }}" method="post" class="col-12 col-lg-8 mx-auto my-4 bg-white p-4 shadow rounded">
+                    <form action="{{ $cv ? route('cv.update', $cv['uuid']) : route('cv.store') }}" method="post" class="col-12 col-lg-8 mx-auto my-4 bg-white p-5 shadow rounded">
+                        @if ($cv)
+                            @method('PUT')
+                        @endif
                         @csrf
                         <div class="text-left mb-4">
                             <p class="font-bold text-dark m-0 p-0">Personal details</p>
@@ -63,7 +66,7 @@ Add CV
                                 type="text"
                                 class="form-control input-round @error('last_name') is-invalid @enderror"
                                 name="last_name"
-                                value="{{ old('last_name', $cv->middle_name ?? '') }}"
+                                value="{{ old('last_name', $cv->last_name ?? '') }}"
                                 placeholder="Surname / Last Name"
                                 required
                             >
@@ -81,10 +84,11 @@ Add CV
                                 type="date"
                                 class="form-control input-round @error('date_of_birth') is-invalid @enderror"
                                 name="date_of_birth"
-                                value="{{ old('date_of_birth', $cv->middle_name ?? '') }}"
+                                value="{{ old('date_of_birth', $cv->dob ?? '') }}"
+                                max="{{ now()->toDateString('Y-m-d') }}"
                                 required
                             >
-                            @error('first_name')
+                            @error('date_of_birth')
                                 <span class="invalid-feedback" role="alert">
                                 <small>{{ $message }}</small>
                                 </span>
@@ -101,8 +105,10 @@ Add CV
                                     id="male"
                                     value="male"
                                     required
-                                    @if (old('sex') == 'male')
-                                        checked    
+                                    @if ($cv)
+                                        {{ $cv->sex === 'male' ? 'checked' : '' }}   
+                                    @else
+                                        {{ old('sex') === 'male' ? 'checked' : '' }}
                                     @endif
                                 >
                                 <label class="form-check-label" for="male">Male</label>
@@ -115,8 +121,10 @@ Add CV
                                     id="female"
                                     value="female"
                                     required
-                                    @if (old('sex') == 'female')
-                                        checked    
+                                    @if ($cv)
+                                        {{ $cv->sex === 'female' ? 'checked' : '' }}   
+                                    @else
+                                        {{ old('sex') === 'female' ? 'checked' : '' }}
                                     @endif
                                 >
                                 <label class="form-check-label" for="female">Female</label>

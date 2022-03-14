@@ -7,14 +7,13 @@ Add CV
 <div class="d-flex flex-column bg-light" id="content-wrapper">
     <div id="content">
         <x-top-nav title="Add CV" />
-
         <div class="container-fluid bg-light">
             <section>
                 <x-multi-stepper step="2" />
             </section>
             <section>
                 <div class="">
-                    <form action="{{ route('cv.contact-details.update', $cv) }}" method="post" class="col-12 col-lg-8 mx-auto my-4 bg-white p-4 shadow rounded">
+                    <form action="{{ route('cv.contact-details.update', $cv['uuid']) }}" method="post" class="col-12 col-lg-8 mx-auto my-4 bg-white p-5 shadow rounded">
                         @csrf
                         <div class="text-left mb-4">
                             <p class="font-bold text-dark m-0 p-0">Contact details</p>
@@ -28,7 +27,7 @@ Add CV
                                 type="text"
                                 class="form-control input-round @error('town') is-invalid @enderror"
                                 name="town"
-                                value="{{ old('town', $cv->first_name ?? '') }}"
+                                value="{{ old('town', $cv->town ?? '') }}"
                                 placeholder="Town / Locality"
                                 required
                             >
@@ -41,14 +40,16 @@ Add CV
 
                         <div class="form-group mb-3 row">
                             <div class="col">
-                                <label class="form-label" for="country">Country</label>
-                                <select class="form-select" name="country" id="country" required data-live-search="true">
+                                <label class="form-label" for="select-country">Country</label>
+                                <select class="form-select" name="country" id="select-country" required data-live-search="true">
                                     <option value="" selected disabled>Select Country</option>
                                     @foreach ($countries as $country)
                                         <option
                                             value="{{ $country->id }}"
-                                            @if (old('country') == $country->id)
-                                                selected
+                                            @if ($cv->country)
+                                                {{ $cv->country->name == $country->name ? 'selected' : '' }}
+                                            @else
+                                                {{ old('country') == $country->id ? 'selected' : '' }}
                                             @endif
                                         >
                                             {{ $country->name }}
@@ -63,9 +64,13 @@ Add CV
                                 @enderror
                             </div>
                             <div class="col">
-                                <label class="form-label" for="state">State</label>
-                                <select class="form-select" name="state" id="state" required>
-                                    <option value="1" selected="">Lagos</option>
+                                <label class="form-label" for="select-state">State</label>
+                                <select class="form-select" name="state" id="select-state" required>
+                                    @if ($cv->state)
+                                        <option value="{{ $cv->state->id }}" selected>{{ $cv->state->name }}</option>
+                                    @else
+                                    <option value="" selected disabled>Select State</option>
+                                    @endif
                                 </select>
                                 
                                 @error('state')
@@ -101,7 +106,7 @@ Add CV
                                 type="tel"
                                 class="form-control input-round @error('mobile_phone') is-invalid @enderror"
                                 name="mobile_phone"
-                                value="{{ old('mobile_phone', $cv->street ?? '') }}"
+                                value="{{ old('mobile_phone', $cv->mobile_phone ?? '') }}"
                                 placeholder="+234 812 345 678"
                             >
                             @error('mobile_phone')
@@ -118,7 +123,7 @@ Add CV
                                 type="tel"
                                 class="form-control input-round @error('home_phone') is-invalid @enderror"
                                 name="home_phone"
-                                value="{{ old('home_phone', $cv->street ?? '') }}"
+                                value="{{ old('home_phone', $cv->home_phone ?? '') }}"
                                 placeholder="+234 812 345 678"
                             >
                             @error('home_phone')
@@ -135,7 +140,7 @@ Add CV
                                 type="email"
                                 class="form-control input-round @error('email') is-invalid @enderror"
                                 name="email"
-                                value="{{ old('email', $cv->street ?? '') }}"
+                                value="{{ old('email', $cv->email ?? '') }}"
                                 placeholder="me@domain.com"
                                 required
                             >
@@ -146,7 +151,7 @@ Add CV
                             @enderror
                         </div>
                         <div class="d-flex mt-4" >
-                            <a href="{{ route('cv.create') }}" class="btn btn-light btn-outline-secondary px-4 font-bold mx-2">Prev</a>
+                            <a href="{{ route('cv.create') }}" id="previousBtn" class="btn btn-light btn-outline-secondary px-4 font-bold mx-2">Prev</a>
                             <button class="btn btn-warning px-4 font-bold mx-2" type="submit">Next</button>
                         </div>
                     </form>
@@ -158,6 +163,34 @@ Add CV
 
 @endsection
 @push('javascript')
+    <script>
+        $(document).ready(function () {
+            $('#select-country').on('change', function () {
+                var country_id = this.value;
+                $("#select-state").html('');
+                $.ajax({
+                    url: '/api/country/' + country_id + '/fetch-states',
+                    type: "GET",
+                    dataType: 'json',
+                    success: function (states) {
+                        $('#select-state').html('<option value="">Select State</option>');
+                        $.each(states, function (key, value) {
+                            $("#select-state").append('<option value="' + value.id + '">' + value.name + '</option>');
+                        });
+                    }
+                });
+            });
+
+            $('#previousBtn').click(function(e) {
+                var href = $(this).attr('href');
+                e.preventDefault();
+                if(confirm('Changes you made may not be saved')) {
+                    window.location = href;
+                }
+            });
+        });
+    </script>
+
     <script>
         mdd = document.getElementById("country");
         mdd.selectpicker();

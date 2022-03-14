@@ -18,9 +18,8 @@ return new class extends Migration
             $table->string('name');
             $table->date('start_date');
             $table->date('end_date');
-            $table->string('qualification');
-            $table->boolean('status');
             $table->foreignId('cv_id')->constrained();
+            $table->foreignId('secondary_school_qualifications_id')->constrained();
             $table->timestamps();
         });
     }

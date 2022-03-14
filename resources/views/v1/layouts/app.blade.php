@@ -26,9 +26,11 @@
 	</head>
 	<body id="page-top">
 		<div id="wrapper" class="w-100">
-			@include('v1.partials.sidebar')
+			<div class="">
+				@include('v1.partials.sidebar')
+			</div>
 			<div class="w-100 h-100 position-relative bg-light">
-				<main class="">
+				<main class="pb-5">
 					<div >
 						@include('v1.partials.message')
 					</div>
@@ -44,6 +46,7 @@
 			</div>
 		</div>
 		</div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+		<script src="{{ asset('assets/js/Multi-step-form.js') }}"></script>
 
 		<script src="{{ asset('assets/js/theme.js') }}"></script>
 
