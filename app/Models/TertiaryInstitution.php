@@ -14,6 +14,7 @@ class TertiaryInstitution extends Model
 
     public function type(): BelongsTo
     {
-        return $this->belongsTo(TertiaryInstitutionTypes::class, 'tertiary_institution_type_id');
+        return $this->belongsTo(TertiaryTypes::class, 'tertiary_types_id');
     }
+    
 }

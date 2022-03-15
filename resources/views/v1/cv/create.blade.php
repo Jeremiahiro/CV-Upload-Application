@@ -14,7 +14,12 @@ Add CV
             </section>
             <section>
                 <div class="">
-                    <form action="{{ $cv ? route('cv.update', $cv['uuid']) : route('cv.store') }}" method="post" class="col-12 col-lg-8 mx-auto my-4 bg-white p-5 shadow rounded">
+                    <form
+                        action="{{ $cv ? route('cv.update', $cv['uuid']) : route('cv.store') }}"
+                        method="post"
+                        class="col-12 col-lg-8 mx-auto my-4 bg-white p-5 shadow rounded"
+                        onsubmit="$('.submit__btn').attr('disabled', true)"
+                    >
                         @if ($cv)
                             @method('PUT')
                         @endif
@@ -29,7 +34,7 @@ Add CV
                             <input
                                 id="first_name"
                                 type="text"
-                                class="form-control input-round @error('first_name') is-invalid @enderror"
+                                class="form-control form-input input-round @error('first_name') is-invalid @enderror"
                                 name="first_name"
                                 value="{{ old('first_name', $cv->first_name ?? '') }}"
                                 placeholder="First Name"
@@ -47,7 +52,7 @@ Add CV
                             <input
                                 id="middle_name"
                                 type="text"
-                                class="form-control input-round @error('middle_name') is-invalid @enderror"
+                                class="form-control form-input input-round @error('middle_name') is-invalid @enderror"
                                 name="middle_name"
                                 value="{{ old('middle_name', $cv->middle_name ?? '') }}"
                                 placeholder="Middle Name"
@@ -64,7 +69,7 @@ Add CV
                             <input
                                 id="last_name"
                                 type="text"
-                                class="form-control input-round @error('last_name') is-invalid @enderror"
+                                class="form-control form-input input-round @error('last_name') is-invalid @enderror"
                                 name="last_name"
                                 value="{{ old('last_name', $cv->last_name ?? '') }}"
                                 placeholder="Surname / Last Name"
@@ -82,7 +87,7 @@ Add CV
                             <input
                                 id="date_of_birth"
                                 type="date"
-                                class="form-control input-round @error('date_of_birth') is-invalid @enderror"
+                                class="form-control form-input input-round @error('date_of_birth') is-invalid @enderror"
                                 name="date_of_birth"
                                 value="{{ old('date_of_birth', $cv->dob ?? '') }}"
                                 max="{{ now()->toDateString('Y-m-d') }}"
@@ -132,7 +137,7 @@ Add CV
                         </div>
 
                         <div class="d-flex mt-4" >
-                            <button class="btn btn-warning px-4 font-bold" type="submit">Next</button>
+                            <button class="btn btn-warning px-4 font-bold submit__btn" type="submit">Next</button>
                         </div>
                     </form>
                 </div>

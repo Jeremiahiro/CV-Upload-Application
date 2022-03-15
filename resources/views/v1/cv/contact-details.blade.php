@@ -13,7 +13,12 @@ Add CV
             </section>
             <section>
                 <div class="">
-                    <form action="{{ route('cv.contact-details.update', $cv['uuid']) }}" method="post" class="col-12 col-lg-8 mx-auto my-4 bg-white p-5 shadow rounded">
+                    <form
+                        action="{{ route('cv.contact-details.update', $cv['uuid']) }}"
+                        method="post"
+                        class="col-12 col-lg-8 mx-auto my-4 bg-white p-5 shadow rounded"
+                        onsubmit="$('.submit__btn').attr('disabled', true)"
+                    >
                         @csrf
                         <div class="text-left mb-4">
                             <p class="font-bold text-dark m-0 p-0">Contact details</p>
@@ -25,7 +30,7 @@ Add CV
                             <input
                                 id="town"
                                 type="text"
-                                class="form-control input-round @error('town') is-invalid @enderror"
+                                class="form-control form-input input-round @error('town') is-invalid @enderror"
                                 name="town"
                                 value="{{ old('town', $cv->town ?? '') }}"
                                 placeholder="Town / Locality"
@@ -86,7 +91,7 @@ Add CV
                             <input
                                 id="street"
                                 type="text"
-                                class="form-control input-round @error('street') is-invalid @enderror"
+                                class="form-control form-input input-round @error('street') is-invalid @enderror"
                                 name="street"
                                 value="{{ old('street', $cv->street ?? '') }}"
                                 placeholder="Street"
@@ -104,7 +109,7 @@ Add CV
                             <input
                                 id="mobile_phone"
                                 type="tel"
-                                class="form-control input-round @error('mobile_phone') is-invalid @enderror"
+                                class="form-control form-input input-round @error('mobile_phone') is-invalid @enderror"
                                 name="mobile_phone"
                                 value="{{ old('mobile_phone', $cv->mobile_phone ?? '') }}"
                                 placeholder="+234 812 345 678"
@@ -121,7 +126,7 @@ Add CV
                             <input
                                 id="home_phone"
                                 type="tel"
-                                class="form-control input-round @error('home_phone') is-invalid @enderror"
+                                class="form-control form-input input-round @error('home_phone') is-invalid @enderror"
                                 name="home_phone"
                                 value="{{ old('home_phone', $cv->home_phone ?? '') }}"
                                 placeholder="+234 812 345 678"
@@ -138,7 +143,7 @@ Add CV
                             <input
                                 id="email"
                                 type="email"
-                                class="form-control input-round @error('email') is-invalid @enderror"
+                                class="form-control form-input input-round @error('email') is-invalid @enderror"
                                 name="email"
                                 value="{{ old('email', $cv->email ?? '') }}"
                                 placeholder="me@domain.com"
@@ -151,8 +156,8 @@ Add CV
                             @enderror
                         </div>
                         <div class="d-flex mt-4" >
-                            <a href="{{ route('cv.create') }}" id="previousBtn" class="btn btn-light btn-outline-secondary px-4 font-bold mx-2">Prev</a>
-                            <button class="btn btn-warning px-4 font-bold mx-2" type="submit">Next</button>
+                            <a href="{{ route('cv.create') }}" id="previousBtn" class="submit__btn btn btn-light btn-outline-secondary px-4 font-bold mx-2">Prev</a>
+                            <button class="btn btn-warning px-4 font-bold mx-2 submit__btn" type="submit">Next</button>
                         </div>
                     </form>
                 </div>

@@ -1,6 +1,6 @@
 SET FOREIGN_KEY_CHECKS=0;
 
-INSERT INTO `tertiary_institutions` (`id`, `name`, `tertiary_institution_type_id`) VALUES
+INSERT INTO `tertiary_institutions` (`id`, `name`, `tertiary_types_id`) VALUES
 
 -- College of Agriculture
 (1, 'College of Agriculture DAC Kabba', 1),

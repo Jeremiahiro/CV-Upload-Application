@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('tertiary_institutions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('tertiary_institution_type_id')->constrained();
+            $table->foreignId('tertiary_types_id')->constrained();
             $table->timestamps();
         });
     }

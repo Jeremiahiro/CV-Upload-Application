@@ -27,9 +27,9 @@ class TertiaryInstitutionRequest extends FormRequest
             'professional_qualification' => 'nullable|string',
             'name_of_institution' => 'required|string',
             'type_of_institution' => 'required|string',
-            'other_tertiary_institution' => 'nullable|string',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date',
+            'other_tertiary_institution_type' => 'required_if:type_of_institution,others',
+            'start_date' => 'required|date|before:end_date',
+            'end_date' => 'nullable|date|after:start_date',
         ];
 
     }

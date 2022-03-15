@@ -20,15 +20,15 @@ class DatabaseSeeder extends Seeder
         $this->call(CountrySeeder::class);
         $this->call(StateSeeder::class);
         $this->call(CitySeeder::class);
-        $this->call(SecondarySchoolQualificationSeeder::class);
-        $this->call(TertiaryInstitutionTypesSeeder::class);
+        $this->call(SecondaryQualificationSeeder::class);
+        $this->call(TertiaryTypesSeeder::class);
         $this->call(TertiaryInstitutionSeeder::class);
-        $this->call(TertiaryInstitutionCoursesTypesSeeder::class);
-        $this->call(TertiaryInstitutionCoursesSeeder::class);
-        $this->call(TertiaryInstitutionQualificationTypesSeeder::class);
-        $this->call(TertiaryInstitutionQualificationSeeder::class);
+        $this->call(TertiaryCourseTypesSeeder::class);
+        $this->call(TertiaryCoursesSeeder::class);
+        $this->call(TertiaryQualificationTypesSeeder::class);
+        $this->call(TertiaryQualificationSeeder::class);
         $this->call(ProfessionalInstitutionsSeeder::class);
-        $this->call(ProfessionalInstitutionsQualificationsSeeder::class);
+        $this->call(ProfessionalQualificationsSeeder::class);
         $this->call(IndustrialSectorSeeder::class);
 
     }

@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('qualifications', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('type');
-            $table->string('other_type')->nullable();
+            $table->string('name');
+            $table->foreignId('professional_qualifications_id')->nullable()->constrained();
+            $table->string('other_qualification_type')->nullable();
+            $table->foreignId('professional_institutions_id')->nullable()->constrained();
+            $table->string('other_institutions_type')->nullable();
             $table->date('date');
-            $table->string('institution');
-            $table->boolean('completed_nysc')->default(false);
             $table->foreignId('cv_id')->constrained();
             $table->timestamps();
         });

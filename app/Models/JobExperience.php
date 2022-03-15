@@ -11,6 +11,10 @@ class JobExperience extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        //
+    ];
+
     public function cv(): BelongsTo
     {
         return $this->belongsTo(Cv::class);

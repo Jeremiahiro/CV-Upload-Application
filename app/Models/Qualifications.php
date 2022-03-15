@@ -10,9 +10,23 @@ class Qualifications extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        //
+    ];
+
     public function cv(): BelongsTo
     {
         return $this->belongsTo(Cv::class);
+    }
+
+    public function qualification(): BelongsTo
+    {
+        return $this->belongsTo(ProfessionalQualifications::class, 'professional_qualifications_id');
+    }
+
+    public function awarding_institution(): BelongsTo
+    {
+        return $this->belongsTo(ProfessionalInstitutions::class, 'professional_institutions_id');
     }
 
 }

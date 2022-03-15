@@ -16,11 +16,11 @@ return new class extends Migration
         Schema::create('job_experiences', function (Blueprint $table) {
             $table->id();
             $table->string('employer');
-            $table->date('employment_date');
+            $table->date('date');
             $table->string('role');
             $table->longText('job_description');
             $table->string('no_of_positions');
-            $table->foreignId('industry_id')->constrained('industrial_sectors');
+            $table->foreignId('industrial_sectors_id')->nullable()->constrained();
             $table->string('other_industry')->nullable();
             $table->foreignId('cv_id')->constrained();
             $table->timestamps();

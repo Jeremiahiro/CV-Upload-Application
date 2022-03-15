@@ -26,8 +26,8 @@ class SecondaryEducationRequest extends FormRequest
         return [
             'no_of_secondary_school' => 'nullable|string',
             'name' => 'required|string',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date',
+            'start_date' => 'required|date|before:end_date',
+            'end_date' => 'nullable|date|after:start_date',
             'qualification' => 'required|string',
             'tertiary_institution' => 'required|string',
             'has_more' => 'nullable|string',

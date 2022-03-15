@@ -4,10 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ContactDetailsRequest;
 use App\Http\Requests\CVRequest;
+use App\Http\Requests\HobbiesRequest;
+use App\Http\Requests\JobExperienceRequest;
+use App\Http\Requests\LocationPreferenceRequest;
+use App\Http\Requests\NyscDetailsRequest;
+use App\Http\Requests\ProfessionalQualificationsRequest;
+use App\Http\Requests\RefereeRequest;
 use App\Http\Requests\SecondaryEducationRequest;
 use App\Http\Requests\TertiaryInstitutionRequest;
 use App\Models\CV;
 use App\Models\JobExperience;
+use App\Models\NyscDetails;
+use App\Models\Qualifications;
+use App\Models\Referees;
 use App\Models\SecondaryEducation;
 use App\Models\TertiaryEducation;
 use App\Models\TertiaryInstitutionTypes;
@@ -89,7 +98,7 @@ class CVController extends Controller
     /**
      * Display view for contact details
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\CV  $cV
+     * @param  \App\Models\CV  $cv
      * 
     */
     public function contact_details(Cv $cv) 
@@ -102,7 +111,7 @@ class CVController extends Controller
      * Update for contact details
      * 
      * @param  \App\Http\Requests\ContactDetailsRequest  $request
-     * @param  \App\Models\CV  $cV
+     * @param  \App\Models\CV  $cv
      * 
     */
     public function update_contact_details(ContactDetailsRequest $request, CV $cv) 
@@ -117,20 +126,25 @@ class CVController extends Controller
     /**
      * Display view for contact details
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\CV  $cV
+     * @param  \App\Models\CV  $cv
      * 
     */
     public function secondary_education(CV $cv) 
     {
         $qualifications = $this->otherServices->get_secondary_qualifications();
-        return view('v1.cv.secondary-education', compact(['cv', 'qualifications']));
+
+        if(!$secondary_education = $this->otherServices->get_secondary_education()) {
+            $secondary_education = null;
+        }
+
+        return view('v1.cv.secondary-education', compact(['cv', 'qualifications', 'secondary_education']));
     }
 
     /**
      * Create for secondary education details
      * 
      * @param  \App\Http\Requests\ContactDetailsRequest  $request
-     * @param  \App\Models\CV  $cV
+     * @param  \App\Models\CV  $cv
      * 
     */
     public function create_secondary_education(SecondaryEducationRequest $request, CV $cv) 
@@ -146,7 +160,7 @@ class CVController extends Controller
      * Update for secondary education details
      * 
      * @param  \App\Http\Requests\ContactDetailsRequest  $request
-     * @param  \App\Models\CV  $cV
+     * @param  \App\Models\CV  $cv
      * 
     */
     public function update_secondary_education(SecondaryEducationRequest $request, CV $cv, SecondaryEducation $secondary_education) 
@@ -162,7 +176,7 @@ class CVController extends Controller
     /**
      * Delete for secondary education details
      * 
-     * @param  \App\Models\CV  $cV
+     * @param  \App\Models\CV  $cv
      * @param  \App\Models\SecondaryEducation  $secondary_edu
      * 
     */
@@ -176,24 +190,24 @@ class CVController extends Controller
 
     /**
      * Display view for tertiary institution
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\CV  $cV
+     * @param  \App\Models\CV  $cv
      * 
     */
     public function tertiary_institution(Cv $cv) 
     {
-        $tertiary_types = $this->otherServices->get_tertiary_institutions_types();
+        $tertiary_types = $this->otherServices->get_tertiary_types();
         $qualifications = $this->otherServices->get_tertiary_qualifications();
+        $tertiary_educations = $this->otherServices->get_tertiary_education($cv);
 
-        return view('v1.cv.tertiary-institution', compact(['cv', 'tertiary_types', 'qualifications']));
+        return view('v1.cv.tertiary-institution', compact(['cv', 'tertiary_types', 'qualifications', 'tertiary_educations']));
     }
 
     
     /**
      * Create for tertiary institution
      * 
-     * @param  \App\Http\Requests\ContactDetailsRequest  $request
-     * @param  \App\Models\CV  $cV
+     * @param  \App\Http\Requests\TertiaryInstitutionRequest  $request
+     * @param  \App\Models\CV  $cv
      * 
     */
     public function create_tertiary_institution(TertiaryInstitutionRequest $request, CV $cv) 
@@ -208,8 +222,9 @@ class CVController extends Controller
     /**
      * Update for tertiary institution
      * 
-     * @param  \App\Http\Requests\ContactDetailsRequest  $request
-     * @param  \App\Models\CV  $cV
+     * @param  \App\Http\Requests\TertiaryInstitutionRequest  $request
+     * @param  \App\Models\TertiaryEducation  $tertiary_edu
+     * @param  \App\Models\CV  $cv
      * 
     */
     public function update_tertiary_institution(TertiaryInstitutionRequest $request, CV $cv, TertiaryEducation $tertiary_edu) 
@@ -217,15 +232,13 @@ class CVController extends Controller
         if(!$this->cvServices->handle_update_tertiary_education($request, $cv, $tertiary_edu)){
             return back()->with('error', 'An error occured! Refresh and try again');
         }
-
         return redirect()->back()->with('success', 'Operation Successful');
     }
 
-        
     /**
      * Delete for tertiary education details
      * 
-     * @param  \App\Models\CV  $cV
+     * @param  \App\Models\CV  $cv
      * @param  \App\Models\TertiaryEducation  $tertiary_edu
      * 
     */
@@ -237,287 +250,287 @@ class CVController extends Controller
         return redirect()->back()->with('success', 'Operation Successful');
     }
 
+    /**
+     * Display view for professional qualification
+     * @param  \App\Models\CV  $cv
+     * 
+    */
+    public function professional_qualification(Cv $cv) 
+    {
+        $qualification_types = $this->otherServices->get_professional_qualification_types($cv);
+        $awarding_institutions = $this->otherServices->get_professional_institutions($cv);
+        $professional_qualifications = $this->otherServices->get_professional_qualifications($cv);
+
+        return view('v1.cv.professional-qualification', compact(['cv', 'qualification_types', 'awarding_institutions', 'professional_qualifications']));
+    }
     
     /**
-     * Display view for Employment History
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\CV  $cV
+     * Create for professional qualification
+     * 
+     * @param  \App\Http\Requests\ProfessionalQualificationsRequest  $request
+     * @param  \App\Models\CV  $cv
+     * 
+    */
+    public function create_professional_qualification(ProfessionalQualificationsRequest $request, CV $cv) 
+    {
+        if(!$this->cvServices->handle_create_professional_qualification($request, $cv)){
+            return back()->with('error', 'An error occured! Refresh and try again');
+        }
+
+        return redirect()->back()->with('success', 'Operation Successful');
+    }
+
+    /**
+     * Update for professional qualification
+     * 
+     * @param  \App\Http\Requests\ProfessionalQualificationsRequest  $request
+     * @param  \App\Models\Qualifications  $qualification
+     * @param  \App\Models\CV  $cv
+     * 
+    */
+    public function update_professional_qualification(ProfessionalQualificationsRequest $request, CV $cv, Qualifications $qualification) 
+    {
+        if(!$this->cvServices->handle_update_professional_qualification($request, $cv, $qualification)){
+            return back()->with('error', 'An error occured! Refresh and try again');
+        }
+        return redirect()->back()->with('success', 'Operation Successful');
+    }
+        
+    /**
+     * Delete for professional qualification
+     * 
+     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Qualifications  $qualification
+     * 
+    */
+    public function delete_professional_qualification(CV $cv, Qualifications $qualification) 
+    {
+        if(!$qualification->delete()) {
+            return redirect()->back()->with('success', 'OOPS Something went wrong');
+        }
+        return redirect()->back()->with('success', 'Operation Successful');
+    }
+    
+    /**
+     * Display view for nysc details
+     * @param  \App\Models\CV  $cv
+     * 
+    */
+    public function nysc_details(Cv $cv) 
+    {
+        $states = $this->otherServices->get_states_in_nigeria();
+        return view('v1.cv.nysc-details', compact(['cv', 'states']));
+    }
+    
+    /**
+     * Create for nysc details
+     * 
+     * @param  \App\Http\Requests\NyscDetailsRequest  $request
+     * @param  \App\Models\CV  $cv
+     * 
+    */
+    public function update_nysc_details(NyscDetailsRequest $request, CV $cv) 
+    {
+        if(!$this->cvServices->handle_update_nysc_details($request, $cv)){
+            return back()->with('error', 'An error occured! Refresh and try again');
+        }
+
+        return redirect()->route('cv.employement_history', $cv);
+    }
+
+    /**
+     * Display view for employement history
+     * @param  \App\Models\CV  $cv
      * 
     */
     public function employement_history(Cv $cv) 
     {
-        $sectors = $this->otherServices->get_industry_sector();
-        return view('v1.cv.employment-history', compact(['cv', 'sectors']));
-    }
+        $industry_sector = $this->otherServices->get_industry_sector($cv);
+        $previous_experiecne = $this->otherServices->get_previous_experiecne($cv);
 
+        return view('v1.cv.employment-history', compact(['cv', 'industry_sector', 'previous_experiecne']));
+    }
+    
     /**
-     * Update for Employment History
+     * Create for employement history
      * 
-     * @param  \App\Http\Requests\ContactDetailsRequest  $request
-     * @param  \App\Models\CV  $cV
+     * @param  \App\Http\Requests\ProfessionalQualificationsRequest  $request
+     * @param  \App\Models\CV  $cv
      * 
     */
-    public function update_employement_history(ContactDetailsRequest $request, CV $cv) 
+    public function create_employement_history(JobExperienceRequest $request, CV $cv) 
     {
+        if(!$this->cvServices->handle_create_job_experience($request, $cv)){
+            return back()->with('error', 'An error occured! Refresh and try again');
+        }
+
+        return redirect()->back()->with('success', 'Operation Successful');
+    }
+
+    /**
+     * Update for employement history
+     * 
+     * @param  \App\Http\Requests\JobExperienceRequest  $request
+     * @param  \App\Models\JobExperience  $experience
+     * @param  \App\Models\CV  $cv
+     * 
+    */
+    public function update_employement_history(JobExperienceRequest $request, CV $cv, JobExperience $experience) 
+    {
+        if(!$this->cvServices->handle_update_job_experience($request, $cv, $experience)){
+            return back()->with('error', 'An error occured! Refresh and try again');
+        }
+        return redirect()->back()->with('success', 'Operation Successful');
+    }
+
+    /**
+     * Edit for employement history
+     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\JobExperience  $experience
+     * 
+    */
+    public function edit_employement_history(Cv $cv, JobExperience $experience) 
+    {
+        $industry_sector = $this->otherServices->get_industry_sector($cv);
+
+        return view('v1.cv.employment-history-edit', compact(['cv', 'industry_sector', 'experience']));
+    }
         
-
-        // if(!$cv = $this->cvServices->handle_update_contact_details($request, $cv)){
-        //     return back()->with('error', 'An error occured! Refresh and try again');
-        // }
-        // return redirect()->route('cv.secondary-education', $cv);
-
-    }
-
-
-
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\CV  $cV
-     * @return \Illuminate\Http\Response
-     */
-    public function show(CV $cV)
+     * Delete for employement history
+     * 
+     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\JobExperience  $experience
+     * 
+    */
+    public function delete_employement_history(CV $cv, JobExperience $experience) 
     {
-        //
+        if(!$experience->delete()) {
+            return redirect()->back()->with('success', 'OOPS Something went wrong');
+        }
+        return redirect()->back()->with('success', 'Operation Successful');
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\CV  $cV
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(CV $cV)
+     * Display view for referee
+     * @param  \App\Models\CV  $cv
+     * 
+    */
+    public function referee(Cv $cv) 
     {
-        //
+        return view('v1.cv.referee', compact(['cv']));
+    }
+    
+    /**
+     * Create for referee
+     * 
+     * @param  \App\Http\Requests\RefereeRequest  $request
+     * @param  \App\Models\CV  $cv
+     * 
+    */
+    public function create_referee(RefereeRequest $request, CV $cv) 
+    {
+        if(!$this->cvServices->handle_create_referee($request, $cv)){
+            return back()->with('error', 'An error occured! Refresh and try again');
+        }
+
+        return redirect()->back()->with('success', 'Operation Successful');
     }
 
-    // /**
-    //  * Update the specified resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @param  \App\Models\CV  $cV
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function update(Request $request, CV $cv, $type)
-    // {
-    //     $response = false;
-    //     switch ($type) {
-    //         case 'cv':
-    //             $response = $this->update_cv($request, $cv);
-    //             break;
-    //         case 'secondary_education':
-    //             $response = $this->update_secondary_education($request, $cv);
-    //             break;
-    //         case 'tertiary_education':
-    //             $response = $this->update_tertiary_education($request, $cv);
-    //             break;
-    //         case 'qualification':
-    //             $response = $this->update_qualification($request, $cv);
-    //             break;      
-    //         case 'nysc_detail':
-    //             $response = $this->update_nysc_detail($request, $cv);
-    //             break; 
-    //         case 'referee':
-    //             $response = $this->update_referee($request, $cv);
-    //             break; 
+    /**
+     * Update for referee
+     * 
+     * @param  \App\Http\Requests\RefereeRequest  $request
+     * @param  \App\Models\Referees  $referee
+     * @param  \App\Models\CV  $cv
+     * 
+    */
+    public function update_referee(RefereeRequest $request, CV $cv, Referees $referee) 
+    {
+        if(!$this->cvServices->handle_update_referee($request, $cv, $referee)){
+            return back()->with('error', 'An error occured! Refresh and try again');
+        }
+        return redirect()->back()->with('success', 'Operation Successful');
+    }
+        
+    /**
+     * Delete for referee
+     * 
+     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Referees  $referee
+     * 
+    */
+    public function delete_referee(CV $cv, Referees $referee) 
+    {
+        if(!$referee->delete()) {
+            return redirect()->back()->with('success', 'OOPS Something went wrong');
+        }
+        return redirect()->back()->with('success', 'Operation Successful');
+    }
 
-    //             if(!$response) {
-    //                 return 'false';
-    //             }
-    //             return 'true';
-    //     }
-    // }
+    /**
+     * Display view for location preference
+     * @param  \App\Models\CV  $cv
+     * 
+    */
+    public function location_preference(Cv $cv) 
+    {
+        $states = $this->otherServices->get_states_in_nigeria();
+        return view('v1.cv.location-preference', compact(['cv', 'states']));
+    }
 
-    // /**
-    //  * Update cv resource
-    //  *
-    //  * @param  \App\Models\CV  $cV
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @return \Illuminate\Http\Response
-    // */
-    // public function update_cv(Request $request, CV $cv)
-    // {
-    //     $request->validate([
-    //         'first_name' => 'required|string',
-    //         'middle_name' => 'nullable|string',
-    //         'last_name' => 'required|string',
-    //         'dob' => 'required|date',
-    //         'sex' => 'required|string',
-    //         'town' => 'required|string',
-    //         'street' => 'required|string',
-    //         'mobile_phone' => 'nullable|string',
-    //         'home_phone' => 'nullable|string',
-    //         'email' => 'required|email',
-    //         'preferred_employment_industry' => 'required|string',
-    //         'hobbies' => 'required|json',
-    //         'additional_information' => 'required|string',
-    //         'no_of_secondary_school' => 'required|string',
-    //         'preferred_employment_city' => 'required|string',
-    //         'additional_infcountry_idormation' => 'required|string',
-    //         'state_id' => 'required|string',
-    //         'city_id' => 'required|string',
-    //     ]);
+    /**
+     * Create / update location preference
+     * 
+     * @param  \App\Http\Requests\LocationPreferenceRequest  $request
+     * @param  \App\Models\CV  $cv
+     * 
+    */
+    public function update_location_preference(LocationPreferenceRequest $request, CV $cv) 
+    {
+        if(!$this->cvServices->handle_update_location_preference($request, $cv)){
+            return back()->with('error', 'An error occured! Refresh and try again');
+        }
 
-    //     return $this->cvServices->handle_update_cv($request, $cv);
-    // }
+        return redirect()->back()->with('success', 'Operation Successful');
+    }
 
-    // /**
-    //  * Update secondary school information
-    //  *
-    //  * @param  \App\Models\CV  $cV
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @return \Illuminate\Http\Response
-    // */
-    // public function update_secondary_education(Request $request, CV $cv)
-    // {
-    //     $request->validate([
-    //         'name' => 'required|string',
-    //         'type' => 'required|string',
-    //         'other_type' => 'nullable|string',
-    //         'start_date' => 'required|date',
-    //         'end_date' => 'required|date',
-    //         'qualification' => 'required|string',
-    //         'professional_qualification' => 'required|string',
-    //     ]);
+    /**
+     * Display view for hobbies
+     * @param  \App\Models\CV  $cv
+     * 
+    */
+    public function hobbies(Cv $cv) 
+    {
+        return view('v1.cv.hobbies', compact(['cv']));
+    }
 
-    //     return $this->cvServices->handle_update_secondary_education($request, $cv);
-    // }
+    /**
+     * Create / update location preference
+     * 
+     * @param  \App\Http\Requests\HobbiesRequest  $request
+     * @param  \App\Models\CV  $cv
+     * 
+    */
+    public function update_hobbies(HobbiesRequest $request, CV $cv) 
+    {
+        if(!$this->cvServices->handle_update_hobbies($request, $cv)){
+            return back()->with('error', 'An error occured! Refresh and try again');
+        }
 
-    // /**
-    //  * Update tertiary school information
-    //  *
-    //  * @param  \App\Models\CV  $cV
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @return \Illuminate\Http\Response
-    // */
-    // public function update_tertiary_education(Request $request, CV $cv)
-    // {
-    //     $request->validate([
-    //         'name' => 'required|string',
-    //         'start_date' => 'required|date',
-    //         'end_date' => 'required|date',
-    //         'qualification' => 'required|string',
-    //         'status' => 'required|string',
-    //     ]);
-
-    //     return $this->cvServices->handle_update_tertiary_education($request, $cv);
-    // }
-
-    // /**
-    //  * Update qualification
-    //  *
-    //  * @param  \App\Models\CV  $cV
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @return \Illuminate\Http\Response
-    // */
-    // public function update_qualification(Request $request, CV $cv)
-    // {
-    //     $request->validate([
-    //         'title' => 'required|string',
-    //         'type' => 'required|string',
-    //         'other_type' => 'nullable|string',
-    //         'date' => 'required|date',
-    //         'institution' => 'required|string',
-    //         'completed_nysc' => 'required|string',
-    //     ]);
-
-    //     return $this->cvServices->handle_update_qualification($request, $cv);
-    // }
-
-    // /**
-    //  * Update NYSC data
-    //  *
-    //  * @param  \App\Models\CV  $cV
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @return \Illuminate\Http\Response
-    // */
-    // public function update_nysc_detail(Request $request, CV $cv)
-    // {
-    //     $request->validate([
-    //         'date' => 'required|date',
-    //         'ref_for_location' => 'required|string',
-    //         'employed' => 'required|string',
-    //     ]);
-
-    //     return $this->cvServices->handle_update_nysc_detail($request, $cv);
-    // }
-
-    // /**
-    //  * Update Job Experience
-    //  *
-    //  * @param  \App\Models\CV  $cV
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @return \Illuminate\Http\Response
-    // */
-    // public function update_update_job_experience(Request $request, CV $cv)
-    // {
-    //     $request->validate([
-    //         'employer' => 'required|string',
-    //         'industry' => 'required|string',
-    //         'other_industry' => 'nullable|string',
-    //         'employment_date' => 'required|date',
-    //         'role' => 'required|string',
-    //         'job_description' => 'required|string',
-    //         'no_of_positions' => 'required|string',
-    //     ]);
-
-    //     return $this->cvServices->handle_update_job_experience($request, $cv);
-    // }
-
-    // /**
-    //  * Update Job Experience
-    //  *
-    //  * @param  \App\Models\CV  $cV
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @return \Illuminate\Http\Response
-    // */
-    // public function update_job_experience_roles(Request $request, CV $cv, JobExperience $jobExperience)
-    // {
-    //     $request->validate([
-    //         'position' => 'required|string',
-    //         'start_date' => 'required|date',
-    //         'end_date' => 'nullable|date',
-    //         'job_description' => 'required|string',
-    //         'no_of_positions' => 'required|string',
-    //         'referees' => 'required|string',
-    //     ]);
-
-    //     return $this->cvServices->handle_update_job_experience($request, $cv, $jobExperience);
-    // }
-
-    // /**
-    //  * Update Referee data
-    //  *
-    //  * @param  \App\Models\CV  $cV
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @return \Illuminate\Http\Response
-    // */
-    // public function update_referee(Request $request, CV $cv)
-    // {
-    //     $request->validate([
-    //         'employer' => 'required|string',
-    //         'industry' => 'required|string',
-    //         'other_industry' => 'nullable|string',
-    //         'employment_date' => 'required|date',
-    //         'role' => 'required|string',
-    //         'job_description' => 'required|string',
-    //         'no_of_positions' => 'required|string',
-    //     ]);
-
-    //     return $this->cvServices->handle_update_referee($request, $cv);
-    // }
+        return redirect()->back()->with('success', 'Operation Successful');
+    }
 
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\CV  $cV
+     * @param  \App\Models\CV  $cv
      * @return \Illuminate\Http\Response
     */
-    public function destroy(CV $cV)
+    public function destroy(CV $cv)
     {
-        if(!$cV->delete()) {
+        if(!$cv->delete()) {
             return 'false';
         }
         return 'true';

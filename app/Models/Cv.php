@@ -16,7 +16,13 @@ class Cv extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'tertiary_institution' => 'boolean'
+        'tertiary_institution' => 'boolean',
+        'hobbies' => 'json',
+        'has_hobbies' => 'boolean',
+        'professional_qualification' => 'boolean',
+        'completed_nysc' => 'boolean',
+        'location_preference' => 'boolean',
+        'employment_status' => 'boolean'
     ];
 
     public function user(): BelongsTo
@@ -62,6 +68,16 @@ class Cv extends Model
     public function referees(): HasMany
     {
         return $this->hasMany(Referees::class, 'cv_id');
+    }
+
+    public function preferred_state(): BelongsTo
+    {
+        return $this->belongsTo(State::class, 'id', 'preferred_state_id');
+    }
+
+    public function preferred_industry(): BelongsTo
+    {
+        return $this->belongsTo(IndustrialSector::class, 'id', 'preferred_industry_id');
     }
     
 

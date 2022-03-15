@@ -19,6 +19,7 @@ Add CV
                         method="post"
                         class="col-12 col-lg-8 mx-auto my-4 bg-white p-5 shadow rounded"
                         id="secondary_education_form"
+                        onsubmit="$('.submit__btn').attr('disabled', true)"
                     >
                         @csrf
                         <div class="text-left mb-3">
@@ -29,7 +30,7 @@ Add CV
                         <div class="d-flex flex-wrap mb-2">
                             @foreach ($cv->secondary_educations as $secondary_education)
                                 <div class="col col-lg-6">
-                                    <div class="w-100 secondary_data m-2 p-2">
+                                    <div class="w-100 data m-2 p-2">
                                         <div class="d-flex justify-content-between p-2 bg-warning text-dark">
                                             <div class=" ">
                                                 <span class="font-bold">
@@ -40,7 +41,7 @@ Add CV
                                                     {{ $secondary_education->start_date }} to {{ $secondary_education->end_date }}
                                                 </small>
                                             </div>
-                                            <div class="secondary_data-action mx-3">
+                                            <div class="data__action mx-3">
                                                 <div class="d-flex flex-column">
                                                     <span class="cursor-pointer mx-2">
                                                         <i
@@ -73,7 +74,7 @@ Add CV
                             <input
                                 id="no_of_secondary_school"
                                 type="number"
-                                class="form-control input-round @error('no_of_secondary_school') is-invalid @enderror"
+                                class="form-control form-input input-round @error('no_of_secondary_school') is-invalid @enderror"
                                 name="no_of_secondary_school"
                                 value="{{ old('no_of_secondary_school', $cv->no_of_secondary_school ?? '') }}"
                                 placeholder="No of secondary school"
@@ -92,7 +93,7 @@ Add CV
                             <input
                                 id="name_of_secondary_school"
                                 type="text"
-                                class="form-control input-round @error('name') is-invalid @enderror"
+                                class="form-control form-input input-round @error('name') is-invalid @enderror"
                                 name="name"
                                 value="{{ old('name') }}"
                                 placeholder="Name of secondary school"
@@ -111,7 +112,7 @@ Add CV
                                 <input
                                     id="start_date"
                                     type="date"
-                                    class="form-control input-round @error('start_date') is-invalid @enderror"
+                                    class="form-control form-input input-round @error('start_date') is-invalid @enderror"
                                     name="start_date"
                                     value="{{ old('start_date') }}"
                                     max="{{ now()->toDateString('Y-m-d') }}"
@@ -129,7 +130,7 @@ Add CV
                                 <input
                                     id="end_date"
                                     type="date"
-                                    class="form-control input-round @error('end_date') is-invalid @enderror"
+                                    class="form-control form-input input-round @error('end_date') is-invalid @enderror"
                                     name="end_date"
                                     value="{{ old('end_date') }}"
                                     max="{{ now()->toDateString('Y-m-d') }}"
@@ -147,7 +148,7 @@ Add CV
 
                         <div class="form-group mb-3">
                             <label class="form-label" for="select-qualification">Qualification Obtained</label>
-                            <select class="form-select" name="qualification" id="select-qualification" required data-live-search="true">
+                            <select class="form-select form-input" name="qualification" id="select-qualification" required data-live-search="true">
                                 <option value="" selected disabled>Qualification</option>
                                 @foreach ($qualifications as $qualification)
                                     <option
@@ -206,7 +207,11 @@ Add CV
 
                         <div>
                             <div class="form-group mb-3" id="addMore">
-                                <button type="submit" class="text-warning font-bold btn btn-clear">
+                                <button
+                                    type="submit"
+                                    class="submit__btn text-warning font-bold btn btn-clear"
+                                    @if($cv->secondary_educations->count() == $cv->no_of_secondary_school) disabled @endif
+                                >
                                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
                                         fill="currentColor" viewBox="0 0 16 16"
                                         class="bi bi-plus-circle fs-4"
@@ -218,12 +223,11 @@ Add CV
                                             d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z">
                                         </path>
                                     </svg>
-    
                                     Add
                                 </button>
                             </div>
                             <div class="form-group mb-3" id="update">
-                                <button type="submit" class="text-warning font-bold btn btn-clear">
+                                <button type="submit" class="submit__btn text-warning font-bold btn btn-clear">
                                     <i class="fa fa-check"></i>
                                     Update
                                 </button>
@@ -231,11 +235,11 @@ Add CV
                         </div>
 
                         <div class="d-flex mt-4" >
-                            <a href="{{ route('cv.contact-details', $cv['uuid']) }}" id="previousBtn" class="btn btn-light btn-outline-secondary px-4 font-bold mx-2">Prev</a>
+                            <a href="{{ route('cv.contact-details', $cv['uuid']) }}" id="previousBtn" class="submit__btn btn btn-light btn-outline-secondary px-4 font-bold mx-2">Prev</a>
                             <a
-                                href="{{ $cv->tertiary_institution == 1 ? route('cv.tertiary-institution', $cv['uuid']) : route('cv.employment-history', $cv['uuid']) }}"
+                                href="{{ $cv->tertiary_institution == 1 ? route('cv.tertiary-institution', $cv['uuid']) : route('cv.employement_history', $cv['uuid']) }}"
                                 id="nextForm"
-                                class="btn btn-warning px-4 font-bold mx-2 @if(!$cv->secondary_educations->count()) disabled-link disabled @endif"
+                                class="submit__btn btn btn-warning px-4 font-bold mx-2 @if(!$cv->secondary_educations->count()) disabled-link disabled @endif"
                             >
                                 Next
                             </a>
@@ -247,12 +251,7 @@ Add CV
     </div>
 </div>
 <style>
-    .secondary_data-action {
-        display: none
-    }
-    .secondary_data:hover .secondary_data-action {
-        display: block;
-    }
+ 
   
 </style>
 

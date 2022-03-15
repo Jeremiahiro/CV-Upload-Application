@@ -14,13 +14,21 @@ body{
     font-weight: bold;
 }
 
-.form-control, .form-select {
+.form-input, .form-select {
     height: 40px;
 }
 
 .disabled-link, .disabled {
     pointer-events: none;
     cursor: default;
+}
+
+.data__action {
+    display: none
+}
+
+.data:hover .data__action {
+    display: block;
 }
 
 .js-btn-prev, .js-btn-prev:hover{

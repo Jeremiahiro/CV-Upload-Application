@@ -17,8 +17,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('state_id')->constrained();
             $table->date('date');
-            $table->boolean('ref_for_location')->default(false);
-            $table->boolean('employed')->default(false);
             $table->foreignId('cv_id')->constrained();
             $table->timestamps();
         });

@@ -67,8 +67,27 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
         Route::post('/cv/{cv:uuid}/tertiary-institution/{tertiary_edu}', [CVController::class, 'update_tertiary_institution'])->name('cv.tertiary-institution.update');
         Route::get('/cv/{cv:uuid}/tertiary-education/{tertiary_edu}', [CVController::class, 'delete_tertiary_institution'])->name('cv.tertiary-institution.delete');
 
-        Route::get('/cv/{cv:uuid}/employement-history', [CVController::class, 'employement_history'])->name('cv.employement-history');
-        Route::post('/cv/{cv:uuid}/employement-history', [CVController::class, 'update_employement_history'])->name('cv.employement-history.update');
+        Route::get('/cv/{cv:uuid}/professional-qualification', [CVController::class, 'professional_qualification'])->name('cv.professional-qualification');
+        Route::post('/cv/{cv:uuid}/professional-qualification', [CVController::class, 'create_professional_qualification'])->name('cv.professional-qualification.create');
+        Route::post('/cv/{cv:uuid}/professional-qualification/{qualification}', [CVController::class, 'update_professional_qualification'])->name('cv.professional-qualification.update');
+        Route::get('/cv/{cv:uuid}/professional-qualification/{qualification}', [CVController::class, 'delete_professional_qualification'])->name('cv.professional-qualification.delete');
+
+        Route::get('/cv/{cv:uuid}/nysc-details', [CVController::class, 'nysc_details'])->name('cv.nysc_details');
+        Route::post('/cv/{cv:uuid}/nysc-details', [CVController::class, 'update_nysc_details'])->name('cv.nysc_details.update');
+
+        Route::get('/cv/{cv:uuid}/employement-history', [CVController::class, 'employement_history'])->name('cv.employement_history');
+        Route::post('/cv/{cv:uuid}/employement-history', [CVController::class, 'create_employement_history'])->name('cv.employement_history.create');
+        Route::get('/cv/{cv:uuid}/employement-history/update/{experience}', [CVController::class, 'edit_employement_history'])->name('cv.employement_history.edit');
+        Route::post('/cv/{cv:uuid}/employement-history/{experience}', [CVController::class, 'update_employement_history'])->name('cv.employement_history.update');
+        Route::get('/cv/{cv:uuid}/employement-history/{experience}', [CVController::class, 'delete_employement_history'])->name('cv.employement_history.delete');
+
+        Route::get('/cv/{cv:uuid}/referees', [CVController::class, 'referee'])->name('cv.referee');
+        Route::post('/cv/{cv:uuid}/referees', [CVController::class, 'create_referee'])->name('cv.referee.create');
+        Route::post('/cv/{cv:uuid}/referees/{referee}', [CVController::class, 'update_referee'])->name('cv.referee.update');
+        Route::get('/cv/{cv:uuid}/referees/{referee}', [CVController::class, 'delete_referee'])->name('cv.referee.delete');
+
+        Route::get('/cv/{cv:uuid}/location-preference', [CVController::class, 'location_preference'])->name('cv.location_preference');
+        Route::post('/cv/{cv:uuid}/location-preference', [CVController::class, 'update_location_preference'])->name('cv.location_preference.update');
 
         Route::post('user/password', [UserContorller::class, 'update_password'])->name('update.password');
         Route::post('user/image', [UserContorller::class, 'update_image'])->name('update.image');

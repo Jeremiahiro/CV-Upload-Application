@@ -26,7 +26,6 @@ class CvRepository
     public function handle_create_cv(Request $request)
     {   
         $cv = new Cv();
-
         return $this->handle_update_cv($request, $cv);
        
     }
@@ -38,19 +37,6 @@ class CvRepository
         $cv->last_name = $request['last_name'];
         $cv->dob = $request['date_of_birth'];
         $cv->sex = $request['sex'];
-        // $cv->town = $request['town'];
-        // $cv->street = $request['street'];
-        // $cv->mobile_phone = $request['mobile_phone'];
-        // $cv->home_phone = $request['home_phone'];
-        // $cv->email = $request['email'];
-        // $cv->preferred_employment_industry = $request['preferred_employment_industry'];
-        // $cv->hobbies = $request['hobbies'];
-        // $cv->additional_information = $request['additional_information'];
-        // $cv->no_of_secondary_school = $request['no_of_secondary_school'];
-        // $cv->preferred_employment_city = $request['preferred_employment_city'];
-        // $cv->country_id = $request['country_id'];
-        // $cv->state_id = $request['state_id'];
-        // $cv->city_id = $request['city_id'];
         $cv->user_id = auth()->user()->id;
         $cv->save();
         return $cv;
@@ -71,169 +57,166 @@ class CvRepository
 
     public function handle_create_secondary_education(Request $request, Cv $cv)
     {   
-        $secondary_education = SecondaryEducation::create([
-                'name' => $request['name'],
-                'start_date' => $request['start_date'],
-                'end_date' => $request['end_date'],
-                'secondary_school_qualifications_id' => $request['qualification'],
-                'cv_id' => $cv['id'],
-        ]);
-
-        $cv->update([
-            'tertiary_institution' => $request['tertiary_institution'],
-            'no_of_secondary_school' => $request['no_of_secondary_school']
-        ]);
-
-        return $secondary_education;
+        $secondary_education = new SecondaryEducation();
+        return $this->handle_update_secondary_education($request, $cv, $secondary_education);
     }
 
     public function handle_update_secondary_education(Request $request, Cv $cv, SecondaryEducation $secondary_education)
     {   
-        $secondary_education->update([
-            'name' => $request['name'],
-            'start_date' => $request['start_date'],
-            'end_date' => $request['end_date'],
-            'secondary_school_qualifications_id' => $request['qualification'],
+        $secondary_education->name = $request['name'];
+        $secondary_education->start_date = $request['start_date'];
+        $secondary_education->end_date = $request['end_date'];
+        $secondary_education->secondary_qualifications_id = $request['qualification'];
+        $secondary_education->cv_id = $cv['id'];
+
+        $cv->update([
+            'tertiary_institution' => $request['tertiary_institution'] ?: $cv->tertiary_institution,
+            'no_of_secondary_school' => $request['no_of_secondary_school'] ?: $cv->no_of_secondary_school
         ]);
 
-
-        return $secondary_education;
+        return $secondary_education->save();
     }
 
     public function handle_create_tertiary_education(Request $request, Cv $cv)
     {   
-        $secondary_education = TertiaryEducation::create([
-                'name' => $request['name_of_institution'],
-                'type' => $request['type_of_institution'],
-                'other_type' => $request['other_tertiary_institution'],
-                'start_date' => $request['start_date'],
-                'end_date' => $request['end_date'],
-                'qualification' => $request['qualification'],
-                'cv_id' => $cv['id'],
-        ]);
+        $tertiary_education = new TertiaryEducation();
+        return $this->handle_update_tertiary_education($request, $cv, $tertiary_education);
+    }
+
+    public function handle_update_tertiary_education(Request $request, Cv $cv, TertiaryEducation $tertiary_education)
+    {   
+        $institution_type = $request['type_of_institution'];
+        if($institution_type === 'others') {
+            $tertiary_education->other_type = $request['other_tertiary_institution_type'];
+        } else {
+            $tertiary_education->tertiary_types_id = $request['type_of_institution'];
+        }
+        $tertiary_education->tertiary_institutions_id = $request['name_of_institution'];
+        $tertiary_education->start_date = $request['start_date'];
+        $tertiary_education->end_date = $request['end_date'];
+        $tertiary_education->tertiary_qualifications_id = $request['qualification'];
+        $tertiary_education->cv_id = $cv['id'];
 
         $cv->update([
-            'professional_qualification' => $request['professional_qualification'],
+            'professional_qualification' => $request['professional_qualification'] ?: $cv->professional_qualification,
         ]);
 
-        return $secondary_education;
+        return $tertiary_education->save();
     }
 
-    public function handle_update_tertiary_education(Request $request, Cv $cv, TertiaryEducation $secondary_education)
+    public function handle_create_professional_qualification(Request $request, Cv $cv)
     {   
-        $secondary_education->update([
-            'name' => $request['name_of_institution'],
-            'type' => $request['type_of_institution'],
-            'other_type' => $request['other_tertiary_institution'],
-            'start_date' => $request['start_date'],
-            'end_date' => $request['end_date'],
-            'qualification' => $request['qualification'],
+        $qualification = new Qualifications();
+        return $this->handle_update_professional_qualification($request, $cv, $qualification);
+    }
+    
+    public function handle_update_professional_qualification(Request $request, Cv $cv, Qualifications $qualification)
+    {   
+        
+        $qualification_type = $request['type_of_qualification'];
+        if($qualification_type === 'others') {
+            $qualification->other_qualification_type = $request['other_qualification_type'];
+        } else {
+            $qualification->professional_qualifications_id = $request['type_of_qualification'];
+        }
+
+        $awarding_institution = $request['awarding_institution'];
+        if($awarding_institution === 'others') {
+            $qualification->other_institutions_type = $request['other_awarding_institution'];
+        } else {
+            $qualification->professional_institutions_id = $request['awarding_institution'];
+        }
+
+        $qualification->name = $request['name_of_qualification'];
+        $qualification->date = $request['qualification_date'];
+        $qualification->cv_id = $cv['id'];
+
+        $cv->update([
+            'completed_nysc' => $request['nysc_check'] ?: $cv->completed_nysc,
         ]);
 
-
-        return $secondary_education;
+        return $qualification->save();
     }
 
-    public function handle_update_qualification(Request $request, Cv $cv, $qualification_id = null)
+
+    public function handle_update_nysc_details(Request $request, Cv $cv)
     {   
-        $qualification = Qualifications::updateOrCreate(
-            [
-                'id' => $qualification_id,
-                'cv_id' => $cv->id,
-            ],
-            [
-                'title' => $request['title'],
-                'type' => $request['type'],
-                'other_type' => $request['other_type'],
-                'date' => $request['date'],
-                'institution' => $request['institution'],
-                'completed_nysc' => $request['completed_nysc'],
-                'cv_id' => $cv['id'],
-            ]
-        );
+        $nysc_detail = NyscDetails::where('cv_id', $cv['id'])->first() ?? new NyscDetails();
 
-        return $qualification;
+        $nysc_detail->state_id = $request['nysc_state'];
+        $nysc_detail->date = $request['comencement_date'];
+        $nysc_detail->cv_id = $cv['id'];
+
+        $cv->update([
+            'location_preference' => $request['location_preference'] ?: $cv->location_preference,
+            'employment_status' => $request['employment_status'] ?: $cv->employment_status
+        ]);
+
+        return $nysc_detail->save();
     }
 
-    public function handle_update_nysc_detail(Request $request, Cv $cv, $nysc_detail_id = null)
+    public function handle_create_job_experience(Request $request, Cv $cv)
     {   
-        $nysc_detail = NyscDetails::updateOrCreate(
-            [
-                'id' => $nysc_detail_id,
-                'cv_id' => $cv->id,
-            ],
-            [
-                'state_id' => $request['state_id'],
-                'other_type' => $request['other_type'],
-                'ref_for_location' => $request['ref_for_location'],
-                'employed' => $request['employed'],
-                'cv_id' => $cv['id'],
-            ]
-        );
-
-        return $nysc_detail;
+        $experience = new JobExperience();
+        return $this->handle_update_job_experience($request, $cv, $experience);
     }
 
-    public function handle_update_job_experience(Request $request, Cv $cv, $job_experience_id = null)
+    public function handle_update_job_experience(Request $request, Cv $cv, JobExperience $experience)
     {   
-        $job_experience = JobExperience::updateOrCreate(
-            [
-                'id' => $job_experience_id,
-                'cv_id' => $cv->id,
-            ],
-            [
-                'employer' => $request['employer'],
-                'industry' => $request['industry'],
-                'other_industry' => $request['other_industry'],
-                'employment_date' => $request['employment_date'],
-                'role' => $request['role'],
-                'job_description' => $request['job_description'],
-                'no_of_positions' => $request['no_of_positions'],
-                'cv_id' => $cv['id'],
-            ]
-        );
 
-        return $job_experience;
+        $sector = $request['industry_sector'];
+        if($sector === 'others') {
+            $experience->other_industry = $request['other_industry_sector'];
+        } else {
+            $experience->industrial_sectors_id = $request['industry_sector'];
+        }
+
+        $experience->employer = $request['name_of_employer'];
+        $experience->date = $request['employment_date'];
+        $experience->role = $request['role'];
+        $experience->job_description = $request['job_description'];
+        $experience->no_of_positions = $request['no_of_positions'];
+        $experience->cv_id = $cv['id'];
+
+        return $experience->save();
     }
 
-    public function handle_update_job_experience_role(Request $request, JobExperience $job_experience, $job_experience_role_id = null)
+    public function handle_create_referee(Request $request, Cv $cv)
     {   
-        $job_experience_role = JobExperienceRoles::updateOrCreate(
-            [
-                'id' => $job_experience_role_id,
-                'job_experience_id' => $job_experience['id'],
-            ],
-            [
-                'position' => $request['position'],
-                'start_date' => $request['start_date'],
-                'end_date' => $request['end_date'],
-                'job_description' => $request['job_description'],
-                'no_of_positions' => $request['no_of_positions'],
-                'referees' => $request['referees'],
-                'job_experience_id' => $job_experience['id'],
-            ]
-        );
-
-        return $job_experience_role;
+        $referee = new Referees();
+        return $this->handle_update_referee($request, $cv, $referee);
     }
 
-    public function handle_update_referee(Request $request, Cv $cv, $referee_id = null)
+    public function handle_update_referee(Request $request, Cv $cv, Referees $referee)
     {   
-        $referee = Referees::updateOrCreate(
-            [
-                'id' => $referee_id,
-                'cv_id' => $cv->id,
-            ],
-            [
-                'name' => $request['name'],
-                'email' => $request['email'],
-                'phone' => $request['phone'],
-                'address' => $request['address'],
-                'for_industry_type' => $request['for_industry_type'],
-                'cv_id' => $cv['id'],
-            ]
-        );
 
-        return $referee;
+        $referee->name = $request['referee_name'];
+        $referee->email = $request['referee_email'];
+        $referee->phone = $request['referee_phone_number'];
+        $referee->address = $request['referee_address'];
+        $referee->for_industry_type = $request['for_industry_type'];
+        $referee->name = $request['referee_name'];
+        $referee->cv_id = $cv['id'];
+
+        return $referee->save();
     }
+
+    public function handle_update_location_preference(Request $request, Cv $cv)
+    {   
+        return $cv->update([
+            'preferred_state' => $request['preferred_state'] ?: $cv->preferred_state,
+            'preferred_industry' => $request['preferred_industry'] ?: $cv->preferred_industry,
+            'has_hobbies' => $request['hobbies'] ?: $cv->hobbies,
+        ]);
+    }
+
+    public function handle_update_hobbies(Request $request, Cv $cv)
+    {   
+        return $cv->update([
+            'hobbies' => json_encode($request['hobbies']) ?? '',
+            'additional_information' => $request['additional_information'] ?: $cv->additional_information,
+        ]);
+    }
+
+    
 }
