@@ -19,8 +19,8 @@ return new class extends Migration
             $table->date('start_date');
             $table->date('end_date')->nullable();
             $table->longText('job_description');
-            $table->string('no_of_positions');
             $table->boolean('referees');
+            $table->boolean('is_current')->default(false);
             $table->foreignId('job_experience_id')->constrained();
             $table->timestamps();
         });

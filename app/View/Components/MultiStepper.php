@@ -7,15 +7,17 @@ use Illuminate\View\Component;
 class MultiStepper extends Component
 {
     public $step;
+    public $title;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($step)
+    public function __construct($step, $title)
     {
         $this->step = $step;
+        $this->title = $title;
     }
 
     /**

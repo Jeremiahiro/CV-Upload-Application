@@ -1,6 +1,6 @@
 @extends('v1.layouts.app')
 @section('title')
-Add CV
+Secondary Education
 @endsection
 @section('main')
 
@@ -10,7 +10,7 @@ Add CV
 
         <div class="container-fluid bg-light">
             <section>
-                <x-multi-stepper step="3" />
+                <x-multi-stepper step="3" title="Secondary Education" />
             </section>
             <section>
                 <div class="">
@@ -29,9 +29,9 @@ Add CV
 
                         <div class="d-flex flex-wrap mb-2">
                             @foreach ($cv->secondary_educations as $secondary_education)
-                                <div class="col col-lg-6">
-                                    <div class="w-100 data m-2 p-2">
-                                        <div class="d-flex justify-content-between p-2 bg-warning text-dark">
+                                <div class="col col-lg-6 mb-2">
+                                    <div class="w-100 data">
+                                        <div class="m-2 d-flex justify-content-between p-2 bg-warning text-dark">
                                             <div class=" ">
                                                 <span class="font-bold">
                                                     {{ Str::limit($secondary_education->name, 30) }} <small>({{ $secondary_education->qualification->name }})</small>

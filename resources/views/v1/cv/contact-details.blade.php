@@ -1,6 +1,6 @@
 @extends('v1.layouts.app')
 @section('title')
-Add CV
+Contact Details
 @endsection
 @section('main')
 
@@ -9,7 +9,7 @@ Add CV
         <x-top-nav title="Add CV" />
         <div class="container-fluid bg-light">
             <section>
-                <x-multi-stepper step="2" />
+                <x-multi-stepper step="2" title="Contact Details" />
             </section>
             <section>
                 <div class="">

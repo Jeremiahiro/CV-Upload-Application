@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ContactDetailsRequest;
 use App\Http\Requests\CVRequest;
 use App\Http\Requests\HobbiesRequest;
+use App\Http\Requests\JobExperiecneRoleRequest;
 use App\Http\Requests\JobExperienceRequest;
 use App\Http\Requests\LocationPreferenceRequest;
 use App\Http\Requests\NyscDetailsRequest;
@@ -14,12 +15,11 @@ use App\Http\Requests\SecondaryEducationRequest;
 use App\Http\Requests\TertiaryInstitutionRequest;
 use App\Models\CV;
 use App\Models\JobExperience;
-use App\Models\NyscDetails;
+use App\Models\JobExperienceRoles;
 use App\Models\Qualifications;
 use App\Models\Referees;
 use App\Models\SecondaryEducation;
 use App\Models\TertiaryEducation;
-use App\Models\TertiaryInstitutionTypes;
 use App\Repositories\CvRepository;
 use App\Repositories\OtherDataRepository;
 use Illuminate\Http\Request;
@@ -65,6 +65,17 @@ class CVController extends Controller
             $cv = null;
         }
         return view('v1.cv.create', compact(['cv']));
+    }
+
+    /**
+     * Show the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function show()
+    {
+        $cv = $this->otherServices->get_cv();
+        return view('v1.cv.show', compact(['cv']));
     }
 
     /**
@@ -360,52 +371,103 @@ class CVController extends Controller
     */
     public function create_employement_history(JobExperienceRequest $request, CV $cv) 
     {
-        if(!$this->cvServices->handle_create_job_experience($request, $cv)){
+        if(!$experience = $this->cvServices->handle_create_job_experience($request, $cv)){
             return back()->with('error', 'An error occured! Refresh and try again');
         }
 
-        return redirect()->back()->with('success', 'Operation Successful');
+        return redirect()->route('cv.employement_role', [$cv['uuid'], $experience['id']]);
     }
 
     /**
      * Update for employement history
      * 
      * @param  \App\Http\Requests\JobExperienceRequest  $request
-     * @param  \App\Models\JobExperience  $experience
+     * @param  \App\Models\JobExperience  $employement
      * @param  \App\Models\CV  $cv
      * 
     */
-    public function update_employement_history(JobExperienceRequest $request, CV $cv, JobExperience $experience) 
+    public function update_employement_history(JobExperienceRequest $request, CV $cv, JobExperience $employement) 
     {
-        if(!$this->cvServices->handle_update_job_experience($request, $cv, $experience)){
+        if(!$this->cvServices->handle_update_job_experience($request, $cv, $employement)){
             return back()->with('error', 'An error occured! Refresh and try again');
         }
         return redirect()->back()->with('success', 'Operation Successful');
-    }
-
-    /**
-     * Edit for employement history
-     * @param  \App\Models\CV  $cv
-     * @param  \App\Models\JobExperience  $experience
-     * 
-    */
-    public function edit_employement_history(Cv $cv, JobExperience $experience) 
-    {
-        $industry_sector = $this->otherServices->get_industry_sector($cv);
-
-        return view('v1.cv.employment-history-edit', compact(['cv', 'industry_sector', 'experience']));
     }
         
     /**
      * Delete for employement history
      * 
      * @param  \App\Models\CV  $cv
-     * @param  \App\Models\JobExperience  $experience
+     * @param  \App\Models\JobExperience  $employement
      * 
     */
-    public function delete_employement_history(CV $cv, JobExperience $experience) 
+    public function delete_employement_history(CV $cv, JobExperience $employement) 
     {
-        if(!$experience->delete()) {
+        if(!$employement->delete()) {
+            return redirect()->back()->with('success', 'OOPS Something went wrong');
+        }
+        return redirect()->back()->with('success', 'Operation Successful');
+    }
+
+    /**
+     * Display view for employement role
+     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\JobExperience  $employement
+     * 
+    */
+    public function employement_role(Cv $cv, JobExperience $employement) 
+    {
+        $industry_sector = $this->otherServices->get_industry_sector($cv);
+        $roles = $this->otherServices->get_employment_roles($employement);
+        return view('v1.cv.employment-role', compact(['cv', 'industry_sector', 'employement', 'roles']));
+    }
+
+    
+    /**
+     * Create for employement role
+     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\JobExperience  $employement
+     * @param  \App\Http\Requests\JobExperiecneRoleRequest  $request
+     * 
+     * 
+    */
+    public function create_employement_role(JobExperiecneRoleRequest $request, Cv $cv, JobExperience $employement) 
+    {
+        if(!$this->cvServices->handle_create_employement_role($request, $employement)){
+            return redirect()->back()->with('success', 'OOPS Something went wrong');
+        }
+
+        if($employement->roles->count() != $employement->no_of_positions) {
+            return redirect()->back()->with('success', 'Operation Successful');
+        }
+        return redirect()->route('cv.referee', $cv['uuid']);
+
+    }
+
+    /**
+     * Update for employement role
+     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\JobExperience  $employement
+     * 
+    */
+    public function update_employement_role(Request $request, Cv $cv, JobExperience $employement, JobExperienceRoles $role) 
+    {
+        if(!$this->cvServices->handle_update_employement_role($request, $employement, $role)){
+            return redirect()->back()->with('success', 'OOPS Something went wrong');
+        }
+        return redirect()->back()->with('success', 'Operation Successful');
+    }
+
+    /**
+     * Delete for employement role
+     * 
+     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\JobExperience  $employement
+     * 
+    */
+    public function delete_employement_role(CV $cv, JobExperienceRoles $role) 
+    {
+        if(!$role->delete()) {
             return redirect()->back()->with('success', 'OOPS Something went wrong');
         }
         return redirect()->back()->with('success', 'Operation Successful');
@@ -418,7 +480,9 @@ class CVController extends Controller
     */
     public function referee(Cv $cv) 
     {
-        return view('v1.cv.referee', compact(['cv']));
+        $referees = $this->otherServices->get_referee($cv);
+
+        return view('v1.cv.referee', compact(['cv', 'referees']));
     }
     
     /**
@@ -476,7 +540,8 @@ class CVController extends Controller
     public function location_preference(Cv $cv) 
     {
         $states = $this->otherServices->get_states_in_nigeria();
-        return view('v1.cv.location-preference', compact(['cv', 'states']));
+        $industry_sector = $this->otherServices->get_industry_sector($cv);
+        return view('v1.cv.location-preference', compact(['cv', 'states', 'industry_sector']));
     }
 
     /**
@@ -492,7 +557,10 @@ class CVController extends Controller
             return back()->with('error', 'An error occured! Refresh and try again');
         }
 
-        return redirect()->back()->with('success', 'Operation Successful');
+        if($cv->has_hobbies == true) {
+            return redirect()->route('cv.hobbies', $cv['uuid']);
+        }
+        return redirect()->route('cv.show', $cv['uuid']);
     }
 
     /**
@@ -517,8 +585,7 @@ class CVController extends Controller
         if(!$this->cvServices->handle_update_hobbies($request, $cv)){
             return back()->with('error', 'An error occured! Refresh and try again');
         }
-
-        return redirect()->back()->with('success', 'Operation Successful');
+        return redirect()->route('cv.show', $cv['uuid']);
     }
 
 

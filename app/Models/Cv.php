@@ -40,11 +40,6 @@ class Cv extends Model
         return $this->belongsTo(State::class);
     }
 
-    public function city(): HasOne
-    {
-        return $this->hasOne(City::class, 'city_id');
-    }
-
     public function nysc_detail(): HasOne
     {
         return $this->hasOne(NyscDetails::class, 'cv_id');
@@ -60,6 +55,11 @@ class Cv extends Model
         return $this->hasMany(TertiaryEducation::class, 'cv_id');
     }
 
+    public function qualifications(): HasMany
+    {
+        return $this->hasMany(Qualifications::class, 'cv_id');
+    }
+
     public function job_expereinces(): HasMany
     {
         return $this->hasMany(JobExperience::class, 'cv_id');
@@ -72,12 +72,18 @@ class Cv extends Model
 
     public function preferred_state(): BelongsTo
     {
-        return $this->belongsTo(State::class, 'id', 'preferred_state_id');
+        return $this->belongsTo(State::class, 'preferred_state_id', 'id');
     }
 
     public function preferred_industry(): BelongsTo
     {
-        return $this->belongsTo(IndustrialSector::class, 'id', 'preferred_industry_id');
+        return $this->belongsTo(IndustrialSector::class, 'preferred_industry_id', 'id');
+    }
+
+    public function title()
+    {
+        $current_role = $this->job_expereinces()->where('is_current', true)->first();git 
+        return $current_role->position;
     }
     
 

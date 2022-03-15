@@ -1,6 +1,6 @@
 @extends('v1.layouts.app')
 @section('title')
-Add CV
+NYSC Details
 @endsection
 @section('main')
 
@@ -10,7 +10,7 @@ Add CV
 
         <div class="container-fluid bg-light">
             <section>
-                <x-multi-stepper step="5" />
+                <x-multi-stepper step="6" title="NYSC Details" />
             </section>
             <section>
                 <div class="">

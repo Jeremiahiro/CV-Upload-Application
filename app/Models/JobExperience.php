@@ -12,21 +12,21 @@ class JobExperience extends Model
     use HasFactory;
 
     protected $casts = [
-        //
+        'job_description' => 'array'
     ];
 
     public function cv(): BelongsTo
     {
         return $this->belongsTo(Cv::class);
     }
-
+ 
     public function roles(): HasMany
     {
-        return $this->hasMany(JobExperienceRoles::class);
+        return $this->hasMany(JobExperienceRoles::class, 'job_experience_id');
     }
 
     public function sector(): BelongsTo
     {
-        return $this->belongsTo(IndustrialSector::class);
+        return $this->belongsTo(IndustrialSector::class, 'industrial_sectors_id');
     }
 }

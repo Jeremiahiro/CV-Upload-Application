@@ -29,7 +29,7 @@
 			<div class="">
 				@include('v1.partials.sidebar')
 			</div>
-			<div class="w-100 h-100 position-relative bg-light">
+			<div class="w-100 m-h-100 position-relative bg-light">
 				<main class="pb-5">
 					<div >
 						@include('v1.partials.message')

@@ -10,7 +10,7 @@ Add CV
 
         <div class="container-fluid bg-light">
             <section>
-                <x-multi-stepper step="1" />
+                <x-multi-stepper step="1" title="Personal Details" />
             </section>
             <section>
                 <div class="">

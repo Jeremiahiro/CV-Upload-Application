@@ -77,9 +77,13 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
 
         Route::get('/cv/{cv:uuid}/employement-history', [CVController::class, 'employement_history'])->name('cv.employement_history');
         Route::post('/cv/{cv:uuid}/employement-history', [CVController::class, 'create_employement_history'])->name('cv.employement_history.create');
-        Route::get('/cv/{cv:uuid}/employement-history/update/{experience}', [CVController::class, 'edit_employement_history'])->name('cv.employement_history.edit');
-        Route::post('/cv/{cv:uuid}/employement-history/{experience}', [CVController::class, 'update_employement_history'])->name('cv.employement_history.update');
-        Route::get('/cv/{cv:uuid}/employement-history/{experience}', [CVController::class, 'delete_employement_history'])->name('cv.employement_history.delete');
+        Route::post('/cv/{cv:uuid}/employement-history/{employement}', [CVController::class, 'update_employement_history'])->name('cv.employement_history.update');
+        Route::get('/cv/{cv:uuid}/employement-history/{employement}', [CVController::class, 'delete_employement_history'])->name('cv.employement_history.delete');
+        
+        Route::get('/cv/{cv:uuid}/employement-role/{employement}', [CVController::class, 'employement_role'])->name('cv.employement_role');
+        Route::post('/cv/{cv:uuid}/employement-role/{employement}', [CVController::class, 'create_employement_role'])->name('cv.employement_role.create');
+        Route::post('/cv/{cv:uuid}/employement-role/{employement}/{role}', [CVController::class, 'update_employement_role'])->name('cv.employement_role.update');
+        Route::get('/cv/{cv:uuid}/employement-role/delete/{role}', [CVController::class, 'delete_employement_role'])->name('cv.employement_role.delete');
 
         Route::get('/cv/{cv:uuid}/referees', [CVController::class, 'referee'])->name('cv.referee');
         Route::post('/cv/{cv:uuid}/referees', [CVController::class, 'create_referee'])->name('cv.referee.create');
@@ -88,6 +92,9 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
 
         Route::get('/cv/{cv:uuid}/location-preference', [CVController::class, 'location_preference'])->name('cv.location_preference');
         Route::post('/cv/{cv:uuid}/location-preference', [CVController::class, 'update_location_preference'])->name('cv.location_preference.update');
+
+        Route::get('/cv/{cv:uuid}/hobbies', [CVController::class, 'hobbies'])->name('cv.hobbies');
+        Route::post('/cv/{cv:uuid}/hobbies', [CVController::class, 'update_hobbies'])->name('cv.hobbies.update');
 
         Route::post('user/password', [UserContorller::class, 'update_password'])->name('update.password');
         Route::post('user/image', [UserContorller::class, 'update_image'])->name('update.image');

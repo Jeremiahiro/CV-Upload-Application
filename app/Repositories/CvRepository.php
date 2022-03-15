@@ -10,6 +10,7 @@ use App\Models\JobExperienceRoles;
 use App\Models\NyscDetails;
 use App\Models\Qualifications;
 use App\Models\Referees;
+use App\Models\Role;
 use App\Models\SecondaryEducation;
 use App\Models\TertiaryEducation;
 use Illuminate\Http\Request;
@@ -85,8 +86,7 @@ class CvRepository
 
     public function handle_update_tertiary_education(Request $request, Cv $cv, TertiaryEducation $tertiary_education)
     {   
-        $institution_type = $request['type_of_institution'];
-        if($institution_type === 'others') {
+        if($request['type_of_institution'] === 'others') {
             $tertiary_education->other_type = $request['other_tertiary_institution_type'];
         } else {
             $tertiary_education->tertiary_types_id = $request['type_of_institution'];
@@ -112,16 +112,14 @@ class CvRepository
     
     public function handle_update_professional_qualification(Request $request, Cv $cv, Qualifications $qualification)
     {   
-        
-        $qualification_type = $request['type_of_qualification'];
-        if($qualification_type === 'others') {
+
+        if($request['type_of_qualification'] === 'others') {
             $qualification->other_qualification_type = $request['other_qualification_type'];
         } else {
             $qualification->professional_qualifications_id = $request['type_of_qualification'];
         }
 
-        $awarding_institution = $request['awarding_institution'];
-        if($awarding_institution === 'others') {
+        if($request['awarding_institution'] === 'others') {
             $qualification->other_institutions_type = $request['other_awarding_institution'];
         } else {
             $qualification->professional_institutions_id = $request['awarding_institution'];
@@ -164,8 +162,7 @@ class CvRepository
     public function handle_update_job_experience(Request $request, Cv $cv, JobExperience $experience)
     {   
 
-        $sector = $request['industry_sector'];
-        if($sector === 'others') {
+        if($request['industry_sector'] === 'others') {
             $experience->other_industry = $request['other_industry_sector'];
         } else {
             $experience->industrial_sectors_id = $request['industry_sector'];
@@ -177,8 +174,9 @@ class CvRepository
         $experience->job_description = $request['job_description'];
         $experience->no_of_positions = $request['no_of_positions'];
         $experience->cv_id = $cv['id'];
+        $experience->save();
 
-        return $experience->save();
+        return $experience;
     }
 
     public function handle_create_referee(Request $request, Cv $cv)
@@ -189,7 +187,6 @@ class CvRepository
 
     public function handle_update_referee(Request $request, Cv $cv, Referees $referee)
     {   
-
         $referee->name = $request['referee_name'];
         $referee->email = $request['referee_email'];
         $referee->phone = $request['referee_phone_number'];
@@ -201,11 +198,31 @@ class CvRepository
         return $referee->save();
     }
 
+    public function handle_create_employement_role(Request $request, JobExperience $experience,)
+    {   
+        $role = new JobExperienceRoles();
+        return $this->handle_update_employement_role($request, $experience, $role);
+    }
+
+    public function handle_update_employement_role(Request $request, JobExperience $experience, JobExperienceRoles $role)
+    {   
+
+        $role->position = $request['position'];
+        $role->start_date = $request['from_date'];
+        $role->end_date = $request['to_date'];
+        $role->job_description = $request['job_description'];
+        $role->referees = $request['referees'];
+        $role->no_of_positions = $request['referees']; //TODO: remove this
+        $role->job_experience_id = $experience['id'];
+
+        return $role->save();
+    }
+
     public function handle_update_location_preference(Request $request, Cv $cv)
     {   
         return $cv->update([
-            'preferred_state' => $request['preferred_state'] ?: $cv->preferred_state,
-            'preferred_industry' => $request['preferred_industry'] ?: $cv->preferred_industry,
+            'preferred_state_id' => $request['preferred_state'] ?: $cv->preferred_state,
+            'preferred_industry_id' => $request['preferred_industry'] ?: $cv->preferred_industry,
             'has_hobbies' => $request['hobbies'] ?: $cv->hobbies,
         ]);
     }

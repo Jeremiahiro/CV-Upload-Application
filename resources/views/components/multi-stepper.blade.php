@@ -5,62 +5,62 @@
                 <a
                     class="btn multisteps-form__progress-btn @if($step > 0) js-active @endif"
                     role="button"
-                    title="User Info"
+                    title="Personal Information"
                 ></a>
                 <a
                     class="btn multisteps-form__progress-btn @if($step > 1) js-active @endif"
                     role="button"
-                    title="User Info"
+                    title="Contact Details"
                 ></a>
                 <a
                     class="btn multisteps-form__progress-btn @if($step > 2) js-active @endif"
                     role="button"
-                    title="User Info"
+                    title="Secondary Education"
                 ></a>
                 <a
                     class="btn multisteps-form__progress-btn @if($step > 3) js-active @endif"
                     role="button"
-                    title="User Info"
+                    title="Tertiary Institutions"
                 ></a>
                 <a
                     class="btn multisteps-form__progress-btn @if($step > 4) js-active @endif"
                     role="button"
-                    title="User Info"
+                    title="Professional Qualification"
                 ></a>
                 <a
                     class="btn multisteps-form__progress-btn @if($step > 5) js-active @endif"
                     role="button"
-                    title="User Info"
+                    title="NYSC Details"
                 ></a>
                 <a
                     class="btn multisteps-form__progress-btn @if($step > 6) js-active @endif"
                     role="button"
-                    title="User Info"
+                    title="Employement History"
                 ></a>
                 <a
                     class="btn multisteps-form__progress-btn @if($step > 7) js-active @endif"
                     role="button"
-                    title="User Info"
+                    title="Employement Role"
                 ></a>
                 <a
                     class="btn multisteps-form__progress-btn @if($step > 8) js-active @endif"
                     role="button"
-                    title="User Info"
+                    title="{{ $title }}"
                 ></a>
                 <a
                     class="btn multisteps-form__progress-btn @if($step > 9) js-active @endif"
                     role="button"
-                    title="User Info"
+                    title="{{ $title }}"
                 ></a>
                 <a
                     class="btn multisteps-form__progress-btn @if($step > 10) js-active @endif"
                     role="button"
-                    title="User Info"
+                    title="{{ $title }}"
                 ></a>
                 <a
                     class="btn multisteps-form__progress-btn @if($step > 11) js-active @endif"
                     role="button"
-                    title="User Info"
+                    title="{{ $title }}"
                 ></a>
             </div>
         </div>
