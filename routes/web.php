@@ -42,7 +42,7 @@ Route::get('/api/fetch-countries', [GeneralController::class, 'fetch_countries']
 Route::get('/api/country/{country}/fetch-states', [GeneralController::class, 'fetch_states'])->name('fetch.states');
 Route::get('/api/tertiary-types', [GeneralController::class, 'fetch_tertiary_type'])->name('fetch.tertiary.type');
 
-Route::group(['middleware' => ['auth', 'verified']], function() {
+Route::group(['middleware' => ['auth', 'verified', 'signed']], function() {
     // Route::group(['middleware' => ['is_profile_complete']], function() {
         Route::get('/', [HomeController::class, 'index'])->name('home');
         Route::resource('cv', CVController::class)->parameter('cv', 'cv:uuid');
@@ -96,5 +96,5 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
         Route::post('user/password', [UserContorller::class, 'update_password'])->name('update.password');
         Route::post('user/image', [UserContorller::class, 'update_image'])->name('update.image');
     // });
-});
+})->name('verification.verify');
 
