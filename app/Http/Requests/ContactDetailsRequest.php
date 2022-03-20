@@ -28,7 +28,7 @@ class ContactDetailsRequest extends FormRequest
             'country' => 'required|string',
             'state' => 'required|string',
             'mobile_phone' => 'nullable|string',
-            'home_phone' => 'nullable|string',
+            'home_phone' => 'nullable|string|required_if:mobile_phone,null',
             'email' => 'required|email',
         ];
     }

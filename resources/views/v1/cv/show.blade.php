@@ -143,9 +143,9 @@ Preview CV
                                                 style="margin-left: 47px;font-family: Poppins, sans-serif;color: black;font-size: 13px;">
                                                 <h5 class="font-bold">{{ $secondary_education->name }}</h5>
                                                 <p class="m-1">
-                                                    {{ \Carbon\Carbon::parse($secondary_education->start_date)->format('Y') }}
+                                                    {{ date('M-Y', strtotime($secondary_education->start_date)) }}
                                                     -
-                                                    {{ \Carbon\Carbon::parse($secondary_education->end_date)->format('Y') }}
+                                                    {{ date('M-Y', strtotime($secondary_education->end_date)) }}
                                                 </p>
                                                 <h5>{{ $secondary_education->qualification->name }}</h5>
                                             </div>
@@ -182,9 +182,9 @@ Preview CV
                                                     {{ $institution->institution_type ? $institution->institution_type->name : $institution->other_type }}
                                                 </p>
                                                 <p class="p-0 m-0">
-                                                    {{ \Carbon\Carbon::parse($institution->start_date)->format('Y') }}
+                                                    {{ date('M-Y', strtotime($institution->start_date)) }}
                                                     -
-                                                    {{ \Carbon\Carbon::parse($institution->end_date)->format('Y') }}
+                                                    {{ date('M-Y', strtotime($institution->start_date)) }}
                                                 </p>
                                                 <h5>{{ $institution->qualification->name }}</h5>
                                             </div>

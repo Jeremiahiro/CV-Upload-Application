@@ -49,6 +49,7 @@
 		{{-- <script src="{{ asset('assets/js/Multi-step-form.js') }}"></script> --}}
 
 		<script src="{{ asset('assets/js/theme.js') }}"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>  
 
 		@stack('javascript')
 

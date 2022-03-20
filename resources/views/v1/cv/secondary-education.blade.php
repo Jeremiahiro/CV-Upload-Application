@@ -38,7 +38,7 @@ Secondary Education
                                                 </span>
                                                 <br>
                                                 <small class="">
-                                                    {{ $secondary_education->start_date }} to {{ $secondary_education->end_date }}
+                                                    {{ date('M-Y', strtotime($secondary_education->start_date)) }} to {{ date('M-Y', strtotime($secondary_education->end_date)) }}
                                                 </small>
                                             </div>
                                             <div class="data__action mx-3">
@@ -79,7 +79,6 @@ Secondary Education
                                 value="{{ old('no_of_secondary_school', $cv->no_of_secondary_school ?? '') }}"
                                 placeholder="No of secondary school"
                                 required
-                                {{ $cv->no_of_secondary_school ? 'readonly' : '' }}
                             >
                             @error('no_of_secondary_school')
                                 <span class="invalid-feedback" role="alert">
@@ -111,11 +110,11 @@ Secondary Education
                                 <label class="form-label" for="start_date">Start Date</label>
                                 <input
                                     id="start_date"
-                                    type="date"
+                                    type="month"
                                     class="form-control form-input input-round @error('start_date') is-invalid @enderror"
                                     name="start_date"
                                     value="{{ old('start_date') }}"
-                                    max="{{ now()->toDateString('Y-m-d') }}"
+                                    max="{{ now()->toDateString('M-Y') }}"
                                     required
                                 >
                                 
@@ -129,12 +128,11 @@ Secondary Education
                                 <label class="form-label" for="end_date">End Date</label>
                                 <input
                                     id="end_date"
-                                    type="date"
+                                    type="month"
                                     class="form-control form-input input-round @error('end_date') is-invalid @enderror"
                                     name="end_date"
                                     value="{{ old('end_date') }}"
-                                    max="{{ now()->toDateString('Y-m-d') }}"
-                                    format="d-m-y"
+                                    max="{{ now()->toDateString('M-Y') }}"
                                     required
                                 >
                                 
@@ -169,6 +167,51 @@ Secondary Education
                             @enderror
                         </div>
 
+                        <div class="form-group mb-3" id="other_qualifiation_obtained-container">
+                            <label class="form-label" for="other_qualifiation_obtained">Other Qualification Obtained</label>
+                            <input
+                                id="other_qualifiation_obtained"
+                                type="text"
+                                class="form-control form-input input-round @error('other_qualifiation_obtained') is-invalid @enderror"
+                                name="other_qualifiation_obtained"
+                                value="{{ old('other_qualifiation_obtained') }}"
+                                placeholder="Other qualification"
+                            >
+                            @error('other_qualifiation_obtained')
+                                <span class="invalid-feedback" role="alert">
+                                <small>{{ $message }}</small>
+                                </span>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <div class="form-group mb-3" id="addMore">
+                                <button
+                                    type="submit"
+                                    class="submit__btn text-warning font-bold btn btn-clear"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                        fill="currentColor" viewBox="0 0 16 16"
+                                        class="bi bi-plus-circle fs-4"
+                                        style="color: var(--bs-yellow);font-weight: bold;border-width: 2px;">
+                                        <path
+                                            d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z">
+                                        </path>
+                                        <path
+                                            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z">
+                                        </path>
+                                    </svg>
+                                    Add
+                                </button>
+                            </div>
+                            <div class="form-group mb-3" id="update">
+                                <button type="submit" class="submit__btn text-warning font-bold btn btn-clear">
+                                    <i class="fa fa-check"></i>
+                                    Update
+                                </button>
+                            </div>
+                        </div>
+                        
                         <div class="form-group mb-3" id="tertiary_institution-check">
                             <label class="form-label">Did you attend or are you attending a Tertiary Institution?</label><br>
                             <div class="form-check form-check-inline">
@@ -205,34 +248,6 @@ Secondary Education
                             </div>
                         </div>
 
-                        <div>
-                            <div class="form-group mb-3" id="addMore">
-                                <button
-                                    type="submit"
-                                    class="submit__btn text-warning font-bold btn btn-clear"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-                                        fill="currentColor" viewBox="0 0 16 16"
-                                        class="bi bi-plus-circle fs-4"
-                                        style="color: var(--bs-yellow);font-weight: bold;border-width: 2px;">
-                                        <path
-                                            d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z">
-                                        </path>
-                                        <path
-                                            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z">
-                                        </path>
-                                    </svg>
-                                    Add
-                                </button>
-                            </div>
-                            <div class="form-group mb-3" id="update">
-                                <button type="submit" class="submit__btn text-warning font-bold btn btn-clear">
-                                    <i class="fa fa-check"></i>
-                                    Update
-                                </button>
-                            </div>
-                        </div>
-
                         <div class="d-flex mt-4" >
                             <a href="{{ route('cv.contact-details', $cv['uuid']) }}" id="previousBtn" class="submit__btn btn btn-light btn-outline-secondary px-4 font-bold mx-2">Prev</a>
                             <a
@@ -260,6 +275,7 @@ Secondary Education
         $(document).ready(function () {
 
             const name_of_secondary_school = $('#name_of_secondary_school');
+            const other_qualifiation_obtained = $('#other_qualifiation_obtained-container');
             const addMore = $('#addMore');
             const updateData = $('#update');
             const tertiary_institution_check = $('#tertiary_institution-check');
@@ -267,6 +283,15 @@ Secondary Education
             const end_date = $('#end_date');
 
             updateData.hide()
+            other_qualifiation_obtained.hide();
+
+            $('#select-qualification').on('change', function () {
+                if(this.value === '6') {
+                    other_qualifiation_obtained.show(500)
+                } else {
+                    other_qualifiation_obtained.hide(500)
+                }
+            });
             
             $('#start_date').change(function(e) {
                 var date = new Date($(this).val());
@@ -312,8 +337,8 @@ Secondary Education
                 function handleUpdateData(data) {
                     $('#secondary_education_form').attr('action', form_action);
                     name_of_secondary_school.val(data.name);
-                    start_date.val(data.start_date);
-                    end_date.val(data.end_date);
+                    start_date.val(moment(data.start_date).format('YYYY-MM'));
+                    end_date.val(moment(data.end_date).format('YYYY-MM'));
                     $('#select-qualification').val(data.qualification.id).change();
                 };
             });

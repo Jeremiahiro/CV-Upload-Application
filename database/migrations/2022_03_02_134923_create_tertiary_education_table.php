@@ -17,8 +17,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('tertiary_institutions_id')->constrained();
             $table->foreignId('tertiary_types_id')->nullable()->constrained();
-            $table->foreignId('tertiary_qualifications_id')->constrained();
+            $table->foreignId('tertiary_qualifications_id')->nullable()->constrained();
             $table->string('other_type')->nullable();
+            $table->string('other_qualification')->nullable();
             $table->date('start_date');
             $table->date('end_date');
             $table->foreignId('cv_id')->constrained();

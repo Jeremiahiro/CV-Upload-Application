@@ -15,6 +15,7 @@ use App\Models\State;
 use App\Models\SecondaryEducation;
 use App\Models\SecondaryQualifications;
 use App\Models\TertiaryEducation;
+use App\Models\TertiaryInstitution;
 use App\Models\TertiaryTypes;
 use App\Models\TertiaryQualifications;
 use Illuminate\Support\Facades\Auth;
@@ -68,7 +69,12 @@ class OtherDataRepository
 
     public function get_tertiary_types()
     {
-        return TertiaryTypes::with(['institutions'])->get(['id', 'name']);
+        return TertiaryTypes::orderBy('name', 'asc')->get(['id', 'name']);
+    }
+
+    public function get_tertiary_institutions()
+    {
+        return TertiaryInstitution::orderBy('name', 'asc')->get(['id', 'name']);
     }
 
     public function get_tertiary_education(Cv $cv)

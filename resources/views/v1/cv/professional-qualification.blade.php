@@ -40,7 +40,7 @@ Qualifications
                                                 </span>
                                                 <br>
                                                 <small class="">
-                                                    {{ $qualification->date }}
+                                                    {{ date('M-Y', strtotime($qualification->date)) }}
                                                 </small>
                                             </div>
                                             <div class="data__action mx-3">
@@ -135,11 +135,11 @@ Qualifications
                             <label class="form-label" for="qualification_date">Date qualification obtained</label>
                             <input
                                 id="qualification_date"
-                                type="date"
+                                type="month"
                                 class="form-control form-input input-round @error('qualification_date') is-invalid @enderror"
                                 name="qualification_date"
                                 value="{{ old('qualification_date') }}"
-                                max="{{ now()->toDateString('Y-m-d') }}"
+                                max="{{ now()->toDateString('M-Y') }}"
                                 required
                             >
                             
@@ -190,6 +190,31 @@ Qualifications
                                 </span>
                             @enderror
                         </div>
+                        
+                        <div>
+                            <div class="form-group mb-3" id="addMore">
+                                <button type="submit" class="submit__btn text-warning font-bold btn btn-clear">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                        fill="currentColor" viewBox="0 0 16 16"
+                                        class="bi bi-plus-circle fs-4"
+                                        style="color: var(--bs-yellow);font-weight: bold;border-width: 2px;">
+                                        <path
+                                            d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z">
+                                        </path>
+                                        <path
+                                            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z">
+                                        </path>
+                                    </svg>
+                                    Add
+                                </button>
+                            </div>
+                            <div class="form-group mb-3" id="update">
+                                <button type="submit" class="submit__btn text-warning font-bold btn btn-clear">
+                                    <i class="fa fa-check"></i>
+                                    Update
+                                </button>
+                            </div>
+                        </div>
 
                         <div class="form-group mb-3" id="nysc-check">
                             <label class="form-label">Have you completed NYSC?</label><br>
@@ -224,31 +249,6 @@ Qualifications
                                     @endif
                                 >
                                 <label class="form-check-label" for="no">no</label>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="form-group mb-3" id="addMore">
-                                <button type="submit" class="submit__btn text-warning font-bold btn btn-clear">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-                                        fill="currentColor" viewBox="0 0 16 16"
-                                        class="bi bi-plus-circle fs-4"
-                                        style="color: var(--bs-yellow);font-weight: bold;border-width: 2px;">
-                                        <path
-                                            d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z">
-                                        </path>
-                                        <path
-                                            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z">
-                                        </path>
-                                    </svg>
-                                    Add
-                                </button>
-                            </div>
-                            <div class="form-group mb-3" id="update">
-                                <button type="submit" class="submit__btn text-warning font-bold btn btn-clear">
-                                    <i class="fa fa-check"></i>
-                                    Update
-                                </button>
                             </div>
                         </div>
 

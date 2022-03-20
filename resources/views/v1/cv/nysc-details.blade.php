@@ -55,11 +55,11 @@ NYSC Details
                             <label class="form-label" for="comencement_date">What date & year did you commence National Service?</label>
                             <input
                                 id="comencement_date"
-                                type="date"
+                                type="month"
                                 class="form-control form-input input-round @error('end_date') is-invalid @enderror"
                                 name="comencement_date"
                                 value="{{ old('comencement_date', $cv->nysc_detail->date ?? '') }}"
-                                max="{{ now()->toDateString('Y-m-d') }}"
+                                max="{{ now()->toDateString('M-Y') }}"
                                 format="d-m-y"
                                 required
                             >

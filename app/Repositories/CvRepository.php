@@ -13,6 +13,7 @@ use App\Models\Referees;
 use App\Models\SecondaryEducation;
 use App\Models\TertiaryEducation;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class CvRepository
 {
@@ -64,9 +65,16 @@ class CvRepository
     public function handle_update_secondary_education(Request $request, Cv $cv, SecondaryEducation $secondary_education)
     {   
         $secondary_education->name = $request['name'];
-        $secondary_education->start_date = $request['start_date'];
-        $secondary_education->end_date = $request['end_date'];
-        $secondary_education->secondary_qualifications_id = $request['qualification'];
+        $secondary_education->start_date = Carbon::createFromFormat('Y-m', $request['start_date']);
+        $secondary_education->end_date = Carbon::createFromFormat('Y-m', $request['end_date']);
+
+        // TODO: update this session
+        if($request['qualification'] === 'other') {
+            // $secondary_education->other_qualification = $request['other_qualifiation_obtained'];
+        } else {
+            $secondary_education->secondary_qualifications_id = 1; 
+            // $secondary_education->secondary_qualifications_id = $request['qualification'];
+        }
         $secondary_education->cv_id = $cv['id'];
 
         $cv->update([
@@ -90,10 +98,16 @@ class CvRepository
         } else {
             $tertiary_education->tertiary_types_id = $request['type_of_institution'];
         }
+        // TODO: update this session
+        // if($request['qualification'] === 'other') {
+        //     $tertiary_education->other_qualification = $request['other_qualifiation_obtained'];
+        // } else {
+            $tertiary_education->tertiary_qualifications_id = 1; 
+            // $tertiary_education->secondary_qualifications_id = $request['qualification'];
+        // }
         $tertiary_education->tertiary_institutions_id = $request['name_of_institution'];
-        $tertiary_education->start_date = $request['start_date'];
-        $tertiary_education->end_date = $request['end_date'];
-        $tertiary_education->tertiary_qualifications_id = $request['qualification'];
+        $tertiary_education->start_date = Carbon::createFromFormat('Y-m', $request['start_date']);
+        $tertiary_education->end_date = Carbon::createFromFormat('Y-m', $request['end_date']);;
         $tertiary_education->cv_id = $cv['id'];
 
         $cv->update([
@@ -125,7 +139,7 @@ class CvRepository
         }
 
         $qualification->name = $request['name_of_qualification'];
-        $qualification->date = $request['qualification_date'];
+        $qualification->date = Carbon::createFromFormat('Y-m', $request['qualification_date']);
         $qualification->cv_id = $cv['id'];
 
         $cv->update([

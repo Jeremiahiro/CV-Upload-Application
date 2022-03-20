@@ -207,12 +207,19 @@ class CVController extends Controller
     */
     public function tertiary_institution(Cv $cv) 
     {
-        // $tertiary_types = $this->otherServices->get_tertiary_types();
+        $tertiary_types = $this->otherServices->get_tertiary_types();
+        $tertiary_institutions = $this->otherServices->get_tertiary_institutions();
         $qualifications = $this->otherServices->get_tertiary_qualifications();
         $tertiary_educations = $this->otherServices->get_tertiary_education($cv);
 
-        return view('v1.cv.tertiary-institution', compact(['cv', 'qualifications', 'tertiary_educations']));
-        // return view('v1.cv.tertiary-institution', compact(['cv', 'tertiary_types', 'qualifications', 'tertiary_educations']));
+        // return view('v1.cv.tertiary-institution', compact(['cv', 'qualifications', 'tertiary_educations']));
+        return view('v1.cv.tertiary-institution', compact([
+            'cv',
+            'tertiary_types',
+            'tertiary_institutions',
+            'qualifications',
+            'tertiary_educations'
+        ]));
     }
 
     

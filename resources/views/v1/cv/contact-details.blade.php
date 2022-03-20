@@ -145,7 +145,7 @@ Contact Details
                                 type="email"
                                 class="form-control form-input input-round @error('email') is-invalid @enderror"
                                 name="email"
-                                value="{{ old('email', $cv->email ?? '') }}"
+                                value="{{ old('email', $cv->email ?? auth()->user()->email) }}"
                                 placeholder="me@domain.com"
                                 required
                             >

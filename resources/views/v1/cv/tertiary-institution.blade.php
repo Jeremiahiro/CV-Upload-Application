@@ -40,7 +40,7 @@ Tertiary Institutions
                                                 </span>
                                                 <br>
                                                 <small class="">
-                                                    {{ $tertiary_education->start_date }} to {{ $tertiary_education->end_date }}
+                                                    {{ date('M-Y', strtotime($tertiary_education->start_date)) }} to {{ date('M-Y', strtotime($tertiary_education->end_date)) }}
                                                 </small>
                                             </div>
                                             <div class="data__action mx-3">
@@ -76,20 +76,17 @@ Tertiary Institutions
                             <label class="form-label" for="name_of_institution">Name of Tertiary Institution</label>
                             <select class="form-select form-input" name="name_of_institution" id="select-name_of_institution" required data-live-search="true">
                                 <option value="" selected disabled>Tertiary Institution</option>
-                                {{-- @foreach ($tertiary_types as $type)
-                                    <option value="" class="font-bold text-uppercase" disabled>{{ $type->name }}</option>
-                                    @foreach ($type->institutions as $institution)
-                                        <option
-                                            value="{{ $institution->id }}"
-                                            data-type={{ $institution->type->id }}
-                                            @if (old('name_of_institution') == $institution->id)
-                                                selected
-                                            @endif
-                                        >
-                                            {{ $institution->name }}
-                                        </option>
-                                    @endforeach
-                                @endforeach --}}
+                                @foreach ($tertiary_institutions as $institution)
+                                    <option
+                                        value="{{ $institution->id }}"
+                                        @if (old('name_of_institution') == $institution->id)
+                                            selected
+                                        @endif
+                                    >
+                                        {{ $institution->name }}
+                                    </option>
+                                @endforeach
+                                <option value="others">Others</option>
                             </select>
 
                             @error('name_of_institution')
@@ -103,7 +100,7 @@ Tertiary Institutions
                             <label class="form-label" for="type_of_institution">Type of Tertiary Institution</label>
                             <select class="form-select form-input" name="type_of_institution" id="select-type_of_institution" required data-live-search="true">
                                 <option value="" selected disabled>Type of Institution</option>
-                                {{-- @foreach ($tertiary_types as $type)
+                                @foreach ($tertiary_types as $type)
                                     <option
                                         value="{{ $type->id }}"
                                         @if (old('type_of_institution') == $type->id)
@@ -112,7 +109,7 @@ Tertiary Institutions
                                     >
                                         {{ $type->name }}
                                     </option>
-                                @endforeach --}}
+                                @endforeach
                                 <option value="others">Others</option>
                             </select>
 
@@ -149,11 +146,11 @@ Tertiary Institutions
                                 <label class="form-label" for="start_date">Entry Date</label>
                                 <input
                                     id="start_date"
-                                    type="date"
+                                    type="month"
                                     class="form-control form-input input-round @error('start_date') is-invalid @enderror"
                                     name="start_date"
                                     value="{{ old('start_date') }}"
-                                    max="{{ now()->toDateString('Y-m-d') }}"
+                                    max="{{ now()->toDateString('M-Y') }}"
                                     required
                                 >
                                 
@@ -167,11 +164,11 @@ Tertiary Institutions
                                 <label class="form-label" for="end_date">Finish Date</label>
                                 <input
                                     id="end_date"
-                                    type="date"
+                                    type="month"
                                     class="form-control form-input input-round @error('end_date') is-invalid @enderror"
                                     name="end_date"
                                     value="{{ old('end_date') }}"
-                                    max="{{ now()->toDateString('Y-m-d') }}"
+                                    max="{{ now()->toDateString('M-Y') }}"
                                     format="d-m-y"
                                     required
                                 >
@@ -198,6 +195,7 @@ Tertiary Institutions
                                         {{ $qualification->name }}
                                     </option>
                                 @endforeach
+                                <option value="others">Others</option>
                             </select>
                             
                             @error('qualification')
@@ -205,6 +203,48 @@ Tertiary Institutions
                                 <small>{{ $message }}</small>
                                 </span>
                             @enderror
+                        </div>
+
+                        <div class="form-group mb-3" id="other_qualifiation_obtained-container">
+                            <label class="form-label" for="other_qualifiation_obtained">Other Qualification Obtained</label>
+                            <input
+                                id="other_qualifiation_obtained"
+                                type="text"
+                                class="form-control form-input input-round @error('other_qualifiation_obtained') is-invalid @enderror"
+                                name="other_qualifiation_obtained"
+                                value="{{ old('other_qualifiation_obtained') }}"
+                                placeholder="Other qualification"
+                            >
+                            @error('other_qualifiation_obtained')
+                                <span class="invalid-feedback" role="alert">
+                                <small>{{ $message }}</small>
+                                </span>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <div class="form-group mb-3" id="addMore">
+                                <button type="submit" class="submit__btn text-warning font-bold btn btn-clear">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                        fill="currentColor" viewBox="0 0 16 16"
+                                        class="bi bi-plus-circle fs-4"
+                                        style="color: var(--bs-yellow);font-weight: bold;border-width: 2px;">
+                                        <path
+                                            d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z">
+                                        </path>
+                                        <path
+                                            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z">
+                                        </path>
+                                    </svg>
+                                    Add
+                                </button>
+                            </div>
+                            <div class="form-group mb-3" id="update">
+                                <button type="submit" class="submit__btn text-warning font-bold btn btn-clear">
+                                    <i class="fa fa-check"></i>
+                                    Update
+                                </button>
+                            </div>
                         </div>
 
                         <div class="form-group mb-3" id="tertiary_institution-check">
@@ -242,32 +282,7 @@ Tertiary Institutions
                                 <label class="form-check-label" for="no">no</label>
                             </div>
                         </div>
-
-                        <div>
-                            <div class="form-group mb-3" id="addMore">
-                                <button type="submit" class="submit__btn text-warning font-bold btn btn-clear">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-                                        fill="currentColor" viewBox="0 0 16 16"
-                                        class="bi bi-plus-circle fs-4"
-                                        style="color: var(--bs-yellow);font-weight: bold;border-width: 2px;">
-                                        <path
-                                            d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z">
-                                        </path>
-                                        <path
-                                            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z">
-                                        </path>
-                                    </svg>
-                                    Add
-                                </button>
-                            </div>
-                            <div class="form-group mb-3" id="update">
-                                <button type="submit" class="submit__btn text-warning font-bold btn btn-clear">
-                                    <i class="fa fa-check"></i>
-                                    Update
-                                </button>
-                            </div>
-                        </div>
-
+                     
                         <div class="d-flex mt-4" >
                             <a href="{{ route('cv.secondary-education', $cv['uuid']) }}" id="previousBtn" class="submit__btn btn btn-light btn-outline-secondary px-4 font-bold mx-2">Prev</a>
                             <a
@@ -290,30 +305,30 @@ Tertiary Institutions
     <script>
         $(document).ready(function () {
 
-            fetch_tertiary_types();
+            // fetch_tertiary_types();
 
-            function fetch_tertiary_types() {
-                $("#select-name_of_institution").html('');
-                $("#select-type_of_institution").html('');
+            // function fetch_tertiary_types() {
+            //     $("#select-name_of_institution").html('');
+            //     $("#select-type_of_institution").html('');
                 
-                $.ajax({
-                    url: '/api/tertiary-types',
-                    type: "GET",
-                    dataType: 'json',
-                    success: function (response) {
-                        $('#select-name_of_institution').html('<option value="">Select Tertiary Institution</option>');
-                        $('#select-type_of_institution').html('<option value="">Select Type of Tertiary Institution</option>');
-                        $.each(response, function (key, type) {
-                            $("#select-type_of_institution").append('<option value="' + type.id + '">' + type.name + '</option>');
-                            $.each(type.institutions, function (key, institution) {
-                                $("#select-name_of_institution").append('<option value="' + institution.id + '" data-type="' + institution.tertiary_types_id + '">' + institution.name + '</option>');
-                            });
-                        });
-                        $('#select-name_of_institution').append('<option value="others">Others</option>');
-                        $('#select-type_of_institution').append('<option value="others">Others</option>');
-                    }
-                });
-            }
+            //     $.ajax({
+            //         url: '/api/tertiary-types',
+            //         type: "GET",
+            //         dataType: 'json',
+            //         success: function (response) {
+            //             $('#select-name_of_institution').html('<option value="">Select Tertiary Institution</option>');
+            //             $('#select-type_of_institution').html('<option value="">Select Type of Tertiary Institution</option>');
+            //             $.each(response, function (key, type) {
+            //                 $("#select-type_of_institution").append('<option value="' + type.id + '">' + type.name + '</option>');
+            //                 $.each(type.institutions, function (key, institution) {
+            //                     $("#select-name_of_institution").append('<option value="' + institution.id + '" data-type="' + institution.tertiary_types_id + '">' + institution.name + '</option>');
+            //                 });
+            //             });
+            //             $('#select-name_of_institution').append('<option value="others">Others</option>');
+            //             $('#select-type_of_institution').append('<option value="others">Others</option>');
+            //         }
+            //     });
+            // }
 
 
             const tertiary_institution_check = $('#tertiary_institution-check');
@@ -322,13 +337,24 @@ Tertiary Institutions
             const end_date = $('#end_date'); 
             const addMore = $('#addMore');
             const updateData = $('#update');
+            const other_qualifiation_obtained = $('#other_qualifiation_obtained-container');
 
+            other_qualifiation_obtained.hide();
             updateData.hide()
             other_tertiary_institution.hide()
 
-            $('#select-name_of_institution').on('change', function () {
-                var type = $(this).children('option:selected').data('type');
-                $('#select-type_of_institution').val(type).change();
+            // $('#select-name_of_institution').on('change', function () {
+            //     var type = $(this).children('option:selected').data('type');
+            //     $('#select-type_of_institution').val(type).change();
+            // });
+
+            
+            $('#select-qualification').on('change', function () {
+                if(this.value === 'others') {
+                    other_qualifiation_obtained.show(500)
+                } else {
+                    other_qualifiation_obtained.hide(500)
+                }
             });
 
             $('#select-type_of_institution').on('change', function () {
@@ -362,8 +388,8 @@ Tertiary Institutions
                     $('#select-name_of_institution').val(data.institution.id).change();
                     $('#select-type_of_institution').val(type).change();
                     $('#select-qualification').val(data.qualification.id).change();
-                    start_date.val(data.start_date);
-                    end_date.val(data.end_date);
+                    start_date.val(moment(data.start_date).format('YYYY-MM'));
+                    end_date.val(moment(data.end_date).format('YYYY-MM'));
                     if(type == 'others') {
                         $('#other_tertiary_institution_type').val(data.other_type);
                     }

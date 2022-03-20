@@ -19,7 +19,8 @@ return new class extends Migration
             $table->date('start_date');
             $table->date('end_date');
             $table->foreignId('cv_id')->constrained();
-            $table->foreignId('secondary_qualifications_id')->constrained();
+            $table->string('other_qualification')->nullable();
+            $table->foreignId('secondary_qualifications_id')->nullable()->constrained();
             $table->timestamps();
         });
     }
