@@ -10,7 +10,6 @@ use App\Models\JobExperienceRoles;
 use App\Models\NyscDetails;
 use App\Models\Qualifications;
 use App\Models\Referees;
-use App\Models\Role;
 use App\Models\SecondaryEducation;
 use App\Models\TertiaryEducation;
 use Illuminate\Http\Request;

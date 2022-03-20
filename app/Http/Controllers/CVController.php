@@ -13,7 +13,7 @@ use App\Http\Requests\ProfessionalQualificationsRequest;
 use App\Http\Requests\RefereeRequest;
 use App\Http\Requests\SecondaryEducationRequest;
 use App\Http\Requests\TertiaryInstitutionRequest;
-use App\Models\CV;
+use App\Models\Cv;
 use App\Models\JobExperience;
 use App\Models\JobExperienceRoles;
 use App\Models\Qualifications;
