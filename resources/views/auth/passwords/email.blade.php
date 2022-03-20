@@ -15,13 +15,6 @@
             </div>
             <form method="POST" action="{{ route('password.email') }}">
                 @csrf
-                <div>
-                    <small class="text-danger">
-                        @foreach($errors->all() as $error)
-                            {{ $error  }}
-                        @endforeach
-                    </small>
-                </div>
                 <div class="mb-3">
                     <input id="email" type="email" placeholder="Mail"
                         class="form-control input-round @error('email') is-invalid @enderror" name="email"

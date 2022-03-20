@@ -15,13 +15,6 @@
             </div>
             <form method="POST" action="{{ route('password.confirm') }}">
                 @csrf
-                <div>
-                    <small class="text-danger">
-                        @foreach($errors->all() as $error)
-                            {{ $error  }}
-                        @endforeach
-                    </small>
-                </div>
                 <div class="mb-3">
                     <input id="password" type="password" placeholder="Password"
                         class="form-control input-round @error('password') is-invalid @enderror" name="password"

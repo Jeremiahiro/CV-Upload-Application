@@ -9,13 +9,6 @@
             @csrf
             <div class="text-center">
                 <h5 class="head-text">Sign Up to <span class="fs-">Logo<span class="text-yellow">Name</span></span></h5>
-                {{-- <div>
-                    <small class="text-danger">
-                        @foreach($errors->all() as $error)
-                            {{ $error  }}
-                        @endforeach
-                    </small>
-                </div> --}}
                     <div class="container mt-4">
                         <div class="row mb-4">
                             <div class="col firstcol">
