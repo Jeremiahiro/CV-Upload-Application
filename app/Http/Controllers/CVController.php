@@ -99,7 +99,7 @@ class CVController extends Controller
      * @param  \App\Http\Requests\CVRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function update(CVRequest $request, CV $cv)
+    public function update(CVRequest $request, Cv $cv)
     {
         if(!$cv = $this->cvServices->handle_update_cv($request, $cv)){
             return back()->with('error', 'An error occured! Refresh and try again');
@@ -126,7 +126,7 @@ class CVController extends Controller
      * @param  \App\Models\CV  $cv
      * 
     */
-    public function update_contact_details(ContactDetailsRequest $request, CV $cv) 
+    public function update_contact_details(ContactDetailsRequest $request, Cv $cv) 
     {
         if(!$cv = $this->cvServices->handle_update_contact_details($request, $cv)){
             return back()->with('error', 'An error occured! Refresh and try again');
@@ -141,7 +141,7 @@ class CVController extends Controller
      * @param  \App\Models\CV  $cv
      * 
     */
-    public function secondary_education(CV $cv) 
+    public function secondary_education(Cv $cv) 
     {
         $qualifications = $this->otherServices->get_secondary_qualifications();
 
@@ -156,10 +156,10 @@ class CVController extends Controller
      * Create for secondary education details
      * 
      * @param  \App\Http\Requests\ContactDetailsRequest  $request
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv  $cv
      * 
     */
-    public function create_secondary_education(SecondaryEducationRequest $request, CV $cv) 
+    public function create_secondary_education(SecondaryEducationRequest $request, Cv $cv) 
     {
         if(!$this->cvServices->handle_create_secondary_education($request, $cv)){
             return back()->with('error', 'An error occured! Refresh and try again');
@@ -172,10 +172,10 @@ class CVController extends Controller
      * Update for secondary education details
      * 
      * @param  \App\Http\Requests\ContactDetailsRequest  $request
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv  $cv
      * 
     */
-    public function update_secondary_education(SecondaryEducationRequest $request, CV $cv, SecondaryEducation $secondary_education) 
+    public function update_secondary_education(SecondaryEducationRequest $request, Cv $cv, SecondaryEducation $secondary_education) 
     {
         if(!$this->cvServices->handle_update_secondary_education($request, $cv, $secondary_education)){
             return back()->with('error', 'An error occured! Refresh and try again');
@@ -188,11 +188,11 @@ class CVController extends Controller
     /**
      * Delete for secondary education details
      * 
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv $cv
      * @param  \App\Models\SecondaryEducation  $secondary_edu
      * 
     */
-    public function delete_secondary_education(CV $cv, SecondaryEducation $secondary_edu) 
+    public function delete_secondary_education(Cv $cv, SecondaryEducation $secondary_edu) 
     {
         if(!$secondary_edu->delete()) {
             return redirect()->back()->with('success', 'OOPS Something went wrong');
@@ -202,7 +202,7 @@ class CVController extends Controller
 
     /**
      * Display view for tertiary institution
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv  $cv
      * 
     */
     public function tertiary_institution(Cv $cv) 
@@ -219,10 +219,10 @@ class CVController extends Controller
      * Create for tertiary institution
      * 
      * @param  \App\Http\Requests\TertiaryInstitutionRequest  $request
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv  $cv
      * 
     */
-    public function create_tertiary_institution(TertiaryInstitutionRequest $request, CV $cv) 
+    public function create_tertiary_institution(TertiaryInstitutionRequest $request, Cv $cv) 
     {
         if(!$this->cvServices->handle_create_tertiary_education($request, $cv)){
             return back()->with('error', 'An error occured! Refresh and try again');
@@ -236,10 +236,10 @@ class CVController extends Controller
      * 
      * @param  \App\Http\Requests\TertiaryInstitutionRequest  $request
      * @param  \App\Models\TertiaryEducation  $tertiary_edu
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv  $cv
      * 
     */
-    public function update_tertiary_institution(TertiaryInstitutionRequest $request, CV $cv, TertiaryEducation $tertiary_edu) 
+    public function update_tertiary_institution(TertiaryInstitutionRequest $request, Cv $cv, TertiaryEducation $tertiary_edu) 
     {
         if(!$this->cvServices->handle_update_tertiary_education($request, $cv, $tertiary_edu)){
             return back()->with('error', 'An error occured! Refresh and try again');
@@ -250,11 +250,11 @@ class CVController extends Controller
     /**
      * Delete for tertiary education details
      * 
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv  $cv
      * @param  \App\Models\TertiaryEducation  $tertiary_edu
      * 
     */
-    public function delete_tertiary_institution(CV $cv, TertiaryEducation $tertiary_edu) 
+    public function delete_tertiary_institution(Cv $cv, TertiaryEducation $tertiary_edu) 
     {
         if(!$tertiary_edu->delete()) {
             return redirect()->back()->with('success', 'OOPS Something went wrong');
@@ -264,7 +264,7 @@ class CVController extends Controller
 
     /**
      * Display view for professional qualification
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv  $cv
      * 
     */
     public function professional_qualification(Cv $cv) 
@@ -280,10 +280,10 @@ class CVController extends Controller
      * Create for professional qualification
      * 
      * @param  \App\Http\Requests\ProfessionalQualificationsRequest  $request
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv  $cv
      * 
     */
-    public function create_professional_qualification(ProfessionalQualificationsRequest $request, CV $cv) 
+    public function create_professional_qualification(ProfessionalQualificationsRequest $request, Cv $cv) 
     {
         if(!$this->cvServices->handle_create_professional_qualification($request, $cv)){
             return back()->with('error', 'An error occured! Refresh and try again');
@@ -297,10 +297,10 @@ class CVController extends Controller
      * 
      * @param  \App\Http\Requests\ProfessionalQualificationsRequest  $request
      * @param  \App\Models\Qualifications  $qualification
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv  $cv
      * 
     */
-    public function update_professional_qualification(ProfessionalQualificationsRequest $request, CV $cv, Qualifications $qualification) 
+    public function update_professional_qualification(ProfessionalQualificationsRequest $request, Cv $cv, Qualifications $qualification) 
     {
         if(!$this->cvServices->handle_update_professional_qualification($request, $cv, $qualification)){
             return back()->with('error', 'An error occured! Refresh and try again');
@@ -311,11 +311,11 @@ class CVController extends Controller
     /**
      * Delete for professional qualification
      * 
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv  $cv
      * @param  \App\Models\Qualifications  $qualification
      * 
     */
-    public function delete_professional_qualification(CV $cv, Qualifications $qualification) 
+    public function delete_professional_qualification(Cv $cv, Qualifications $qualification) 
     {
         if(!$qualification->delete()) {
             return redirect()->back()->with('success', 'OOPS Something went wrong');
@@ -325,7 +325,7 @@ class CVController extends Controller
     
     /**
      * Display view for nysc details
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv  $cv
      * 
     */
     public function nysc_details(Cv $cv) 
@@ -338,10 +338,10 @@ class CVController extends Controller
      * Create for nysc details
      * 
      * @param  \App\Http\Requests\NyscDetailsRequest  $request
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv  $cv
      * 
     */
-    public function update_nysc_details(NyscDetailsRequest $request, CV $cv) 
+    public function update_nysc_details(NyscDetailsRequest $request, Cv $cv) 
     {
         if(!$this->cvServices->handle_update_nysc_details($request, $cv)){
             return back()->with('error', 'An error occured! Refresh and try again');
@@ -353,7 +353,7 @@ class CVController extends Controller
 
     /**
      * Display view for employement history
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv  $cv
      * 
     */
     public function employement_history(Cv $cv, $type) 
@@ -368,10 +368,10 @@ class CVController extends Controller
      * Create for employement history
      * 
      * @param  \App\Http\Requests\ProfessionalQualificationsRequest  $request
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv $cv
      * 
     */
-    public function create_employement_history(JobExperienceRequest $request, CV $cv) 
+    public function create_employement_history(JobExperienceRequest $request, Cv $cv) 
     {
         if(!$experience = $this->cvServices->handle_create_job_experience($request, $cv)){
             return back()->with('error', 'An error occured! Refresh and try again');
@@ -410,11 +410,11 @@ class CVController extends Controller
     /**
      * Delete for employement history
      * 
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv  $cv
      * @param  \App\Models\JobExperience  $employement
      * 
     */
-    public function delete_employement_history(CV $cv, JobExperience $employement) 
+    public function delete_employement_history(Cv $cv, JobExperience $employement) 
     {
         if(!$employement->delete()) {
             return redirect()->back()->with('success', 'OOPS Something went wrong');
@@ -424,7 +424,7 @@ class CVController extends Controller
 
     /**
      * Display view for employement role
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv  $cv
      * @param  \App\Models\JobExperience  $employement
      * 
     */
@@ -438,7 +438,7 @@ class CVController extends Controller
     
     /**
      * Create for employement role
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv  $cv
      * @param  \App\Models\JobExperience  $employement
      * @param  \App\Http\Requests\JobExperiecneRoleRequest  $request
      * 
@@ -459,7 +459,7 @@ class CVController extends Controller
 
     /**
      * Update for employement role
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv $cv
      * @param  \App\Models\JobExperience  $employement
      * 
     */
@@ -474,11 +474,11 @@ class CVController extends Controller
     /**
      * Delete for employement role
      * 
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv $cv
      * @param  \App\Models\JobExperience  $employement
      * 
     */
-    public function delete_employement_role(CV $cv, JobExperienceRoles $role) 
+    public function delete_employement_role(Cv $cv, JobExperienceRoles $role) 
     {
         if(!$role->delete()) {
             return redirect()->back()->with('success', 'OOPS Something went wrong');
@@ -488,7 +488,7 @@ class CVController extends Controller
 
     /**
      * Display view for referee
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv  $cv
      * 
     */
     public function referee(Cv $cv) 
@@ -502,10 +502,10 @@ class CVController extends Controller
      * Create for referee
      * 
      * @param  \App\Http\Requests\RefereeRequest  $request
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv $cv
      * 
     */
-    public function create_referee(RefereeRequest $request, CV $cv) 
+    public function create_referee(RefereeRequest $request, Cv $cv) 
     {
         if(!$this->cvServices->handle_create_referee($request, $cv)){
             return back()->with('error', 'An error occured! Refresh and try again');
@@ -519,10 +519,10 @@ class CVController extends Controller
      * 
      * @param  \App\Http\Requests\RefereeRequest  $request
      * @param  \App\Models\Referees  $referee
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv $cv
      * 
     */
-    public function update_referee(RefereeRequest $request, CV $cv, Referees $referee) 
+    public function update_referee(RefereeRequest $request, Cv $cv, Referees $referee) 
     {
         if(!$this->cvServices->handle_update_referee($request, $cv, $referee)){
             return back()->with('error', 'An error occured! Refresh and try again');
@@ -533,11 +533,11 @@ class CVController extends Controller
     /**
      * Delete for referee
      * 
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv $cv
      * @param  \App\Models\Referees  $referee
      * 
     */
-    public function delete_referee(CV $cv, Referees $referee) 
+    public function delete_referee(Cv $cv, Referees $referee) 
     {
         if(!$referee->delete()) {
             return redirect()->back()->with('success', 'OOPS Something went wrong');
@@ -547,7 +547,7 @@ class CVController extends Controller
 
     /**
      * Display view for location preference
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv $cv
      * 
     */
     public function location_preference(Cv $cv) 
@@ -561,10 +561,10 @@ class CVController extends Controller
      * Create / update location preference
      * 
      * @param  \App\Http\Requests\LocationPreferenceRequest  $request
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv $cv
      * 
     */
-    public function update_location_preference(LocationPreferenceRequest $request, CV $cv) 
+    public function update_location_preference(LocationPreferenceRequest $request, Cv $cv) 
     {
         if(!$this->cvServices->handle_update_location_preference($request, $cv)){
             return back()->with('error', 'An error occured! Refresh and try again');
@@ -578,7 +578,7 @@ class CVController extends Controller
 
     /**
      * Display view for hobbies
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv $cv
      * 
     */
     public function hobbies(Cv $cv) 
@@ -590,10 +590,10 @@ class CVController extends Controller
      * Create / update location preference
      * 
      * @param  \App\Http\Requests\HobbiesRequest  $request
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv $cv
      * 
     */
-    public function update_hobbies(HobbiesRequest $request, CV $cv) 
+    public function update_hobbies(HobbiesRequest $request, Cv $cv) 
     {
         if(!$this->cvServices->handle_update_hobbies($request, $cv)){
             return back()->with('error', 'An error occured! Refresh and try again');
@@ -605,10 +605,10 @@ class CVController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\CV  $cv
+     * @param  \App\Models\Cv  $cv
      * @return \Illuminate\Http\Response
     */
-    public function destroy(CV $cv)
+    public function destroy(Cv $cv)
     {
         if(!$cv->delete()) {
             return 'false';
