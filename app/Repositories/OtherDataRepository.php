@@ -101,7 +101,7 @@ class OtherDataRepository
         return IndustrialSector::get(['id', 'name']);
     }
 
-    public function get_previous_experiecne(CV $cv)
+    public function get_previous_experiecne(Cv $cv)
     {
         return JobExperience::with(['roles', 'sector'])->where('cv_id', $cv['id'])->get();
     }
