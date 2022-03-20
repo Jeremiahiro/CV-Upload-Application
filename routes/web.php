@@ -47,7 +47,6 @@ Route::group(['middleware' => ['auth', 'verified', 'signed']], function() {
         Route::get('/', [HomeController::class, 'index'])->name('home');
         Route::resource('cv', CVController::class)->parameter('cv', 'cv:uuid');
         Route::resource('cv/{cv:uuid}/experience', JobExperienceController::class)->only(['create', 'update']);
-        // Route::post('/cv/{cv:uuid}/{type}', [CVController::class, 'update'])->name('update.cv.data');
 
         Route::resource('user', UserContorller::class);
 
@@ -96,5 +95,5 @@ Route::group(['middleware' => ['auth', 'verified', 'signed']], function() {
         Route::post('user/password', [UserContorller::class, 'update_password'])->name('update.password');
         Route::post('user/image', [UserContorller::class, 'update_image'])->name('update.image');
     // });
-})->name('verification.verify');
+});
 
