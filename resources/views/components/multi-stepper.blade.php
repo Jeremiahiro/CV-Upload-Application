@@ -45,22 +45,22 @@
                 <a
                     class="btn multisteps-form__progress-btn @if($step > 8) js-active @endif"
                     role="button"
-                    title="{{ $title }}"
+                    title="{{ $cv }}"
                 ></a>
                 <a
                     class="btn multisteps-form__progress-btn @if($step > 9) js-active @endif"
                     role="button"
-                    title="{{ $title }}"
+                    title="{{ $cv }}"
                 ></a>
                 <a
                     class="btn multisteps-form__progress-btn @if($step > 10) js-active @endif"
                     role="button"
-                    title="{{ $title }}"
+                    title="{{ $cv }}"
                 ></a>
                 <a
                     class="btn multisteps-form__progress-btn @if($step > 11) js-active @endif"
                     role="button"
-                    title="{{ $title }}"
+                    title="{{ $cv }}"
                 ></a>
             </div>
         </div>

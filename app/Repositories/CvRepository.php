@@ -173,6 +173,7 @@ class CvRepository
         $experience->role = $request['role'];
         $experience->job_description = $request['job_description'];
         $experience->no_of_positions = $request['no_of_positions'];
+        $experience->is_current = $request['is_current'] == 'current' ? true : false;
         $experience->cv_id = $cv['id'];
         $experience->save();
 
@@ -212,7 +213,6 @@ class CvRepository
         $role->end_date = $request['to_date'];
         $role->job_description = $request['job_description'];
         $role->referees = $request['referees'];
-        $role->no_of_positions = $request['referees']; //TODO: remove this
         $role->job_experience_id = $experience['id'];
 
         return $role->save();

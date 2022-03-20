@@ -46,7 +46,7 @@
 			</div>
 		</div>
 		</div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
-		<script src="{{ asset('assets/js/Multi-step-form.js') }}"></script>
+		{{-- <script src="{{ asset('assets/js/Multi-step-form.js') }}"></script> --}}
 
 		<script src="{{ asset('assets/js/theme.js') }}"></script>
 

@@ -9,8 +9,8 @@ Preview CV
         <x-top-nav title="CV View" />
         <div class="px-5 py-3">
             <div class="mb-3 d-flex">
-                <button class="btn btn-secondary px-4" href="{{ route('cv.index') }}">Edit</button>
-                <button class="btn btn-warning px-4 mx-3" href="{{ route('cv.index') }}">Save</button>
+                <a href="{{ route('cv.create') }}" class="btn btn-secondary px-4">Edit</a>
+                <a href="{{ route('cv.index') }}" class="btn btn-warning px-4 mx-3">Save</a>
             </div>
 
             <div style="background: rgba(184, 184, 184, 0.3);border-bottom-color: rgb(194,196,212)">
@@ -20,11 +20,11 @@ Preview CV
                             style="margin: 30px;margin-top: 0;padding-top: 10px;padding-left: 30px;margin-bottom: 15px;">
                             <div style="height: 60px;width: 2px;background: black;"></div>
                             <div style="padding-left: 30px;">
-                                <h3
+                                <h3 class="text-capitalize"
                                     style="color: black;font-weight: bold;font-family: Poppins, sans-serif;font-size: 30px;">
                                     {{ $cv->first_name }}
                                 </h3>
-                                <h3
+                                <h3 class="text-capitalize"
                                     style="color: black;font-weight: bold;font-family: Poppins, sans-serif;font-size: 30px;">
                                     {{ $cv->last_name }}
                                 </h3>
@@ -34,14 +34,15 @@ Preview CV
                     <div style="background: transparent;width: 100%;">
                         <div class="">
                             <div class="row" style="margin-left: 0px;">
-                                <div class="col-md-4 d-xl-flex justify-content-xl-center align-items-xl-center"
+                                <div class="col-md-4 d-xl-flex justify-content-xl-between align-items-xl-center position-relative"
                                     style="background: var(--bs-yellow);">
-                                    <div style="height: 102px;width: 4px;background: #ffffff;margin-left: -77px;"></div>
+                                    <div class="p-1 bg-white h-100 position-absolute left-0" style="left: 85px;"></div>
+                                    {{-- <div style="height: 102px;width: 4px;background: #ffffff;margin-left: -77px;"></div> --}}
                                     <div>
                                         <div class="d-xl-flex justify-content-xl-center align-items-xl-center"
                                             style="padding: 0px;height: 80px;">
                                             <h4 class="text-uppercase"
-                                                style="color: black;font-family: Poppins, sans-serif;padding-left: 10px;">
+                                                style="color: black;font-family: Poppins, sans-serif;padding-left:100px;">
                                                 {{ $cv->title() }}
                                             </h4>
                                         </div>
@@ -69,7 +70,7 @@ Preview CV
                                                 style="color: var(--bs-yellow);margin-right: 15px;"></i>&nbsp;
                                             {{ \Carbon\Carbon::parse($cv->dob)->format('d/m/Y') }}
                                         </p>
-                                        <p class="d-xxl-flex align-items-xxl-center"
+                                        <p class="d-xxl-flex align-items-xxl-center text-capitalize"
                                             style="margin-bottom: 10px;color: black;font-family: Poppins, sans-serif;font-size: 14px;">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
                                                 fill="currentColor" viewBox="0 0 16 16" class="bi bi-caret-right fs-4"
@@ -77,38 +78,44 @@ Preview CV
                                                 <path
                                                     d="M6 12.796V3.204L11.481 8 6 12.796zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753z">
                                                 </path>
-                                            </svg>&nbsp;{{ $cv->gender }}</p>
+                                            </svg>&nbsp;{{ $cv->sex }}</p>
                                     </div>
                                 </div>
                                 <div class="col-md-4 d-xxl-flex align-items-xxl-center" style="padding-left: 20px;">
                                     <div>
+                                        @if ($cv->mobile_phone)
                                         <p class="d-xxl-flex align-items-xxl-center"
-                                            style="margin-bottom: 10px;color: black;font-family: Poppins, sans-serif;font-size: 14px;">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-                                                fill="currentColor" viewBox="0 0 16 16" class="bi bi-telephone fs-4"
-                                                style="color: var(--bs-yellow);margin-right: 15px;">
-                                                <path
-                                                    d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z">
-                                                </path>
-                                            </svg>{{ $cv->mobile_phone }}</p>
+                                        style="margin-bottom: 10px;color: black;font-family: Poppins, sans-serif;font-size: 14px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                            fill="currentColor" viewBox="0 0 16 16" class="bi bi-telephone fs-4"
+                                            style="color: var(--bs-yellow);margin-right: 15px;">
+                                            <path
+                                                d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z">
+                                            </path>
+                                        </svg>{{ $cv->mobile_phone }}</p>
+                                        @endif
+                                        @if ($cv->home_phone)
                                         <p class="d-xxl-flex align-items-xxl-center"
-                                            style="margin-bottom: 10px;color: black;font-family: Poppins, sans-serif;font-size: 14px;">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-                                                fill="currentColor" viewBox="0 0 16 16" class="bi bi-telephone fs-4"
-                                                style="color: var(--bs-yellow);margin-right: 15px;">
-                                                <path
-                                                    d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z">
-                                                </path>
-                                            </svg>&nbsp;{{ $cv->home_phone }}</p>
+                                        style="margin-bottom: 10px;color: black;font-family: Poppins, sans-serif;font-size: 14px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                            fill="currentColor" viewBox="0 0 16 16" class="bi bi-telephone fs-4"
+                                            style="color: var(--bs-yellow);margin-right: 15px;">
+                                            <path
+                                                d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z">
+                                            </path>
+                                        </svg>&nbsp;{{ $cv->home_phone }}</p>
+                                        @endif
+                                        @if ($cv->email)
                                         <p class="d-xxl-flex align-items-xxl-center"
-                                            style="margin-bottom: 10px;color: black;font-family: Poppins, sans-serif;font-size: 14px;">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-                                                fill="currentColor" viewBox="0 0 16 16" class="bi bi-envelope fs-4"
-                                                style="color: var(--bs-yellow);margin-right: 15px;">
-                                                <path fill-rule="evenodd"
-                                                    d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z">
-                                                </path>
-                                            </svg>&nbsp;{{ $cv->email }}</p>
+                                        style="margin-bottom: 10px;color: black;font-family: Poppins, sans-serif;font-size: 14px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                            fill="currentColor" viewBox="0 0 16 16" class="bi bi-envelope fs-4"
+                                            style="color: var(--bs-yellow);margin-right: 15px;">
+                                            <path fill-rule="evenodd"
+                                                d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z">
+                                            </path>
+                                        </svg>&nbsp;{{ $cv->email }}</p>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -352,8 +359,9 @@ Preview CV
                                                 </h4>
                                             </div>
                                             @foreach ($cv->job_expereinces as $expereince)
+                                            @if ($expereince->is_current)
                                             <div class="mb-2"
-                                                style="margin-left: 47px;font-family: Poppins, sans-serif;color: black;font-size: 13px;">
+                                            style="margin-left: 47px;font-family: Poppins, sans-serif;color: black;font-size: 13px;">
                                                 <h5 class="font-bold">{{ $expereince->employer }}</h5>
                                                 <p class="m-1">
                                                     {{ $expereince->role }}
@@ -371,6 +379,27 @@ Preview CV
                                                     {{ $expereince->no_of_positions }} Position(s)
                                                 </p>
                                             </div>
+                                            @else
+                                            <div class="mb-2"
+                                            style="margin-left: 47px;font-family: Poppins, sans-serif;color: black;font-size: 13px;">
+                                                <h5 class="font-bold">{{ $expereince->employer }}</h5>
+                                                <p class="m-1">
+                                                    {{ $expereince->role }}
+                                                </p>
+                                                <p class="m-1">
+                                                    {{ \Carbon\Carbon::parse($expereince->date)->format('d/m/Y') }}
+                                                </p>
+                                                <p class="m-1">
+                                                    {{ Str::limit($expereince->job_description, 40) }}
+                                                </p>
+                                                <p class="m-1">
+                                                    {{ Str::limit($expereince->sector ? $expereince->sector->name : $expereince->other_industry, 40) }}
+                                                </p>
+                                                <p class="m-1">
+                                                    {{ $expereince->no_of_positions }} Position(s)
+                                                </p>
+                                            </div>
+                                            @endif
                                             @endforeach
                                         </div>
                                     </div>

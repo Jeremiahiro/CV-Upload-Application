@@ -10,7 +10,7 @@ Qualifications
 
         <div class="container-fluid bg-light">
             <section>
-                <x-multi-stepper step="5" title="Professional Qualification" />
+                <x-multi-stepper step="5" :cv="$cv" />
             </section>
             <section>
                 <div class="">
@@ -256,9 +256,9 @@ Qualifications
                             <a
                                 href="{{ $cv->tertiary_institution ? route('cv.tertiary-institution', $cv['uuid']) : route('cv.secondary-education', $cv['uuid']) }}" id="previousBtn" class="submit__btn btn btn-light btn-outline-secondary px-4 font-bold mx-2">Prev</a>
                             <a
-                                href="{{ $cv->completed_nysc == 1 ? route('cv.nysc_details', $cv['uuid']) : route('cv.employment-history', $cv['uuid']) }}"
+                                href="{{ $cv->completed_nysc == 1 ? route('cv.nysc_details', $cv['uuid']) : route('cv.employement_history', [$cv['uuid'], 'current']) }}"
                                 id="nextForm"
-                                class="submit__btn btn btn-warning px-4 font-bold mx-2 @if(!$cv->tertiary_educations->count()) disabled-link disabled @endif"
+                                class="submit__btn btn btn-warning px-4 font-bold mx-2 @if(!$professional_qualifications->count()) disabled @endif"
                             >
                                 Next
                             </a>
@@ -341,23 +341,25 @@ Qualifications
                 };
             });
 
-            
             $('#nextForm').click(function(e) {
-                var href = $(this).attr('href');
-                e.preventDefault();
-                if(confirm('Changes you made may not be saved')) {
-                    window.location = href;
-                }
+                confirmAction(e);
             });
 
             $('#previousBtn').click(function(e) {
-                var href = $(this).attr('href');
-                e.preventDefault();
-                if(confirm('Changes you made may not be saved')) {
-                    window.location = href;
-                }
+                confirmAction(e);
             });
 
+            function confirmAction(e) {
+                if($('#name_of_qualification').val().length < 1) {
+                    window.location = $(this).attr('href');
+                } else {
+                    var href = $(this).attr('href');
+                    e.preventDefault();
+                    if(confirm('Changes you made may not be saved')) {
+                        window.location = href;
+                    }
+                }
+            }
 
         });
     </script>

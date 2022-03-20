@@ -10,12 +10,12 @@ Employment Roles
 
         <div class="container-fluid bg-light">
             <section>
-                <x-multi-stepper step="9" title="Employement Roles" />
+                <x-multi-stepper step="9" :cv="$cv" />
             </section>
             <section>
                 <div class="">
                     <form
-                        action="{{ $cv ? route('cv.employement_role.create', [$cv['uuid'], $employement['id']]) : route('cv.store') }}"
+                        action="{{ route('cv.employement_role.create', [$cv['uuid'], $employement['id']]) }}"
                         method="post"
                         class="col-12 col-lg-8 mx-auto my-4 bg-white p-5 shadow rounded"
                         onsubmit="$('.submit__btn').attr('disabled', true)"
@@ -195,7 +195,7 @@ Employment Roles
 
                         <div class="d-flex mt-4" >
                             <a
-                                href="{{ route('cv.employement_history', $cv['uuid']) }}"
+                                href="{{ route('cv.employement_history', [$cv['uuid'], $cv->employment_status ? 'current' : 'previous']) }}"
                                 id="previousBtn"
                                 class="submit__btn btn btn-light btn-outline-secondary px-4 font-bold mx-2"
                             >
@@ -205,7 +205,7 @@ Employment Roles
                             <a
                                 href="{{ route('cv.referee', $cv['uuid']) }}"
                                 id="nextForm"
-                                class="submit__btn btn btn-warning px-4 font-bold mx-2 @if(!$employement->roles->count()) disabled @endif"
+                                class="submit__btn btn btn-warning px-4 font-bold mx-2"
                             >
                                 Next
                             </a>

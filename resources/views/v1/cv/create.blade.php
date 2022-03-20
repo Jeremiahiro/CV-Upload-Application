@@ -10,7 +10,7 @@ Add CV
 
         <div class="container-fluid bg-light">
             <section>
-                <x-multi-stepper step="1" title="Personal Details" />
+                <x-multi-stepper step="1" cv="{{ $cv }}" />
             </section>
             <section>
                 <div class="">

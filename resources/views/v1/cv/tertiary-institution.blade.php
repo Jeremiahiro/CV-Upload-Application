@@ -9,7 +9,7 @@ Tertiary Institutions
         <x-top-nav title="Add CV" />
         <div class="container-fluid bg-light">
             <section>
-                <x-multi-stepper step="4" title="Tertiary Institutions" />
+                <x-multi-stepper step="4" :cv="$cv" />
             </section>
             <section>
                 <div class="">
@@ -185,7 +185,7 @@ Tertiary Institutions
                         <div class="form-group mb-3">
                             <label class="form-label" for="select-qualification">Qualification Obtained</label>
                             <select class="form-select form-input" name="qualification" id="select-qualification" required data-live-search="true">
-                                <option value="" selected disabled>Qualification</option>
+                                <option value="null" selected disabled>Qualification</option>
                                 @foreach ($qualifications as $qualification)
                                     <option
                                         value="{{ $qualification->id }}"
@@ -269,7 +269,7 @@ Tertiary Institutions
                         <div class="d-flex mt-4" >
                             <a href="{{ route('cv.secondary-education', $cv['uuid']) }}" id="previousBtn" class="submit__btn btn btn-light btn-outline-secondary px-4 font-bold mx-2">Prev</a>
                             <a
-                                href="{{ $cv->professional_qualification == 1 ? route('cv.professional-qualification', $cv['uuid']) : route('cv.employement_history', $cv['uuid']) }}"
+                                href="{{ $cv->professional_qualification == 1 ? route('cv.professional-qualification', $cv['uuid']) : route('cv.employement_history', [$cv['uuid'], $cv->employment_status ? 'current' : 'previous']) }}"
                                 id="nextForm"
                                 class="submit__btn btn btn-warning px-4 font-bold mx-2 @if(!$cv->tertiary_educations->count()) disabled-link disabled @endif"
                             >
@@ -341,29 +341,23 @@ Tertiary Institutions
                     }
                 };
             });
-
             
             $('#nextForm').click(function(e) {
-                var href = $(this).attr('href');
-                e.preventDefault();
-                if(confirm('Changes you made may not be saved')) {
-                    window.location = href;
-                }
+                confirmAction(e);
             });
 
             $('#previousBtn').click(function(e) {
-                var href = $(this).attr('href');
-                e.preventDefault();
-                if(confirm('Changes you made may not be saved')) {
-                    window.location = href;
-                }
+                confirmAction(e);
             });
 
             function confirmAction(e) {
-                var href = $(this).attr('href');
-                e.preventDefault();
-                if(confirm('Changes you made may not be saved')) {
-                    window.location = href;
+                if($('#select-name_of_institution').val() != 'null') {
+                   window.location = $(this).attr('href');
+                } else {
+                    e.preventDefault();
+                    if(confirm('Changes you made may not be saved')) {
+                        window.location = $(this).attr('href');
+                    }
                 }
             }
 

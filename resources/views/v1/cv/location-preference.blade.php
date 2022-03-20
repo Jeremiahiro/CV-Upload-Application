@@ -10,7 +10,7 @@ Location Preference
 
         <div class="container-fluid bg-light">
             <section>
-                <x-multi-stepper step="11" title="Location Preference" />
+                <x-multi-stepper step="11" :cv="$cv" />
             </section>
             <section>
                 <div class="">
@@ -87,7 +87,7 @@ Location Preference
                                     id="has_hobbies"
                                     value="1"
                                     required
-                                    {{ old('hobbies', $cv->hobbies) === true ? 'checked' : '' }}
+                                    {{ old('hobbies', $cv->has_hobbies) === true ? 'checked' : '' }}
                                 >
                                 <label class="form-check-label" for="has_hobbies">Yes</label>
                             </div>
@@ -99,7 +99,7 @@ Location Preference
                                     id="not_has_hobbies"
                                     value="0"
                                     required
-                                    {{ old('hobbies', $cv->hobbies) == false ? 'checked' : '' }}
+                                    {{ old('hobbies', $cv->has_hobbies) == false ? 'checked' : '' }}
                                 >
                                 <label class="form-check-label" for="not_has_hobbies">No</label>
                             </div>

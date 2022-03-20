@@ -10,7 +10,7 @@ Secondary Education
 
         <div class="container-fluid bg-light">
             <section>
-                <x-multi-stepper step="3" title="Secondary Education" />
+                <x-multi-stepper step="3" :cv="$cv" />
             </section>
             <section>
                 <div class="">
@@ -210,7 +210,7 @@ Secondary Education
                                 <button
                                     type="submit"
                                     class="submit__btn text-warning font-bold btn btn-clear"
-                                    @if($cv->secondary_educations->count() == $cv->no_of_secondary_school) disabled @endif
+                                    @if($cv->no_of_secondary_school != 'null' && ($cv->secondary_educations->count() == $cv->no_of_secondary_school)) disabled @endif
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
                                         fill="currentColor" viewBox="0 0 16 16"
@@ -237,9 +237,9 @@ Secondary Education
                         <div class="d-flex mt-4" >
                             <a href="{{ route('cv.contact-details', $cv['uuid']) }}" id="previousBtn" class="submit__btn btn btn-light btn-outline-secondary px-4 font-bold mx-2">Prev</a>
                             <a
-                                href="{{ $cv->tertiary_institution == 1 ? route('cv.tertiary-institution', $cv['uuid']) : route('cv.employement_history', $cv['uuid']) }}"
+                                href="{{ $cv->tertiary_institution == 1 ? route('cv.tertiary-institution', $cv['uuid']) : route('cv.employement_history', [$cv['uuid'], $cv->employment_status ? 'current' : 'previous']) }}"
                                 id="nextForm"
-                                class="submit__btn btn btn-warning px-4 font-bold mx-2 @if(!$cv->secondary_educations->count()) disabled-link disabled @endif"
+                                class="submit__btn btn btn-warning px-4 font-bold mx-2 @if(!$cv->secondary_educations->count()) disabled @endif"
                             >
                                 Next
                             </a>
@@ -275,24 +275,23 @@ Secondary Education
             });
 
             $('#nextForm').click(function(e) {
-                var href = $(this).attr('href');
-                e.preventDefault();
-                if(name_of_secondary_school.val().length > 3) {
-                    if(confirm('Changes you made may not be saved')) {
-                        window.location = href;
-                    }
-                } else {
-                    window.location = href;
-                };
+                confirmAction(e);
             });
 
             $('#previousBtn').click(function(e) {
-                var href = $(this).attr('href');
-                e.preventDefault();
-                if(confirm('Changes you made may not be saved')) {
-                    window.location = href;
-                }
+                confirmAction(e);
             });
+
+            function confirmAction(e) {
+                if($('#name_of_secondary_school').val().length < 1) {
+                    window.location = $(this).attr('href');
+                } else {
+                    e.preventDefault();
+                    if(confirm('Changes you made may not be saved')) {
+                        window.location = $(this).attr('href');
+                    }
+                }
+            }
 
             $('.edit-secondary-data').click(function(e) {
                 updateData.show(500)

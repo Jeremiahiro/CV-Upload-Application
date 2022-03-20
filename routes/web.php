@@ -20,16 +20,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/cv', function () {
+Route::get('/cv/d', function () {
     return view('v1.user.cv');
 });
 
 Route::get('/cv/all', function () {
     return view('v1.user.cv_all');
-});
-
-Route::get('/cv/view', function () {
-    return view('v1.user.cv_view');
 });
 
 Route::get('/cv/add', function () {
@@ -75,7 +71,7 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
         Route::get('/cv/{cv:uuid}/nysc-details', [CVController::class, 'nysc_details'])->name('cv.nysc_details');
         Route::post('/cv/{cv:uuid}/nysc-details', [CVController::class, 'update_nysc_details'])->name('cv.nysc_details.update');
 
-        Route::get('/cv/{cv:uuid}/employement-history', [CVController::class, 'employement_history'])->name('cv.employement_history');
+        Route::get('/cv/{cv:uuid}/employement-history/{type}', [CVController::class, 'employement_history'])->name('cv.employement_history');
         Route::post('/cv/{cv:uuid}/employement-history', [CVController::class, 'create_employement_history'])->name('cv.employement_history.create');
         Route::post('/cv/{cv:uuid}/employement-history/{employement}', [CVController::class, 'update_employement_history'])->name('cv.employement_history.update');
         Route::get('/cv/{cv:uuid}/employement-history/{employement}', [CVController::class, 'delete_employement_history'])->name('cv.employement_history.delete');

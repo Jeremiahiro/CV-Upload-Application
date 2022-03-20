@@ -9,7 +9,7 @@ Contact Details
         <x-top-nav title="Add CV" />
         <div class="container-fluid bg-light">
             <section>
-                <x-multi-stepper step="2" title="Contact Details" />
+                <x-multi-stepper step="2" :cv="$cv" />
             </section>
             <section>
                 <div class="">
@@ -187,22 +187,16 @@ Contact Details
             });
 
             $('#previousBtn').click(function(e) {
-                var href = $(this).attr('href');
-                e.preventDefault();
-                if(confirm('Changes you made may not be saved')) {
-                    window.location = href;
+                if($('#town').val().length > 0) {
+                    window.location = $(this).attr('href');
+                } else {
+                    var href = $(this).attr('href');
+                    e.preventDefault();
+                    if(confirm('Changes you made may not be saved')) {
+                        window.location = href;
+                    }
                 }
             });
         });
-    </script>
-
-    <script>
-        mdd = document.getElementById("country");
-        mdd.selectpicker();
-
-        // $(function () {
-        //     $('.selectpicker').selectpicker();
-        // });
-        
     </script>
 @endpush

@@ -14,7 +14,7 @@ body{
     font-weight: bold;
 }
 
-.form-input, .form-select {
+.form-input {
     height: 40px;
 }
 

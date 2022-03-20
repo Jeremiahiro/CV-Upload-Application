@@ -83,7 +83,8 @@ class Cv extends Model
     public function title()
     {
         $current_role = $this->job_expereinces()->where('is_current', true)->first(); 
-        return $current_role->position;
+        $previous = $this->job_expereinces()->where('is_current', false)->first(); 
+        return $current_role ? $current_role->role : $previous->role;
     }
     
 

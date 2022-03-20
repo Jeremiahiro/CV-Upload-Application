@@ -10,7 +10,7 @@ Referee
 
         <div class="container-fluid bg-light">
             <section>
-                <x-multi-stepper step="10" title="Your Referees" />
+                <x-multi-stepper step="10" :cv="$cv" />
             </section>
             <section>
                 <div class="">
@@ -184,7 +184,7 @@ Referee
                         </div>
 
                         <div class="d-flex mt-4" >
-                            <a href="{{ route('cv.employement_history', $cv['uuid']) }}" id="previousBtn" class="submit__btn btn btn-light btn-outline-secondary px-4 font-bold mx-2">Prev</a>
+                            <a href="{{ url()->previous() }}" id="previousBtn" class="submit__btn btn btn-light btn-outline-secondary px-4 font-bold mx-2">Prev</a>
                             <a
                                 href="{{ route('cv.location_preference', $cv['uuid']) }}"
                                 id="nextForm"
@@ -218,8 +218,10 @@ Referee
                 const cv = $(this).data('cv');
                 const form_action = '/cv/'+cv.uuid+'/referees/'+data.id
 
-                if(confirm('Changes you made may not be saved')) {
-                    handleUpdateData(data);
+                if($('#referee_name').val().length < 2) {
+                    if(confirm('Changes you made may not be saved')) {
+                        handleUpdateData(data);
+                    }
                 }
 
                 function handleUpdateData(data) {
@@ -235,22 +237,25 @@ Referee
                 };
             });
 
-            
             $('#nextForm').click(function(e) {
-                var href = $(this).attr('href');
-                e.preventDefault();
-                if(confirm('Changes you made may not be saved')) {
-                    window.location = href;
-                }
+                confirmAction(e);
             });
 
             $('#previousBtn').click(function(e) {
-                var href = $(this).attr('href');
-                e.preventDefault();
-                if(confirm('Changes you made may not be saved')) {
-                    window.location = href;
-                }
+                confirmAction(e);
             });
+
+            function confirmAction(e) {
+                if($('#referee_name').val().length < 1) {
+                    window.location = $(this).attr('href');
+                } else {
+                    var href = $(this).attr('href');
+                    e.preventDefault();
+                    if(confirm('Changes you made may not be saved')) {
+                        window.location = href;
+                    }
+                }
+            }
 
         });
     </script>

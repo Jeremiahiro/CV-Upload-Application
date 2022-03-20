@@ -10,7 +10,7 @@ Employment History
 
         <div class="container-fluid bg-light">
             <section>
-                <x-multi-stepper step="7" title="Employement History" />
+                <x-multi-stepper step="7" :cv="$cv" />
             </section>
             <section>
                 <div class="">
@@ -23,12 +23,18 @@ Employment History
                     >
                         @csrf
                         <div class="text-left mb-4">
-                            <p class="font-bold text-dark m-0 p-0">Your previous employment history</p>
+                            <p class="font-bold text-dark m-0 p-0">Your {{ $type == 'current' ? 'Current' : 'Previous' }} employment history</p>
                             <small class="font-bold text-warning">Please provide the following information</small>
+                        </div>
+
+                        <div>
+                            <input type="hidden" name="is_current" id="is_current" value="{{ $type == 'current' ? 'current' : 'previous' }}">
                         </div>
 
                         <div class="d-flex flex-wrap mb-2">
                             @foreach ($previous_experiecne as $experience)
+                                @if ($type == 'current')
+                                @if ($experience->is_current)
                                 <div class="col col-lg-6">
                                     <div class="w-100 data m-2 p-2">
                                         <div class="d-flex justify-content-between p-2 bg-warning text-dark">
@@ -49,7 +55,7 @@ Employment History
                                                 <div class="d-flex flex-column align-items-end">
                                                     <span class="cursor-pointer mx-2">
                                                         <i
-                                                            class="fa fa-edit text-dark edit-experience-data"
+                                                            class="fa fa-edit text-dark edit-experience-data cursor-pointer"
                                                             data-education="{{ $experience }}"
                                                             data-cv="{{ $cv }}"
                                                             data-toggle="tooltip"
@@ -82,6 +88,62 @@ Employment History
                                         </div>
                                     </div>
                                 </div>
+                                @endif
+                                @else
+                                <div class="col col-lg-6">
+                                    <div class="w-100 data m-2 p-2">
+                                        <div class="d-flex justify-content-between p-2 bg-warning text-dark">
+                                            <div class=" ">
+                                                <span class="font-bold">
+                                                    {{ Str::limit($experience->employer, 30) }} - <i>{{ $experience->role }}</i>
+                                                </span>
+                                                <br>
+                                                <small class="">
+                                                    {{ $experience->date }}
+                                                </small>
+                                                <br>
+                                                <small>
+                                                    Sector: {{ $experience->no_of_positions ?? $experience->other_industry }}
+                                                </small>
+                                            </div>
+                                            <div class="data__action mx-3">
+                                                <div class="d-flex flex-column align-items-end">
+                                                    <span class="cursor-pointer mx-2">
+                                                        <i
+                                                            class="fa fa-edit text-dark edit-experience-data cursor-pointer"
+                                                            data-education="{{ $experience }}"
+                                                            data-cv="{{ $cv }}"
+                                                            data-toggle="tooltip"
+                                                            title="Edit Data"></i>
+                                                    </span>
+                                                    <span class="cursor-pointer mx-2">
+                                                        <a
+                                                            href="{{ route('cv.employement_history.delete', [$cv['uuid'], $experience['id']]) }}"
+                                                            data-toggle="tooltip"
+                                                            title="Delete Data"
+                                                            class="text-danger"
+                                                        >
+                                                            <i class="fa fa-trash text-danger delete-experience-data"></i>
+                                                        </a>
+                                                    </span>
+                                                    <span class="cursor-pointer mx-2">
+                                                        <small>
+                                                            <a
+                                                                href="{{ route('cv.employement_role', [$cv['uuid'], $experience['id']]) }}"
+                                                                data-toggle="tooltip"
+                                                                title="Add Employment Roles"
+                                                                class="text-primary"
+                                                            >
+                                                                Manage Roles
+                                                            </a>
+                                                        </small>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
                             @endforeach
                         </div>
 
@@ -214,8 +276,13 @@ Employment History
                             >
                                 Prev
                             </a>
-                            
-
+                            <a
+                                href="{{ $type == 'current' ? route('cv.employement_history', [$cv['uuid'], 'previous']) : route('cv.employement_role', [$cv['uuid'], 1]) }}"
+                                id="nextBtn"
+                                class="submit__btn btn btn-warning px-4 font-bold mx-2 @if(!$cv->secondary_educations->count()) disabled @endif"
+                            >
+                                Next
+                            </a>
                             <button class="submit__btn btn btn-warning px-4 font-bold" type="submit" id="submit_btn">Next</button>
                         </div>
                     </form>
@@ -230,8 +297,17 @@ Employment History
     <script>
         $(document).ready(function () {
 
+            const nextBtn = $('#nextBtn');
+            const submitBtn = $('#submit_btn');
+            submitBtn.hide();
+            
             const other_industrial_sector = $('#other_industrial_sector');
             other_industrial_sector.hide()
+
+            $('#name_of_employer').on('input', function () {
+                nextBtn.hide(500);
+                submitBtn.show(500);
+            });
 
             $('#select-industry_sector').on('change', function () {
                 var sector = this.value;

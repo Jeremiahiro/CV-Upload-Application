@@ -10,7 +10,7 @@ NYSC Details
 
         <div class="container-fluid bg-light">
             <section>
-                <x-multi-stepper step="6" title="NYSC Details" />
+                <x-multi-stepper step="6" :cv="$cv" />
             </section>
             <section>
                 <div class="">
@@ -145,7 +145,7 @@ NYSC Details
 
                         <div class="d-flex mt-4" >
                             <a
-                                href="{{ $cv->professional_qualification ? route('cv.professional-qualification', $cv['uuid']) : route('cv.tertiary-institution', $cv['uuid']) }}" id="previousBtn" class="submit__btn btn btn-light btn-outline-secondary px-4 font-bold mx-2">Prev</a>
+                                href="{{ url()->previous() }}" id="previousBtn" class="submit__btn btn btn-light btn-outline-secondary px-4 font-bold mx-2">Prev</a>
                             <button class="btn btn-warning px-4 font-bold submit__btn" type="submit">Next</button>
                         </div>
                     </form>
@@ -160,13 +160,25 @@ NYSC Details
     <script>
         $(document).ready(function () {
 
-            $('#previousBtn').click(function(e) {
-                var href = $(this).attr('href');
-                e.preventDefault();
-                if(confirm('Changes you made may not be saved')) {
-                    window.location = href;
-                }
+            $('#nextForm').click(function(e) {
+                confirmAction(e);
             });
+
+            $('#previousBtn').click(function(e) {
+                confirmAction(e);
+            });
+
+            function confirmAction(e) {
+                if($('#nysc_state').val().length < 1) {
+                    window.location = $(this).attr('href');
+                } else {
+                    var href = $(this).attr('href');
+                    e.preventDefault();
+                    if(confirm('Changes you made may not be saved')) {
+                        window.location = href;
+                    }
+                }
+            }
 
         });
     </script>

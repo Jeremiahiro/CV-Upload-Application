@@ -49,9 +49,10 @@ class CVController extends Controller
      */
     public function index(Request $request)
     {
-        // $data = $this->cvServices->handle_get_data($request);
-        // return $data;
-        return view('v1.cv.index');
+        if(!$cv = Auth::user()->cv) {
+            $cv = null;
+        }
+        return view('v1.cv.index', compact(['cv']));
     }
 
     /**
@@ -346,7 +347,8 @@ class CVController extends Controller
             return back()->with('error', 'An error occured! Refresh and try again');
         }
 
-        return redirect()->route('cv.employement_history', $cv);
+        $type = $cv->employment_status ? 'current' : 'previous';
+        return redirect()->route('cv.employement_history', [$cv, $type]);
     }
 
     /**
@@ -354,12 +356,12 @@ class CVController extends Controller
      * @param  \App\Models\CV  $cv
      * 
     */
-    public function employement_history(Cv $cv) 
+    public function employement_history(Cv $cv, $type) 
     {
         $industry_sector = $this->otherServices->get_industry_sector($cv);
         $previous_experiecne = $this->otherServices->get_previous_experiecne($cv);
 
-        return view('v1.cv.employment-history', compact(['cv', 'industry_sector', 'previous_experiecne']));
+        return view('v1.cv.employment-history', compact(['cv', 'industry_sector', 'previous_experiecne', 'type']));
     }
     
     /**
@@ -373,6 +375,11 @@ class CVController extends Controller
     {
         if(!$experience = $this->cvServices->handle_create_job_experience($request, $cv)){
             return back()->with('error', 'An error occured! Refresh and try again');
+        }
+
+        if($experience->is_current == 'current') {
+            $type = 'previous';
+            return redirect()->route('cv.employement_history', [$cv, $type]);
         }
 
         return redirect()->route('cv.employement_role', [$cv['uuid'], $experience['id']]);
@@ -391,6 +398,12 @@ class CVController extends Controller
         if(!$this->cvServices->handle_update_job_experience($request, $cv, $employement)){
             return back()->with('error', 'An error occured! Refresh and try again');
         }
+
+        if($employement->is_current == 'current') {
+            $type = 'previous';
+            return redirect()->route('cv.employement_history', [$cv, $type]);
+        }
+
         return redirect()->back()->with('success', 'Operation Successful');
     }
         

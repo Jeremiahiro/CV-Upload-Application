@@ -10,7 +10,7 @@ Referee
 
         <div class="container-fluid bg-light">
             <section>
-                <x-multi-stepper step="12" title="Hobbies" />
+                <x-multi-stepper step="12" :cv="$cv" />
             </section>
             <section>
                 <div class="">
@@ -29,7 +29,7 @@ Referee
 
                         <div class="form-group mb-3">
                             <label class="form-label" for="hobbies">Please list your hobbies in the text below</label>
-                            <textarea name="hobbies" id="hobbies" class="form-control" rows="5" required>{{ old('hobbies', $cv->hobbies) }}</textarea>
+                            <textarea name="hobbies" id="hobbies" class="form-control" rows="5" required>{{ old('hobbies', json_decode($cv->hobbies)) }}</textarea>
                             @error('hobbies')
                                 <span class="invalid-feedback" role="alert">
                                 <small>{{ $message }}</small>
