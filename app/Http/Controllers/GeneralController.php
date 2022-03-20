@@ -39,4 +39,17 @@ class GeneralController extends Controller
         $response = $this->otherServices->get_states($country);
         return response()->json($response, 200);
     }
+
+    /**
+     * Fetch Country
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Country $country
+     * 
+    */
+    public function fetch_tertiary_type() 
+    {
+        $response = $this->otherServices->get_tertiary_types();
+        return response()->json($response, 200);
+    }
+    
 }

@@ -34,11 +34,11 @@ class CVController extends Controller
     {
         $this->cvServices = new CvRepository;
         $this->otherServices = new OtherDataRepository;
-        $this->middleware('is_profile_complete');
-        $this->middleware('permission:view-cv', ['only' => ['index','show']]);
-        $this->middleware('permission:create-cv', ['only' => ['create','store']]);
-        $this->middleware('permission:update-cv', ['only' => ['edit','update']]);
-        $this->middleware('permission:delete-cv', ['only' => ['destroy']]);
+        // $this->middleware('is_profile_complete');
+        // $this->middleware('permission:view-cv', ['only' => ['index','show']]);
+        // $this->middleware('permission:create-cv', ['only' => ['create','store']]);
+        // $this->middleware('permission:update-cv', ['only' => ['edit','update']]);
+        // $this->middleware('permission:delete-cv', ['only' => ['destroy']]);
     }
 
 
@@ -207,11 +207,12 @@ class CVController extends Controller
     */
     public function tertiary_institution(Cv $cv) 
     {
-        $tertiary_types = $this->otherServices->get_tertiary_types();
+        // $tertiary_types = $this->otherServices->get_tertiary_types();
         $qualifications = $this->otherServices->get_tertiary_qualifications();
         $tertiary_educations = $this->otherServices->get_tertiary_education($cv);
 
-        return view('v1.cv.tertiary-institution', compact(['cv', 'tertiary_types', 'qualifications', 'tertiary_educations']));
+        return view('v1.cv.tertiary-institution', compact(['cv', 'qualifications', 'tertiary_educations']));
+        // return view('v1.cv.tertiary-institution', compact(['cv', 'tertiary_types', 'qualifications', 'tertiary_educations']));
     }
 
     
@@ -441,7 +442,6 @@ class CVController extends Controller
      * @param  \App\Models\Cv  $cv
      * @param  \App\Models\JobExperience  $employement
      * @param  \App\Http\Requests\JobExperiecneRoleRequest  $request
-     * 
      * 
     */
     public function create_employement_role(JobExperiecneRoleRequest $request, Cv $cv, JobExperience $employement) 

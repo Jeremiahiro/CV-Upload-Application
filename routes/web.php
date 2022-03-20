@@ -40,6 +40,7 @@ Auth::routes(['verify' => true]);
 
 Route::get('/api/fetch-countries', [GeneralController::class, 'fetch_countries'])->name('fetch.countries');
 Route::get('/api/country/{country}/fetch-states', [GeneralController::class, 'fetch_states'])->name('fetch.states');
+Route::get('/api/tertiary-types', [GeneralController::class, 'fetch_tertiary_type'])->name('fetch.tertiary.type');
 
 Route::group(['middleware' => ['auth', 'verified']], function() {
     // Route::group(['middleware' => ['is_profile_complete']], function() {

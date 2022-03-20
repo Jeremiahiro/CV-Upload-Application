@@ -26,6 +26,7 @@ Tertiary Institutions
                             <small class="font-bold text-warning">Please provide the following information</small>
                         </div>
 
+                        @if ($tertiary_educations->count())
                         <div class="d-flex flex-wrap mb-2">
                             @foreach ($tertiary_educations as $tertiary_education)
                                 <div class="col col-lg-6 mb-2">
@@ -69,12 +70,13 @@ Tertiary Institutions
                                 </div>
                             @endforeach
                         </div>
+                        @endif
 
                         <div class="form-group mb-3">
                             <label class="form-label" for="name_of_institution">Name of Tertiary Institution</label>
                             <select class="form-select form-input" name="name_of_institution" id="select-name_of_institution" required data-live-search="true">
                                 <option value="" selected disabled>Tertiary Institution</option>
-                                @foreach ($tertiary_types as $type)
+                                {{-- @foreach ($tertiary_types as $type)
                                     <option value="" class="font-bold text-uppercase" disabled>{{ $type->name }}</option>
                                     @foreach ($type->institutions as $institution)
                                         <option
@@ -87,7 +89,7 @@ Tertiary Institutions
                                             {{ $institution->name }}
                                         </option>
                                     @endforeach
-                                @endforeach
+                                @endforeach --}}
                             </select>
 
                             @error('name_of_institution')
@@ -101,7 +103,7 @@ Tertiary Institutions
                             <label class="form-label" for="type_of_institution">Type of Tertiary Institution</label>
                             <select class="form-select form-input" name="type_of_institution" id="select-type_of_institution" required data-live-search="true">
                                 <option value="" selected disabled>Type of Institution</option>
-                                @foreach ($tertiary_types as $type)
+                                {{-- @foreach ($tertiary_types as $type)
                                     <option
                                         value="{{ $type->id }}"
                                         @if (old('type_of_institution') == $type->id)
@@ -110,7 +112,7 @@ Tertiary Institutions
                                     >
                                         {{ $type->name }}
                                     </option>
-                                @endforeach
+                                @endforeach --}}
                                 <option value="others">Others</option>
                             </select>
 
@@ -287,6 +289,32 @@ Tertiary Institutions
 @push('javascript')
     <script>
         $(document).ready(function () {
+
+            fetch_tertiary_types();
+
+            function fetch_tertiary_types() {
+                $("#select-name_of_institution").html('');
+                $("#select-type_of_institution").html('');
+                
+                $.ajax({
+                    url: '/api/tertiary-types',
+                    type: "GET",
+                    dataType: 'json',
+                    success: function (response) {
+                        $('#select-name_of_institution').html('<option value="">Select Tertiary Institution</option>');
+                        $('#select-type_of_institution').html('<option value="">Select Type of Tertiary Institution</option>');
+                        $.each(response, function (key, type) {
+                            $("#select-type_of_institution").append('<option value="' + type.id + '">' + type.name + '</option>');
+                            $.each(type.institutions, function (key, institution) {
+                                $("#select-name_of_institution").append('<option value="' + institution.id + '" data-type="' + institution.tertiary_types_id + '">' + institution.name + '</option>');
+                            });
+                        });
+                        $('#select-name_of_institution').append('<option value="others">Others</option>');
+                        $('#select-type_of_institution').append('<option value="others">Others</option>');
+                    }
+                });
+            }
+
 
             const tertiary_institution_check = $('#tertiary_institution-check');
             const other_tertiary_institution = $('#other_tertiary_institution_type-container');

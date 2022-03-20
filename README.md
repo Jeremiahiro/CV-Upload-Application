@@ -8,5 +8,6 @@ Test Site - https://cv-upload-test.herokuapp.com/login
 - php artisan key:generate
 - composer install
 - Update .env with necessary credentials
-- php artisan migrate:fresh --seed
+- php artisan migrate
+- php artisan db:seed
 - php artisan serve
