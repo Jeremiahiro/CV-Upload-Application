@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
-class SecondaryQualifications extends Model
+class SecondaryGrades extends Model
 {
     use HasFactory;
 
-    public function scopeSearch(Builder $builder, Collection $data)
+        public function scopeSearch(Builder $builder, Collection $data)
     {
         if ($data->has('search')) {
             $search = $data->get('search');

@@ -11,9 +11,11 @@ use App\Models\NyscDetails;
 use App\Models\Qualifications;
 use App\Models\Referees;
 use App\Models\SecondaryEducation;
+use App\Models\SecondaryEducationQualifications;
 use App\Models\TertiaryEducation;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class CvRepository
 {
@@ -59,30 +61,58 @@ class CvRepository
     public function handle_create_secondary_education(Request $request, Cv $cv)
     {   
         $secondary_education = new SecondaryEducation();
-        return $this->handle_update_secondary_education($request, $cv, $secondary_education);
+        return $this->handle_update_secondary_education($request, $cv, $secondary_education, true);
     }
 
-    public function handle_update_secondary_education(Request $request, Cv $cv, SecondaryEducation $secondary_education)
-    {   
-        $secondary_education->name = $request['name'];
-        $secondary_education->start_date = Carbon::createFromFormat('Y-m', $request['start_date']);
-        $secondary_education->end_date = Carbon::createFromFormat('Y-m', $request['end_date']);
+    public function handle_update_secondary_education(Request $request, Cv $cv, SecondaryEducation $secondary_education, $new = false)
+    {  
+        try {
+            DB::beginTransaction();
+            $secondary_education->name = $request['name'] ?: $secondary_education->name;
+            $secondary_education->no_of_subjects = $request['no_of_subjects'] ?: $secondary_education->no_of_subjects;
+;
+            $start_date = Carbon::parse($request['start_date'])->format('M-Y');
+            $end_date = Carbon::parse($request['end_date'])->format('M-Y');
 
-        // TODO: update this session
-        if($request['qualification'] === 'other') {
-            // $secondary_education->other_qualification = $request['other_qualifiation_obtained'];
-        } else {
-            $secondary_education->secondary_qualifications_id = 1; 
-            // $secondary_education->secondary_qualifications_id = $request['qualification'];
+            $secondary_education->start_date = Carbon::createFromFormat('M-Y', $start_date);
+            $secondary_education->end_date = Carbon::createFromFormat('M-Y', $end_date);
+    
+            // TODO: update this session
+            if($request['qualification'] === 'others') {
+                $secondary_education->other_qualification = $request['other_qualifiation_obtained'];
+            } else {
+                $secondary_education->secondary_qualifications_id = $request['qualification'];
+            }
+
+            $secondary_education->cv_id = $cv['id'];
+            $secondary_education->save();
+    
+            $secondary_education->qualifications()->delete();
+            if($request->subject){
+                foreach($request->subject as $subject) {
+                    $qualification = new SecondaryEducationQualifications();
+                    $qualification->secondary_subject = $subject['subject_id'];
+                    $qualification->secondary_grades = $subject['grade_id'];
+                    $qualification->secondary_education = $secondary_education->id;
+                    $qualification->save();
+                }
+            }
+
+            if($new) {
+                $cv->update([
+                    'tertiary_institution' => $request['tertiary_institution'] ?: $cv->tertiary_institution,
+                    'no_of_secondary_school' => $request['no_of_secondary_school'] ?: $cv->no_of_secondary_school
+                ]);
+            }
+
+            DB::commit();
+    
+            return $secondary_education;
+        } catch (\Throwable $th) {
+            DB::rollback();
+            dd($th->getMessage());
+            return false;
         }
-        $secondary_education->cv_id = $cv['id'];
-
-        $cv->update([
-            'tertiary_institution' => $request['tertiary_institution'] ?: $cv->tertiary_institution,
-            'no_of_secondary_school' => $request['no_of_secondary_school'] ?: $cv->no_of_secondary_school
-        ]);
-
-        return $secondary_education->save();
     }
 
     public function handle_create_tertiary_education(Request $request, Cv $cv)

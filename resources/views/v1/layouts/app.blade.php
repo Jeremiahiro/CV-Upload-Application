@@ -10,19 +10,9 @@
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=ABeeZee&amp;display=swap">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&amp;display=swap">
 		<link rel="stylesheet" href="{{ asset('assets/fonts/fontawesome-all.min.css') }}">
-		<!-- <link rel="stylesheet" href="assets/fonts/font-awesome.min.css"> -->
 		<link rel="stylesheet" href="{{ asset('assets/fonts/ionicons.min.css') }}">
-		<!-- <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css"> -->
 		<link rel="stylesheet" href="{{ asset('assets/css/Multi-step-form.css') }}">
 		<link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
-		{{-- <link rel="stylesheet" href="{{ asset('/css/custom.css') }}"> --}}
-
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
-
-		<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-		<script src="{{ asset('assets/bootstrap/js/bootstrap.min.js') }}"></script>
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-
 	</head>
 	<body id="page-top">
 		<div id="wrapper" class="w-100">
@@ -47,8 +37,13 @@
 		</div>
 		</div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
 		{{-- <script src="{{ asset('assets/js/Multi-step-form.js') }}"></script> --}}
-
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 		<script src="{{ asset('assets/js/theme.js') }}"></script>
+		<script src="{{ asset('assets/bootstrap/js/bootstrap.min.js') }}"></script>
+
+		<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>  
 
 		@stack('javascript')

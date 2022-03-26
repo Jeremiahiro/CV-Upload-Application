@@ -13,11 +13,18 @@ use App\Models\Qualifications;
 use App\Models\Referees;
 use App\Models\State;
 use App\Models\SecondaryEducation;
+use App\Models\SecondaryGrades;
 use App\Models\SecondaryQualifications;
+use App\Models\SecondarySubjects;
+use App\Models\TertiaryCourses;
+use App\Models\TertiaryCourseTypes;
 use App\Models\TertiaryEducation;
 use App\Models\TertiaryInstitution;
 use App\Models\TertiaryTypes;
 use App\Models\TertiaryQualifications;
+use App\Models\TertiaryQualificationTypes;
+use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class OtherDataRepository
@@ -41,14 +48,14 @@ class OtherDataRepository
                         ->first();
     }
 
-    public function get_countries()
+    public function get_countries(Collection $data)
     {
-        return Country::get(['id', 'name']);
+        return Country::search($data)->get(['id', 'name']);
     }
 
-    public function get_states(Country $country)
+    public function get_states(Collection $data, Country $country)
     {
-        return State::where('country_id', $country->id)->get(['id', 'name']);
+        return State::where('country_id', $country->id)->search($data)->get(['id', 'name']);
     }
 
     public function get_states_in_nigeria()
@@ -57,9 +64,20 @@ class OtherDataRepository
         return State::where('country_id', $country->id)->get(['id', 'name']);
     }
 
-    public function get_secondary_qualifications()
+    public function get_secondary_qualifications(Collection $data)
     {
-        return SecondaryQualifications::get(['id', 'name']);
+        $response = SecondaryQualifications::search($data)->orderBy('name', 'asc')->get(['id', 'name'])->toArray();
+        return $this->with_others($response);
+    }
+
+    public function get_secondary_subjects(Collection $data)
+    {
+        return SecondarySubjects::search($data)->get(['id', 'name']);
+    }
+
+    public function get_secondary_grades(Collection $data)
+    {
+        return SecondaryGrades::search($data)->get(['id', 'name']);
     }
     
     public function get_secondary_education()
@@ -67,14 +85,17 @@ class OtherDataRepository
         return SecondaryEducation::with(['qualification'])->get(['id', 'name']);
     }
 
-    public function get_tertiary_types()
+    public function get_tertiary_types(Collection $data)
     {
-        return TertiaryTypes::orderBy('name', 'asc')->get(['id', 'name']);
+        $response = TertiaryTypes::search($data)->orderBy('name', 'asc')->get(['id', 'name'])->toArray();
+        return $this->with_others($response);
+
     }
 
-    public function get_tertiary_institutions()
+    public function get_tertiary_institutions(Collection $data)
     {
-        return TertiaryInstitution::orderBy('name', 'asc')->get(['id', 'name']);
+        $response = TertiaryInstitution::search($data)->orderBy('name', 'asc')->get(['id', 'name'])->toArray();
+        return $this->with_others($response);
     }
 
     public function get_tertiary_education(Cv $cv)
@@ -82,9 +103,28 @@ class OtherDataRepository
         return TertiaryEducation::with(['institution', 'institution_type', 'qualification'])->where('cv_id', $cv['id'])->get();
     }
 
-    public function get_tertiary_qualifications()
+    public function get_tertiary_qualifications(Collection $data)
     {
-        return TertiaryQualifications::get(['id', 'name']);
+        $response = TertiaryQualificationTypes::search($data)->orderBy('name', 'asc')->get(['id', 'name'])->toArray();
+        return $this->with_others($response);
+    }
+
+    public function get_tertiary_course(Collection $data)
+    {
+        $response = TertiaryCourses::search($data)->select(['id', 'name'])->distinct()->orderBy('name', 'asc')->get()->toArray();
+        return $this->with_others($response);
+    }
+
+    public function get_tertiary_course_type(Collection $data)
+    {
+        $response = TertiaryCourseTypes::search($data)->orderBy('name', 'asc')->get(['id', 'name'])->toArray();
+        return $this->with_others($response);
+    }
+    
+    public function get_tertiary_grade(Collection $data)
+    {
+        $response = TertiaryQualifications::search($data)->orderBy('name', 'asc')->get(['id', 'name'])->toArray();
+        return $this->with_others($response);
     }
 
     public function get_professional_institutions()
@@ -120,5 +160,19 @@ class OtherDataRepository
     public function get_referee(Cv $cv)
     {
         return Referees::where('cv_id', $cv['id'])->get();
+    }
+
+    public function with_others($data): Collection
+    {
+        if($data) {
+            $others = [
+                'id'    => 'others',
+                'name'  => 'Others',
+            ];
+    
+            return collect(array_merge($data, ['-1' => $others]));
+        } else {
+            return $data;
+        }
     }
 }

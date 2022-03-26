@@ -38,9 +38,17 @@ Route::get('/profile', function () {
 
 Auth::routes(['verify' => true]);
 
-Route::get('/api/fetch-countries', [GeneralController::class, 'fetch_countries'])->name('fetch.countries');
-Route::get('/api/country/{country}/fetch-states', [GeneralController::class, 'fetch_states'])->name('fetch.states');
-Route::get('/api/tertiary-types', [GeneralController::class, 'fetch_tertiary_type'])->name('fetch.tertiary.type');
+Route::get('/api/fetch-countries', [GeneralController::class, 'fetch_countries'])->name('countries.list');
+Route::get('/api/country/{country}/fetch-states', [GeneralController::class, 'fetch_states'])->name('states.list');
+Route::get('/api/secondary-qualification', [GeneralController::class, 'fetch_secondary_qualification'])->name('secondary.qualification.list');
+Route::get('/api/secondary-subjects', [GeneralController::class, 'fetch_secondary_subjects'])->name('secondary.subjects.list');
+Route::get('/api/secondary-grades', [GeneralController::class, 'fetch_secondary_grades'])->name('secondary.grades.list');
+Route::get('/api/tertiray-institutions', [GeneralController::class, 'fetch_tertiary_institutions'])->name('tertiray.list');
+Route::get('/api/tertiary-types', [GeneralController::class, 'fetch_tertiary_type'])->name('tertiary.type');
+Route::get('/api/tertiary-qualification', [GeneralController::class, 'fetch_tertiary_qualification'])->name('tertiary.qualification');
+Route::get('/api/tertiary-course', [GeneralController::class, 'fetch_tertiary_course'])->name('tertiary.course');
+Route::get('/api/tertiary-course-type', [GeneralController::class, 'fetch_tertiary_course_type'])->name('tertiary.course.type');
+Route::get('/api/tertiary-grade', [GeneralController::class, 'fetch_tertiary_grade'])->name('tertiary.grade');
 
 Route::group(['middleware' => ['auth', 'verified']], function() {
     // Route::group(['middleware' => ['is_profile_complete']], function() {
@@ -55,8 +63,9 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
 
         Route::get('/cv/{cv:uuid}/secondary-education', [CVController::class, 'secondary_education'])->name('cv.secondary-education');
         Route::post('/cv/{cv:uuid}/secondary-education', [CVController::class, 'create_secondary_education'])->name('cv.secondary-education.create');
+        Route::get('/cv/{cv:uuid}/secondary-education/{secondary_education}/edit', [CVController::class, 'edit_secondary_education'])->name('cv.secondary-education.edit');
         Route::post('/cv/{cv:uuid}/secondary-education/{secondary_education}', [CVController::class, 'update_secondary_education'])->name('cv.secondary-education.update');
-        Route::get('/cv/{cv:uuid}/secondary-education/{secondary_edu}', [CVController::class, 'delete_secondary_education'])->name('cv.secondary-education.delete');
+        Route::get('/cv/{cv:uuid}/secondary-education/{secondary_education}', [CVController::class, 'delete_secondary_education'])->name('cv.secondary-education.delete');
 
         Route::get('/cv/{cv:uuid}/tertiary-institution', [CVController::class, 'tertiary_institution'])->name('cv.tertiary-institution');
         Route::post('/cv/{cv:uuid}/tertiary-institution', [CVController::class, 'create_tertiary_institution'])->name('cv.tertiary-institution.create');

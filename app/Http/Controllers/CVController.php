@@ -115,8 +115,7 @@ class CVController extends Controller
     */
     public function contact_details(Cv $cv) 
     {
-        $countries = $this->otherServices->get_countries();
-        return view('v1.cv.contact-details', compact(['cv', 'countries']));
+        return view('v1.cv.contact-details', compact(['cv']));
     }
 
     /**
@@ -143,13 +142,10 @@ class CVController extends Controller
     */
     public function secondary_education(Cv $cv) 
     {
-        $qualifications = $this->otherServices->get_secondary_qualifications();
-
         if(!$secondary_education = $this->otherServices->get_secondary_education()) {
             $secondary_education = null;
         }
-
-        return view('v1.cv.secondary-education', compact(['cv', 'qualifications', 'secondary_education']));
+        return view('v1.cv.secondary_education.create', compact(['cv', 'secondary_education']));
     }
 
     /**
@@ -164,8 +160,12 @@ class CVController extends Controller
         if(!$this->cvServices->handle_create_secondary_education($request, $cv)){
             return back()->with('error', 'An error occured! Refresh and try again');
         }
-
         return redirect()->back()->with('success', 'Operation Successful');
+    }
+
+    public function edit_secondary_education(Cv $cv, SecondaryEducation $secondary_education) 
+    {
+        return view('v1.cv.secondary_education.edit', compact(['cv', 'secondary_education']));
     }
 
     /**
@@ -181,7 +181,7 @@ class CVController extends Controller
             return back()->with('error', 'An error occured! Refresh and try again');
         }
 
-        return redirect()->back()->with('success', 'Operation Successful');
+        return redirect()->route('cv.secondary-education', $cv['uuid']);
     }
 
         
@@ -192,9 +192,9 @@ class CVController extends Controller
      * @param  \App\Models\SecondaryEducation  $secondary_edu
      * 
     */
-    public function delete_secondary_education(Cv $cv, SecondaryEducation $secondary_edu) 
+    public function delete_secondary_education(Cv $cv, SecondaryEducation $secondary_education) 
     {
-        if(!$secondary_edu->delete()) {
+        if(!$secondary_education->delete()) {
             return redirect()->back()->with('success', 'OOPS Something went wrong');
         }
         return redirect()->back()->with('success', 'Operation Successful');
@@ -207,17 +207,11 @@ class CVController extends Controller
     */
     public function tertiary_institution(Cv $cv) 
     {
-        $tertiary_types = $this->otherServices->get_tertiary_types();
-        $tertiary_institutions = $this->otherServices->get_tertiary_institutions();
-        $qualifications = $this->otherServices->get_tertiary_qualifications();
+
         $tertiary_educations = $this->otherServices->get_tertiary_education($cv);
 
-        // return view('v1.cv.tertiary-institution', compact(['cv', 'qualifications', 'tertiary_educations']));
         return view('v1.cv.tertiary-institution', compact([
             'cv',
-            'tertiary_types',
-            'tertiary_institutions',
-            'qualifications',
             'tertiary_educations'
         ]));
     }

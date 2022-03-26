@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class SecondaryEducation extends Model
 {
@@ -24,6 +25,11 @@ class SecondaryEducation extends Model
     public function qualification(): BelongsTo
     {
         return $this->belongsTo(SecondaryQualifications::class, 'secondary_qualifications_id');
+    }
+
+    public function qualifications(): HasMany
+    {
+        return $this->hasMany(SecondaryEducationQualifications::class, 'secondary_education', 'id');
     }
 
 }

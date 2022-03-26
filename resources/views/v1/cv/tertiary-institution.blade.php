@@ -73,21 +73,34 @@ Tertiary Institutions
                         @endif
 
                         <div class="form-group mb-3">
-                            <label class="form-label" for="name_of_institution">Name of Tertiary Institution</label>
-                            <select class="form-select form-input" name="name_of_institution" id="select-name_of_institution" required data-live-search="true">
-                                <option value="" selected disabled>Tertiary Institution</option>
-                                @foreach ($tertiary_institutions as $institution)
-                                    <option
-                                        value="{{ $institution->id }}"
-                                        @if (old('name_of_institution') == $institution->id)
-                                            selected
-                                        @endif
-                                    >
-                                        {{ $institution->name }}
-                                    </option>
-                                @endforeach
-                                <option value="others">Others</option>
-                            </select>
+                            <x-tertiary-type-select-field />
+ 
+                             @error('type_of_institution')
+                                 <span class="invalid-feedback" role="alert">
+                                 <small>{{ $message }}</small>
+                                 </span>
+                             @enderror
+                         </div>
+ 
+                         <div class="form-group mb-3" id="other_tertiary_institution_type-container">
+                             <label class="form-label" for="other_tertiary_institution_type">if others please specify</label>
+                             <input
+                                 id="other_tertiary_institution_type"
+                                 type="text"
+                                 class="form-control form-input input-round @error('other_tertiary_institution_type') is-invalid @enderror"
+                                 name="other_tertiary_institution_type"
+                                 value="{{ old('other_tertiary_institution_type') }}"
+                                 placeholder="Other Institution Type"
+                             >
+                             @error('other_tertiary_institution_type')
+                                 <span class="invalid-feedback" role="alert">
+                                 <small>{{ $message }}</small>
+                                 </span>
+                             @enderror
+                         </div>
+
+                        <div class="form-group mb-3">
+                           <x-tertiary-select-field />
 
                             @error('name_of_institution')
                                 <span class="invalid-feedback" role="alert">
@@ -96,41 +109,125 @@ Tertiary Institutions
                             @enderror
                         </div>
 
-                        <div class="form-group mb-3">
-                            <label class="form-label" for="type_of_institution">Type of Tertiary Institution</label>
-                            <select class="form-select form-input" name="type_of_institution" id="select-type_of_institution" required data-live-search="true">
-                                <option value="" selected disabled>Type of Institution</option>
-                                @foreach ($tertiary_types as $type)
-                                    <option
-                                        value="{{ $type->id }}"
-                                        @if (old('type_of_institution') == $type->id)
-                                            selected
-                                        @endif
-                                    >
-                                        {{ $type->name }}
-                                    </option>
-                                @endforeach
-                                <option value="others">Others</option>
-                            </select>
-
-                            @error('type_of_institution')
+                        <div class="form-group mb-3" id="other_tertiary_institution-container">
+                            <label class="form-label" for="other_tertiary_institution">Please specify others</label>
+                            <input
+                                id="other_tertiary_institution"
+                                type="text"
+                                class="form-control form-input input-round @error('other_tertiary_institution') is-invalid @enderror"
+                                name="other_tertiary_institution"
+                                value="{{ old('other_tertiary_institution') }}"
+                                placeholder="Other Institution"
+                            >
+                            @error('other_tertiary_institution')
                                 <span class="invalid-feedback" role="alert">
                                 <small>{{ $message }}</small>
                                 </span>
                             @enderror
                         </div>
 
-                        <div class="form-group mb-3" id="other_tertiary_institution_type-container">
-                            <label class="form-label" for="other_tertiary_institution_type">if others please specify</label>
+                        <div class="form-group mb-3">
+                            <x-tertiary-qualification-select-field />
+ 
+                             @error('qualification')
+                                 <span class="invalid-feedback" role="alert">
+                                 <small>{{ $message }}</small>
+                                 </span>
+                             @enderror
+                        </div>
+ 
+                        <div class="form-group mb-3" id="other_qualifiation_obtained-container">
+                            <label class="form-label" for="other_qualifiation_obtained">Other Qualification Obtained</label>
                             <input
-                                id="other_tertiary_institution_type"
+                                id="other_qualifiation_obtained"
                                 type="text"
-                                class="form-control form-input input-round @error('other_tertiary_institution_type') is-invalid @enderror"
-                                name="other_tertiary_institution_type"
-                                value="{{ old('other_tertiary_institution_type') }}"
-                                placeholder="Other Institution Type"
+                                class="form-control form-input input-round @error('other_qualifiation_obtained') is-invalid @enderror"
+                                name="other_qualifiation_obtained"
+                                value="{{ old('other_qualifiation_obtained') }}"
+                                placeholder="Other qualification"
                             >
-                            @error('other_tertiary_institution_type')
+                            @error('other_qualifiation_obtained')
+                                <span class="invalid-feedback" role="alert">
+                                <small>{{ $message }}</small>
+                                </span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <x-tertiary-course-type-select-field />
+ 
+                             @error('qualification')
+                                 <span class="invalid-feedback" role="alert">
+                                 <small>{{ $message }}</small>
+                                 </span>
+                             @enderror
+                        </div>
+ 
+                        <div class="form-group mb-3" id="other_course_type-container">
+                            <label class="form-label" for="other_course_type">Other Course Type</label>
+                            <input
+                                id="other_course_type"
+                                type="text"
+                                class="form-control form-input input-round @error('other_course_type') is-invalid @enderror"
+                                name="other_course_type"
+                                value="{{ old('other_course_type') }}"
+                                placeholder="Other Course Type"
+                            >
+                            @error('other_course_type')
+                                <span class="invalid-feedback" role="alert">
+                                <small>{{ $message }}</small>
+                                </span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <x-tertiary-course-select-field />
+ 
+                             @error('qualification')
+                                 <span class="invalid-feedback" role="alert">
+                                 <small>{{ $message }}</small>
+                                 </span>
+                             @enderror
+                        </div>
+ 
+                        <div class="form-group mb-3" id="other_course-container">
+                            <label class="form-label" for="other_course">Other Course</label>
+                            <input
+                                id="other_course"
+                                type="text"
+                                class="form-control form-input input-round @error('other_course') is-invalid @enderror"
+                                name="other_course"
+                                value="{{ old('other_course') }}"
+                                placeholder="Specify Other Course of Study"
+                            >
+                            @error('other_course')
+                                <span class="invalid-feedback" role="alert">
+                                <small>{{ $message }}</small>
+                                </span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <x-tertiary-grade-select-field />
+ 
+                             @error('qualification')
+                                 <span class="invalid-feedback" role="alert">
+                                 <small>{{ $message }}</small>
+                                 </span>
+                             @enderror
+                        </div>
+ 
+                        <div class="form-group mb-3" id="other_grade-container">
+                            <label class="form-label" for="other_grade">Other Grade of Qualification</label>
+                            <input
+                                id="other_grade"
+                                type="text"
+                                class="form-control form-input input-round @error('other_grade') is-invalid @enderror"
+                                name="other_grade"
+                                value="{{ old('other_grade') }}"
+                                placeholder="Specify Other Grade"
+                            >
+                            @error('other_grade')
                                 <span class="invalid-feedback" role="alert">
                                 <small>{{ $message }}</small>
                                 </span>
@@ -179,47 +276,6 @@ Tertiary Institutions
                                     </span>
                                 @enderror
                             </div>
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label class="form-label" for="select-qualification">Qualification Obtained</label>
-                            <select class="form-select form-input" name="qualification" id="select-qualification" required data-live-search="true">
-                                <option value="null" selected disabled>Qualification</option>
-                                @foreach ($qualifications as $qualification)
-                                    <option
-                                        value="{{ $qualification->id }}"
-                                        @if (old('qualification') == $qualification->id)
-                                            selected
-                                        @endif
-                                    >
-                                        {{ $qualification->name }}
-                                    </option>
-                                @endforeach
-                                <option value="others">Others</option>
-                            </select>
-                            
-                            @error('qualification')
-                                <span class="invalid-feedback" role="alert">
-                                <small>{{ $message }}</small>
-                                </span>
-                            @enderror
-                        </div>
-
-                        <div class="form-group mb-3" id="other_qualifiation_obtained-container">
-                            <label class="form-label" for="other_qualifiation_obtained">Other Qualification Obtained</label>
-                            <input
-                                id="other_qualifiation_obtained"
-                                type="text"
-                                class="form-control form-input input-round @error('other_qualifiation_obtained') is-invalid @enderror"
-                                name="other_qualifiation_obtained"
-                                value="{{ old('other_qualifiation_obtained') }}"
-                                placeholder="Other qualification"
-                            >
-                            @error('other_qualifiation_obtained')
-                                <span class="invalid-feedback" role="alert">
-                                <small>{{ $message }}</small>
-                                </span>
-                            @enderror
                         </div>
 
                         <div>
@@ -305,50 +361,42 @@ Tertiary Institutions
     <script>
         $(document).ready(function () {
 
-            // fetch_tertiary_types();
-
-            // function fetch_tertiary_types() {
-            //     $("#select-name_of_institution").html('');
-            //     $("#select-type_of_institution").html('');
-                
-            //     $.ajax({
-            //         url: '/api/tertiary-types',
-            //         type: "GET",
-            //         dataType: 'json',
-            //         success: function (response) {
-            //             $('#select-name_of_institution').html('<option value="">Select Tertiary Institution</option>');
-            //             $('#select-type_of_institution').html('<option value="">Select Type of Tertiary Institution</option>');
-            //             $.each(response, function (key, type) {
-            //                 $("#select-type_of_institution").append('<option value="' + type.id + '">' + type.name + '</option>');
-            //                 $.each(type.institutions, function (key, institution) {
-            //                     $("#select-name_of_institution").append('<option value="' + institution.id + '" data-type="' + institution.tertiary_types_id + '">' + institution.name + '</option>');
-            //                 });
-            //             });
-            //             $('#select-name_of_institution').append('<option value="others">Others</option>');
-            //             $('#select-type_of_institution').append('<option value="others">Others</option>');
-            //         }
-            //     });
-            // }
-
-
             const tertiary_institution_check = $('#tertiary_institution-check');
-            const other_tertiary_institution = $('#other_tertiary_institution_type-container');
+            const other_tertiary_institution = $('#other_tertiary_institution-container');
+            const other_tertiary_institution_type = $('#other_tertiary_institution_type-container');
+            const other_qualifiation_obtained = $('#other_qualifiation_obtained-container');
+            const other_course_type = $('#other_course_type-container');
+            const other_course = $('#other_course-container');
+            const other_grade = $('#other_grade-container');
             const start_date = $('#start_date');
             const end_date = $('#end_date'); 
             const addMore = $('#addMore');
             const updateData = $('#update');
-            const other_qualifiation_obtained = $('#other_qualifiation_obtained-container');
-
-            other_qualifiation_obtained.hide();
+            
             updateData.hide()
             other_tertiary_institution.hide()
-
-            // $('#select-name_of_institution').on('change', function () {
-            //     var type = $(this).children('option:selected').data('type');
-            //     $('#select-type_of_institution').val(type).change();
-            // });
-
+            other_tertiary_institution_type.hide()
+            other_qualifiation_obtained.hide();
+            other_course_type.hide();
+            other_course.hide();
+            other_grade.hide();
             
+            $('#select-name_of_institution').on('change', function () {
+                if(this.value === 'others') {
+                    other_tertiary_institution.show(500)
+                } else {
+                    other_tertiary_institution.hide(500)
+                }
+            });
+
+            $('#select-type_of_institution').on('change', function () {
+                if(this.value === 'others') {
+                    other_tertiary_institution_type.show(500)
+                } else {
+                    other_tertiary_institution_type.hide(500)
+                }
+            });
+
             $('#select-qualification').on('change', function () {
                 if(this.value === 'others') {
                     other_qualifiation_obtained.show(500)
@@ -357,45 +405,30 @@ Tertiary Institutions
                 }
             });
 
-            $('#select-type_of_institution').on('change', function () {
-                var institution = this.value;
-                if(institution === 'others') {
-                    other_tertiary_institution.show(500)
+            $('#select-course_type').on('change', function () {
+                if(this.value === 'others') {
+                    other_course_type.show(500)
                 } else {
-                    other_tertiary_institution.hide(500)
+                    other_course_type.hide(500)
                 }
             });
 
-            $('.edit-tertiary-data').click(function(e) {
-                updateData.show(500)
-                addMore.hide(500)
-                tertiary_institution_check.hide(500)
-              
-                const data = $(this).data('education');
-                const cv = $(this).data('cv');
-                const form_action = '/cv/'+cv.uuid+'/tertiary-institution/'+data.id
-
-                if(confirm('Changes you made may not be saved')) {
-                    handleUpdateData(data);
+            $('#select-course').on('change', function () {
+                if(this.value === 'others') {
+                    other_course.show(500)
+                } else {
+                    other_course.hide(500)
                 }
-
-                function handleUpdateData(data) {
-                    var type = 'others';
-                    if(data.institution_type != null) {
-                        type = data.institution_type.id;
-                    }
-                    $('#tertiary_education_form').attr('action', form_action);
-                    $('#select-name_of_institution').val(data.institution.id).change();
-                    $('#select-type_of_institution').val(type).change();
-                    $('#select-qualification').val(data.qualification.id).change();
-                    start_date.val(moment(data.start_date).format('YYYY-MM'));
-                    end_date.val(moment(data.end_date).format('YYYY-MM'));
-                    if(type == 'others') {
-                        $('#other_tertiary_institution_type').val(data.other_type);
-                    }
-                };
             });
-            
+
+            $('#select-grade').on('change', function () {
+                if(this.value === 'others') {
+                    other_grade.show(500)
+                } else {
+                    other_grade.hide(500)
+                }
+            });
+
             $('#nextForm').click(function(e) {
                 confirmAction(e);
             });

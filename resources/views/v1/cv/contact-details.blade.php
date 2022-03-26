@@ -45,22 +45,10 @@ Contact Details
 
                         <div class="form-group mb-3 row">
                             <div class="col">
-                                <label class="form-label" for="select-country">Country</label>
-                                <select class="form-select" name="country" id="select-country" required data-live-search="true">
-                                    <option value="" selected disabled>Select Country</option>
-                                    @foreach ($countries as $country)
-                                        <option
-                                            value="{{ $country->id }}"
-                                            @if ($cv->country)
-                                                {{ $cv->country->name == $country->name ? 'selected' : '' }}
-                                            @else
-                                                {{ old('country') == $country->id ? 'selected' : '' }}
-                                            @endif
-                                        >
-                                            {{ $country->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <x-country-select-field
+                                    :required="true"
+                                    :selected="$cv->country"
+                                />
                                 
                                 @error('country')
                                     <span class="invalid-feedback" role="alert">
@@ -70,7 +58,7 @@ Contact Details
                             </div>
                             <div class="col">
                                 <label class="form-label" for="select-state">State</label>
-                                <select class="form-select" name="state" id="select-state" required>
+                                <select class="form-select form-input" name="state" id="select-state" required>
                                     @if ($cv->state)
                                         <option value="{{ $cv->state->id }}" selected>{{ $cv->state->name }}</option>
                                     @else
@@ -112,7 +100,7 @@ Contact Details
                                 class="form-control form-input input-round @error('mobile_phone') is-invalid @enderror"
                                 name="mobile_phone"
                                 value="{{ old('mobile_phone', $cv->mobile_phone ?? '') }}"
-                                placeholder="+234 812 345 678"
+                                placeholder="Enter Mobile Phone Number"
                             >
                             @error('mobile_phone')
                                 <span class="invalid-feedback" role="alert">
@@ -129,7 +117,7 @@ Contact Details
                                 class="form-control form-input input-round @error('home_phone') is-invalid @enderror"
                                 name="home_phone"
                                 value="{{ old('home_phone', $cv->home_phone ?? '') }}"
-                                placeholder="+234 812 345 678"
+                                placeholder="Enter Home Phone Number"
                             >
                             @error('home_phone')
                                 <span class="invalid-feedback" role="alert">
@@ -147,7 +135,7 @@ Contact Details
                                 name="email"
                                 value="{{ old('email', $cv->email ?? auth()->user()->email) }}"
                                 placeholder="me@domain.com"
-                                required
+                                readonly
                             >
                             @error('email')
                                 <span class="invalid-feedback" role="alert">
@@ -170,21 +158,43 @@ Contact Details
 @push('javascript')
     <script>
         $(document).ready(function () {
-            $('#select-country').on('change', function () {
-                var country_id = this.value;
+
+            var country_id = '';
+            $('#country-select').on('change', function () {
+                country_id = this.value;
                 $("#select-state").html('');
-                $.ajax({
-                    url: '/api/country/' + country_id + '/fetch-states',
-                    type: "GET",
-                    dataType: 'json',
-                    success: function (states) {
-                        $('#select-state').html('<option value="">Select State</option>');
-                        $.each(states, function (key, value) {
-                            $("#select-state").append('<option value="' + value.id + '">' + value.name + '</option>');
-                        });
+                fetchStates(country_id);
+            });
+
+            function fetchStates(country) {
+                  $('#select-state').select2({
+                    placeholder: 'Select and begin typing',
+                    ajax: {
+                        url: '/api/country/' + country + '/fetch-states',
+                        delay: 250,
+                        cache: true,
+                        data: function (params) {
+                            return {
+                                search: params.term,
+                            }
+                        },
+                        processResults: function (result) {
+                            console.log(result)
+                            return {
+                                results: result.map(function (country) {
+                                    window.countriesMap[country.id] = country
+                                    return {
+                                        id: country.id,
+                                        text: country.name,
+                                    }
+                                })
+                            }
+                        },
                     }
                 });
-            });
+            }
+
+            $('#select-state').select2();
 
             $('#previousBtn').click(function(e) {
                 if($('#town').val().length > 0) {

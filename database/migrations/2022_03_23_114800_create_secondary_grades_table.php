@@ -13,15 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('secondary_education', function (Blueprint $table) {
+        Schema::create('secondary_grades', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->date('start_date');
-            $table->date('end_date');
-            $table->string('no_of_subjects')->nullable();
-            $table->foreignId('cv_id')->constrained();
-            $table->string('other_qualification')->nullable();
-            $table->foreignId('secondary_qualifications_id')->nullable()->constrained();
             $table->timestamps();
         });
     }
@@ -33,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('secondary_education');
+        Schema::dropIfExists('secondary_grades');
     }
 };

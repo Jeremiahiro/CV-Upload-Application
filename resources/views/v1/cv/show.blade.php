@@ -278,8 +278,7 @@ Preview CV
 
                                 {{-- NYSC Service Year --}}
                                 @if ($cv->nysc_detail)
-                                <div class="col"
-                                    style="margin-top: 30px;padding-right: 30px;padding-left: 30px;border-bottom-width: 3px;border-bottom-color: var(--bs-yellow);">
+                                <div class="col" style="margin-top: 30px;~padding-right: 30px;padding-left: 30px;border-bottom-width: 3px;border-bottom-color: var(--bs-yellow);">
                                     <div>
                                         <div class="d-grid float-none">
                                             <div class="d-flex">

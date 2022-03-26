@@ -34,7 +34,8 @@ Secondary Education
                                         <div class="m-2 d-flex justify-content-between p-2 bg-warning text-dark">
                                             <div class=" ">
                                                 <span class="font-bold">
-                                                    {{ Str::limit($secondary_education->name, 30) }} <small>({{ $secondary_education->qualification->name }})</small>
+                                                    {{ Str::limit($secondary_education->name, 30) }}
+                                                    <small>({{ $secondary_education->secondary_qualifications_id ? $secondary_education->qualification->name : $secondary_education->other_qualification }})</small>
                                                 </span>
                                                 <br>
                                                 <small class="">
@@ -44,12 +45,14 @@ Secondary Education
                                             <div class="data__action mx-3">
                                                 <div class="d-flex flex-column">
                                                     <span class="cursor-pointer mx-2">
-                                                        <i
-                                                            class="fa fa-edit text-dark edit-secondary-data"
-                                                            data-education="{{ $secondary_education }}"
-                                                            data-cv="{{ $cv }}"
+                                                        <a
+                                                            href="{{ route('cv.secondary-education.edit', [$cv['uuid'], $secondary_education['id']]) }}"
                                                             data-toggle="tooltip"
-                                                            title="Edit Data"></i>
+                                                            title="Edit Data"
+                                                            class="text-dark"
+                                                        >
+                                                            <i class="fa fa-edit text-dark edit-secondary-data"></i>
+                                                        </a>
                                                     </span>
                                                     <span class="cursor-pointer mx-2">
                                                         <a
@@ -145,21 +148,7 @@ Secondary Education
                         </div>
 
                         <div class="form-group mb-3">
-                            <label class="form-label" for="select-qualification">Qualification Obtained</label>
-                            <select class="form-select form-input" name="qualification" id="select-qualification" required data-live-search="true">
-                                <option value="" selected disabled>Qualification</option>
-                                @foreach ($qualifications as $qualification)
-                                    <option
-                                        value="{{ $qualification->id }}"
-                                        @if (old('qualification') == $qualification->id)
-                                            selected
-                                        @endif
-                                    >
-                                        {{ $qualification->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            
+                            <x-secondary-qualification-select-field :required="true" />
                             @error('qualification')
                                 <span class="invalid-feedback" role="alert">
                                 <small>{{ $message }}</small>
@@ -182,6 +171,42 @@ Secondary Education
                                 <small>{{ $message }}</small>
                                 </span>
                             @enderror
+                        </div>
+
+                        <div id="no_of_subjects-container">
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="other_qualifiation_obtained">
+                                    In how many subjects do you have this qualification
+                                </label>
+                                <input
+                                    id="no_of_subjects"
+                                    type="number"
+                                    class="form-control form-input input-round @error('no_of_subjects') is-invalid @enderror"
+                                    name="no_of_subjects"
+                                    value="{{ old('no_of_subjects') }}"
+                                    placeholder="No of Subject"
+                                >
+                                @error('no_of_subjects')
+                                    <span class="invalid-feedback" role="alert">
+                                    <small>{{ $message }}</small>
+                                    </span>
+                                @enderror
+                            </div>
+
+                            <div class="table-responsive mb-3">
+                                <table class="table">
+                                    <thead>
+                                      <tr>
+                                        <th scope="col">Subject</th>
+                                        <th scope="col">Grade</th>
+                                        <th scope="col"></th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                        <x-secondary-subject-fields />
+                                    </tbody>
+                                  </table>
+                            </div>
                         </div>
 
                         <div>
@@ -276,20 +301,24 @@ Secondary Education
 
             const name_of_secondary_school = $('#name_of_secondary_school');
             const other_qualifiation_obtained = $('#other_qualifiation_obtained-container');
+            const tertiary_institution_check = $('#tertiary_institution-check');
+            const no_of_subjects = $('#no_of_subjects-container');
             const addMore = $('#addMore');
             const updateData = $('#update');
-            const tertiary_institution_check = $('#tertiary_institution-check');
             const start_date = $('#start_date');
             const end_date = $('#end_date');
 
             updateData.hide()
+            no_of_subjects.hide()
             other_qualifiation_obtained.hide();
 
-            $('#select-qualification').on('change', function () {
-                if(this.value === '6') {
+            $('#select-secondary_qualification').on('change', function () {
+                if(this.value === 'others') {
                     other_qualifiation_obtained.show(500)
+                    no_of_subjects.hide(500)
                 } else {
                     other_qualifiation_obtained.hide(500)
+                    no_of_subjects.show(500)
                 }
             });
             
@@ -317,31 +346,31 @@ Secondary Education
                 }
             }
 
-            $('.edit-secondary-data').click(function(e) {
-                updateData.show(500)
-                addMore.hide(500)
-                tertiary_institution_check.hide(500)
+            // $('.edit-secondary-data').click(function(e) {
+            //     updateData.show(500)
+            //     addMore.hide(500)
+            //     tertiary_institution_check.hide(500)
               
-                const data = $(this).data('education');
-                const cv = $(this).data('cv');
-                const form_action = '/cv/'+cv.uuid+'/secondary-education/'+data.id
+            //     const data = $(this).data('education');
+            //     const cv = $(this).data('cv');
+            //     const form_action = '/cv/'+cv.uuid+'/secondary-education/'+data.id
 
-                if(name_of_secondary_school.val().length > 3) {
-                    if(confirm('Changes you made may not be saved')) {
-                        handleUpdateData(data);
-                    }
-                } else  {
-                    handleUpdateData(data);
-                };
+            //     if(name_of_secondary_school.val().length > 3) {
+            //         if(confirm('Changes you made may not be saved')) {
+            //             handleUpdateData(data);
+            //         }
+            //     } else  {
+            //         handleUpdateData(data);
+            //     };
 
-                function handleUpdateData(data) {
-                    $('#secondary_education_form').attr('action', form_action);
-                    name_of_secondary_school.val(data.name);
-                    start_date.val(moment(data.start_date).format('YYYY-MM'));
-                    end_date.val(moment(data.end_date).format('YYYY-MM'));
-                    $('#select-qualification').val(data.qualification.id).change();
-                };
-            });
+            //     function handleUpdateData(data) {
+            //         $('#secondary_education_form').attr('action', form_action);
+            //         name_of_secondary_school.val(data.name);
+            //         start_date.val(moment(data.start_date).format('YYYY-MM'));
+            //         end_date.val(moment(data.end_date).format('YYYY-MM'));
+            //         $('#select-qualification').val(data.qualification.id).change();
+            //     };
+            // });
         });
     </script>
 @endpush
