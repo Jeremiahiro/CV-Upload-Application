@@ -110,7 +110,7 @@ Referee
                                 class="form-control form-input input-round @error('referee_phone_number') is-invalid @enderror"
                                 name="referee_phone_number"
                                 value="{{ old('referee_phone_number') }}"
-                                placeholder="+234 812 3478 901"
+                                placeholder="Input Referees Phone Number"
                                 required
                             >
                             @error('referee_phone_number')

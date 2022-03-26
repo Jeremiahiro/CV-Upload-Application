@@ -34,9 +34,9 @@ Tertiary Institutions
                                         <div class="m-2 d-flex justify-content-between p-2 bg-warning text-dark">
                                             <div class=" ">
                                                 <span class="font-bold">
-                                                    {{ Str::limit($tertiary_education->institution->name, 40) }} 
+                                                    {{ Str::limit($tertiary_education->tertiary_institutions_id ? $tertiary_education->institution->name : $tertiary_education->other_tertiary_institution, 40) }} 
                                                     <br />
-                                                    <small>({{ $tertiary_education->institution_type->name ?? $tertiary_education->other_type }})</small>
+                                                    <small>({{ $tertiary_education->tertiary_types_id ? $tertiary_education->tertiary_type->name : $tertiary_education->other_tertiary_type }})</small>
                                                 </span>
                                                 <br>
                                                 <small class="">
@@ -46,12 +46,13 @@ Tertiary Institutions
                                             <div class="data__action mx-3">
                                                 <div class="d-flex flex-column">
                                                     <span class="cursor-pointer mx-2">
-                                                        <i
-                                                            class="fa fa-edit text-dark edit-tertiary-data"
-                                                            data-education="{{ $tertiary_education }}"
-                                                            data-cv="{{ $cv }}"
+                                                        <a
+                                                            href="{{ route('cv.tertiary-institution.edit', [$cv['uuid'], $tertiary_education['id']]) }}"
                                                             data-toggle="tooltip"
-                                                            title="Edit Data"></i>
+                                                            title="Edit Data"
+                                                        >
+                                                            <i class="fa fa-edit text-dark"></i>
+                                                        </a>
                                                     </span>
                                                     <span class="cursor-pointer mx-2">
                                                         <a
@@ -73,7 +74,7 @@ Tertiary Institutions
                         @endif
 
                         <div class="form-group mb-3">
-                            <x-tertiary-type-select-field />
+                            <x-tertiary-type-select-field :required="true" />
  
                              @error('type_of_institution')
                                  <span class="invalid-feedback" role="alert">
@@ -100,7 +101,7 @@ Tertiary Institutions
                          </div>
 
                         <div class="form-group mb-3">
-                           <x-tertiary-select-field />
+                           <x-tertiary-select-field :required="true" />
 
                             @error('name_of_institution')
                                 <span class="invalid-feedback" role="alert">
@@ -127,7 +128,7 @@ Tertiary Institutions
                         </div>
 
                         <div class="form-group mb-3">
-                            <x-tertiary-qualification-select-field />
+                            <x-tertiary-qualification-select-field :required="true" />
  
                              @error('qualification')
                                  <span class="invalid-feedback" role="alert">
@@ -154,9 +155,9 @@ Tertiary Institutions
                         </div>
 
                         <div class="form-group mb-3">
-                            <x-tertiary-course-type-select-field />
+                            <x-tertiary-course-type-select-field :required="true" />
  
-                             @error('qualification')
+                             @error('course_type')
                                  <span class="invalid-feedback" role="alert">
                                  <small>{{ $message }}</small>
                                  </span>
@@ -181,9 +182,9 @@ Tertiary Institutions
                         </div>
 
                         <div class="form-group mb-3">
-                            <x-tertiary-course-select-field />
+                            <x-tertiary-course-select-field :required="true" />
  
-                             @error('qualification')
+                             @error('course')
                                  <span class="invalid-feedback" role="alert">
                                  <small>{{ $message }}</small>
                                  </span>
@@ -208,9 +209,9 @@ Tertiary Institutions
                         </div>
 
                         <div class="form-group mb-3">
-                            <x-tertiary-grade-select-field />
+                            <x-tertiary-grade-select-field :required="true" />
  
-                             @error('qualification')
+                             @error('grade')
                                  <span class="invalid-feedback" role="alert">
                                  <small>{{ $message }}</small>
                                  </span>
@@ -277,30 +278,22 @@ Tertiary Institutions
                                 @enderror
                             </div>
                         </div>
-
-                        <div>
-                            <div class="form-group mb-3" id="addMore">
-                                <button type="submit" class="submit__btn text-warning font-bold btn btn-clear">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-                                        fill="currentColor" viewBox="0 0 16 16"
-                                        class="bi bi-plus-circle fs-4"
-                                        style="color: var(--bs-yellow);font-weight: bold;border-width: 2px;">
-                                        <path
-                                            d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z">
-                                        </path>
-                                        <path
-                                            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z">
-                                        </path>
-                                    </svg>
-                                    Add
-                                </button>
-                            </div>
-                            <div class="form-group mb-3" id="update">
-                                <button type="submit" class="submit__btn text-warning font-bold btn btn-clear">
-                                    <i class="fa fa-check"></i>
-                                    Update
-                                </button>
-                            </div>
+                        
+                        <div class="form-group mb-3" id="addMore">
+                            <button type="submit" class="submit__btn text-warning font-bold btn btn-clear">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                    fill="currentColor" viewBox="0 0 16 16"
+                                    class="bi bi-plus-circle fs-4"
+                                    style="color: var(--bs-yellow);font-weight: bold;border-width: 2px;">
+                                    <path
+                                        d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z">
+                                    </path>
+                                    <path
+                                        d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z">
+                                    </path>
+                                </svg>
+                                Add
+                            </button>
                         </div>
 
                         <div class="form-group mb-3" id="tertiary_institution-check">
@@ -344,7 +337,7 @@ Tertiary Institutions
                             <a
                                 href="{{ $cv->professional_qualification == 1 ? route('cv.professional-qualification', $cv['uuid']) : route('cv.employement_history', [$cv['uuid'], $cv->employment_status ? 'current' : 'previous']) }}"
                                 id="nextForm"
-                                class="submit__btn btn btn-warning px-4 font-bold mx-2 @if(!$cv->tertiary_educations->count()) disabled-link disabled @endif"
+                                class="submit__btn btn btn-warning px-4 font-bold mx-2 @if(!$cv->tertiary_educations->count())  disabled @endif"
                             >
                                 Next
                             </a>
@@ -361,92 +354,147 @@ Tertiary Institutions
     <script>
         $(document).ready(function () {
 
-            const tertiary_institution_check = $('#tertiary_institution-check');
-            const other_tertiary_institution = $('#other_tertiary_institution-container');
-            const other_tertiary_institution_type = $('#other_tertiary_institution_type-container');
-            const other_qualifiation_obtained = $('#other_qualifiation_obtained-container');
-            const other_course_type = $('#other_course_type-container');
-            const other_course = $('#other_course-container');
-            const other_grade = $('#other_grade-container');
-            const start_date = $('#start_date');
-            const end_date = $('#end_date'); 
-            const addMore = $('#addMore');
-            const updateData = $('#update');
+        const tertiary_institution_check = $('#tertiary_institution-check');
+        const other_tertiary_institution = $('#other_tertiary_institution-container');
+        const other_tertiary_institution_type = $('#other_tertiary_institution_type-container');
+        const other_qualifiation_obtained = $('#other_qualifiation_obtained-container');
+        const other_course_type = $('#other_course_type-container');
+        const other_course = $('#other_course-container');
+        const other_grade = $('#other_grade-container');
+        const start_date = $('#start_date');
+        const end_date = $('#end_date'); 
+        const updateData = $('#update');
+        
+        updateData.hide()
+        other_tertiary_institution.hide()
+        other_tertiary_institution_type.hide()
+        other_qualifiation_obtained.hide();
+        other_course_type.hide();
+        other_course.hide();
+        other_grade.hide();
+
+        function fetchInstitutionsByType(type) {
+            $('#select-name_of_institution').select2({
+                placeholder: 'Select and begin typing',
+                ajax: {
+                    url: '/api/tertiray-institutions/' + type,
+                    delay: 250,
+                    cache: true,
+                    data: function (params) {
+                        return {
+                            search: params.term,
+                        }
+                    },
+                    processResults: function (result) {
+                        return {
+                            results: result.map(function (institution) {
+                                window.institutionsMap[institution.id] = institution
+                                return {
+                                    id: institution.id,
+                                    text: institution.name,
+                                }
+                            })
+                        }
+                    },
+                }
+            });
+        }
+
+        function fetchInstitutions() {
+            $('#select-name_of_institution').select2({
+                placeholder: 'Select and begin typing',
+                ajax: {
+                url: '{{ route('tertiray.list') }}',
+                delay: 250,
+                    cache: true,
+                    data: function (params) {
+                        return {
+                            search: params.term,
+                        }
+                    },
+                    processResults: function (result) {
+                        return {
+                            results: result.map(function (institution) {
+                                window.institutionsMap[institution.id] = institution
+                                return {
+                                    id: institution.id,
+                                    text: institution.name,
+                                }
+                            })
+                        }
+                    },
+                }
+            });
+        }
             
-            updateData.hide()
-            other_tertiary_institution.hide()
-            other_tertiary_institution_type.hide()
-            other_qualifiation_obtained.hide();
-            other_course_type.hide();
-            other_course.hide();
-            other_grade.hide();
-            
-            $('#select-name_of_institution').on('change', function () {
-                if(this.value === 'others') {
-                    other_tertiary_institution.show(500)
-                } else {
-                    other_tertiary_institution.hide(500)
-                }
-            });
+        $('#select-type_of_institution').on('change', function () {
+            if(this.value === 'others') {
+                other_tertiary_institution_type.show(500);
+                fetchInstitutions();
+            } else {
+                other_tertiary_institution_type.hide(500);
+                fetchInstitutionsByType(this.value)
+            }
+        });
 
-            $('#select-type_of_institution').on('change', function () {
-                if(this.value === 'others') {
-                    other_tertiary_institution_type.show(500)
-                } else {
-                    other_tertiary_institution_type.hide(500)
-                }
-            });
+        $('#select-name_of_institution').on('change', function () {
+            if(this.value === 'others') {
+                other_tertiary_institution.show(500)
+            } else {
+                other_tertiary_institution.hide(500)
+            }
+        });
 
-            $('#select-qualification').on('change', function () {
-                if(this.value === 'others') {
-                    other_qualifiation_obtained.show(500)
-                } else {
-                    other_qualifiation_obtained.hide(500)
-                }
-            });
+        $('#select-qualification').on('change', function () {
+            if(this.value === 'others') {
+                other_qualifiation_obtained.show(500)
+            } else {
+                other_qualifiation_obtained.hide(500)
+            }
+        });
 
-            $('#select-course_type').on('change', function () {
-                if(this.value === 'others') {
-                    other_course_type.show(500)
-                } else {
-                    other_course_type.hide(500)
-                }
-            });
+        $('#select-course_type').on('change', function () {
+            if(this.value === 'others') {
+                other_course_type.show(500)
+            } else {
+                other_course_type.hide(500)
+            }
+        });
 
-            $('#select-course').on('change', function () {
-                if(this.value === 'others') {
-                    other_course.show(500)
-                } else {
-                    other_course.hide(500)
-                }
-            });
+        $('#select-course').on('change', function () {
+            if(this.value === 'others') {
+                other_course.show(500)
+            } else {
+                other_course.hide(500)
+            }
+        });
 
-            $('#select-grade').on('change', function () {
-                if(this.value === 'others') {
-                    other_grade.show(500)
-                } else {
-                    other_grade.hide(500)
-                }
-            });
+        $('#select-grade').on('change', function () {
+            if(this.value === 'others') {
+                other_grade.show(500)
+            } else {
+                other_grade.hide(500)
+            }
+        });
 
-            $('#nextForm').click(function(e) {
-                confirmAction(e);
-            });
+        $('#nextForm').click(function(e) {
+            confirmAction(e);
+        });
 
-            $('#previousBtn').click(function(e) {
-                confirmAction(e);
-            });
+        $('#previousBtn').click(function(e) {
+            confirmAction(e);
+        });
 
-            function confirmAction(e) {
-                if($('#select-name_of_institution').val() != 'null') {
-                   window.location = $(this).attr('href');
-                } else {
-                    e.preventDefault();
-                    if(confirm('Changes you made may not be saved')) {
-                        window.location = $(this).attr('href');
-                    }
+        function confirmAction(e) {
+            if($('#select-name_of_institution').val() != 'null') {
+                window.location = $(this).attr('href');
+            } else {
+                e.preventDefault();
+                if(confirm('Changes you made may not be saved')) {
+                    window.location = $(this).attr('href');
                 }
             }
+        }
 
         });
     </script>

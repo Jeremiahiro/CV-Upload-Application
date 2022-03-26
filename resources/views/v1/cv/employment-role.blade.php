@@ -108,7 +108,7 @@ Employment Roles
                                 @enderror
                             </div>
                             <div class="col">
-                                <label class="form-label invisible" for="role">Position / Role</label>
+                                <label class="form-label invisible" for="role"></label>
                                 <input
                                     id="to_date"
                                     type="date"

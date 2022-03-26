@@ -58,10 +58,10 @@ class OtherDataRepository
         return State::where('country_id', $country->id)->search($data)->get(['id', 'name']);
     }
 
-    public function get_states_in_nigeria()
+    public function get_states_in_nigeria(Collection $data)
     {
         $country = Country::where('sortname', 'NG')->first();
-        return State::where('country_id', $country->id)->get(['id', 'name']);
+        return State::where('country_id', $country->id)->search($data)->get(['id', 'name']);
     }
 
     public function get_secondary_qualifications(Collection $data)
@@ -89,7 +89,17 @@ class OtherDataRepository
     {
         $response = TertiaryTypes::search($data)->orderBy('name', 'asc')->get(['id', 'name'])->toArray();
         return $this->with_others($response);
+    }
 
+    public function get_tertiary_institutions_by_type(Collection $data, TertiaryTypes $tertiaryTypes)
+    {
+        $response = TertiaryInstitution::where('tertiary_types_id', $tertiaryTypes['id'])
+                                        ->search($data)
+                                        ->orderBy('name', 'asc')
+                                        ->get(['id', 'name'])
+                                        ->toArray();
+                                        
+        return $this->with_others($response);
     }
 
     public function get_tertiary_institutions(Collection $data)
@@ -100,7 +110,7 @@ class OtherDataRepository
 
     public function get_tertiary_education(Cv $cv)
     {
-        return TertiaryEducation::with(['institution', 'institution_type', 'qualification'])->where('cv_id', $cv['id'])->get();
+        return TertiaryEducation::where('cv_id', $cv['id'])->get();
     }
 
     public function get_tertiary_qualifications(Collection $data)
@@ -127,14 +137,16 @@ class OtherDataRepository
         return $this->with_others($response);
     }
 
-    public function get_professional_institutions()
+    public function get_professional_institutions(Collection $data)
     {
-        return ProfessionalInstitutions::get();
+        $response = ProfessionalInstitutions::search($data)->orderBy('name', 'asc')->get(['id', 'name'])->toArray();
+        return $this->with_others($response);
     }
 
-    public function get_professional_qualification_types(Cv $cv)
+    public function get_professional_qualification_types(Collection $data)
     {
-        return ProfessionalQualifications::get();
+        $response = ProfessionalQualifications::search($data)->orderBy('name', 'asc')->get(['id', 'name'])->toArray();
+        return $this->with_others($response);
     }
 
     public function get_professional_qualifications(Cv $cv)
@@ -142,9 +154,10 @@ class OtherDataRepository
         return Qualifications::with(['qualification', 'awarding_institution'])->where('cv_id', $cv['id'])->get();
     }
 
-    public function get_industry_sector()
+    public function get_industry_sector(Collection $data)
     {
-        return IndustrialSector::get(['id', 'name']);
+        $response = IndustrialSector::search($data)->get(['id', 'name'])->toArray();
+        return $this->with_others($response);
     }
 
     public function get_previous_experiecne(Cv $cv)

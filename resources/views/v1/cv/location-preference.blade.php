@@ -28,23 +28,11 @@ Location Preference
                         </div>
 
                         <div class="form-group mb-3">
-                            <label class="form-label" for="select-preferred_state">My preferred location for employment is</label>
-                            <select class="form-select" name="preferred_state" id="select-preferred_state" required data-live-search="true">
-                                <option value="" selected disabled>Select Location</option>
-                                @foreach ($states as $state)
-                                    <option
-                                        value="{{ $state->id }}"
-                                        @if ($cv->preferred_state)
-                                            {{ $cv->preferred_state->name == $state->name ? 'selected' : '' }}
-                                        @else
-                                            {{ old('preferred_state') == $state->id ? 'selected' : '' }}
-                                        @endif
-                                    >
-                                        {{ $state->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            
+                            <x-states-in-nigeria-select-field
+                                :required="true"
+                                label="My preferred location for employment is"
+                                fieldName="preferred_state"
+                            />
                             @error('preferred_state')
                                 <span class="invalid-feedback" role="alert">
                                 <small>{{ $message }}</small>
@@ -53,23 +41,12 @@ Location Preference
                         </div>
                         
                         <div class="form-group mb-3">
-                            <label class="form-label" for="select-preferred_industry">My preferred industry for employment is</label>
-                            <select class="form-select form-input" name="preferred_industry" id="select-preferred_industry" required data-live-search="true">
-                                <option value="" selected disabled>Select Industry</option>
-                                @foreach ($industry_sector as $sector)
-                                    <option
-                                        value="{{ $sector->id }}"
-                                        @if ($cv->preferred_industry)
-                                            {{ $cv->preferred_industry->name == $sector->name ? 'selected' : '' }}
-                                        @else
-                                            {{ old('preferred_industry') == $sector->id ? 'selected' : '' }}
-                                        @endif
-                                    >
-                                        {{ $sector->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            
+                            <x-industry-sector-select-field
+                                :required="true"
+                                label="My preferred industry for employment is"
+                                fieldName="preferred_industry"
+                            />
+
                             @error('preferred_industry')
                                 <span class="invalid-feedback" role="alert">
                                 <small>{{ $message }}</small>
@@ -98,8 +75,7 @@ Location Preference
                                     name="hobbies"
                                     id="not_has_hobbies"
                                     value="0"
-                                    required
-                                    {{ old('hobbies', $cv->has_hobbies) == false ? 'checked' : '' }}
+                                    {{ old('hobbies', $cv->has_hobbies) === false ? 'checked' : '' }}
                                 >
                                 <label class="form-check-label" for="not_has_hobbies">No</label>
                             </div>

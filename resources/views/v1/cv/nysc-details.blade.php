@@ -27,40 +27,24 @@ NYSC Details
                         </div>
 
                         <div class="form-group mb-3">
-                            <label class="form-label" for="select-state">What state did you serve for your National Service?</label>
-                                <select class="form-select form-input" name="nysc_state" id="select-state" required data-live-search="true">
-                                    <option value="" selected disabled>Select State</option>
-                                    @foreach ($states as $state)
-                                        <option
-                                            value="{{ $state->id }}"
-                                            @if ($cv->nysc_detail)
-                                                {{ $cv->nysc_detail->state->id == $state->id ? 'selected' : '' }}
-                                            @else
-                                                {{ old('nysc_state') == $state->id ? 'selected' : '' }}
-                                            @endif
-                                        >
-                                            {{ $state->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                            <x-states-in-nigeria-select-field :required="true" :label="What state did you serve for your National Service?" />
                                 
-                                @error('nysc_state')
-                                    <span class="invalid-feedback" role="alert">
-                                    <small>{{ $message }}</small>
-                                    </span>
-                                @enderror
+                            @error('nysc_state')
+                                <span class="invalid-feedback" role="alert">
+                                <small>{{ $message }}</small>
+                                </span>
+                            @enderror
                         </div>
 
                         <div class="form-group mb-3">
                             <label class="form-label" for="comencement_date">What date & year did you commence National Service?</label>
                             <input
                                 id="comencement_date"
-                                type="month"
+                                type="{{ $cv->nysc_detail ? 'text' : 'month' }}"
                                 class="form-control form-input input-round @error('end_date') is-invalid @enderror"
                                 name="comencement_date"
                                 value="{{ old('comencement_date', $cv->nysc_detail->date ?? '') }}"
                                 max="{{ now()->toDateString('M-Y') }}"
-                                format="d-m-y"
                                 required
                             >
                             
@@ -166,6 +150,10 @@ NYSC Details
 
             $('#previousBtn').click(function(e) {
                 confirmAction(e);
+            });
+
+            $('#end_date').focus(function(e) {
+                $(this).attr('type','month');
             });
 
             function confirmAction(e) {

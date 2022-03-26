@@ -1,13 +1,13 @@
 @props([
     'selected' => null,
     'required' => false,
-    'fieldName' => 'qualification',
+    'fieldName' => 'type_of_qualification',
     'disabled' => false,
 ])
 <div class="form-control-wrap form-group">
-    <label for="select-qualification" class="form-label">Type of Qualification</label>
+    <label for="select-type_of_qualification" class="form-label">Type of Qualification</label>
     <select name="{{ $fieldName }}" class="form-select form-input"
-            data-search="on" id="select-qualification" {{ $required ? 'required': '' }} {{ $disabled ? 'disabled' : '' }}>
+            data-search="on" id="select-type_of_qualification" {{ $required ? 'required': '' }} {{ $disabled ? 'disabled' : '' }}>
         @if($selected !== null)
             <option value="{{ $selected->id }}">
                 {{ $selected->name }}
@@ -18,15 +18,15 @@
 
 @push('javascript')
     <script>
-        window.tertirayQualificationMap = [];
+        window.professionalQualificationTypeMap = [];
         @if($selected !== null)
-            window.tertirayQualificationMap[{{ $selected->id }}] = @json($selected);
+            window.professionalQualificationTypeMap[{{ $selected->id }}] = @json($selected);
         @endif
 
-        $('#select-qualification').select2({
+        $('#select-type_of_qualification').select2({
             placeholder: 'Select and begin typing',
             ajax: {
-                url: '{{ route('tertiary.qualification') }}',
+                url: '{{ route('professional.qualification.type') }}',
                 delay: 250,
                 cache: true,
                 data: function (params) {
@@ -37,7 +37,7 @@
                 processResults: function (result) {
                     return {
                         results: result.map(function (qualification) {
-                            window.tertirayQualificationMap[qualification.id] = qualification
+                            window.professionalQualificationTypeMap[qualification.id] = qualification
                             return {
                                 id: qualification.id,
                                 text: qualification.name,

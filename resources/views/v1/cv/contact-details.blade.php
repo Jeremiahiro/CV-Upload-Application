@@ -61,8 +61,6 @@ Contact Details
                                 <select class="form-select form-input" name="state" id="select-state" required>
                                     @if ($cv->state)
                                         <option value="{{ $cv->state->id }}" selected>{{ $cv->state->name }}</option>
-                                    @else
-                                    <option value="" selected disabled>Select State</option>
                                     @endif
                                 </select>
                                 
@@ -167,7 +165,7 @@ Contact Details
             });
 
             function fetchStates(country) {
-                  $('#select-state').select2({
+                $('#select-state').select2({
                     placeholder: 'Select and begin typing',
                     ajax: {
                         url: '/api/country/' + country + '/fetch-states',
@@ -179,10 +177,9 @@ Contact Details
                             }
                         },
                         processResults: function (result) {
-                            console.log(result)
                             return {
                                 results: result.map(function (country) {
-                                    window.countriesMap[country.id] = country
+                                    window.statesMap[country.id] = country
                                     return {
                                         id: country.id,
                                         text: country.name,
@@ -193,8 +190,6 @@ Contact Details
                     }
                 });
             }
-
-            $('#select-state').select2();
 
             $('#previousBtn').click(function(e) {
                 if($('#town').val().length > 0) {

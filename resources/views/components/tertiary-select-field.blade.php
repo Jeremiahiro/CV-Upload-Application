@@ -3,6 +3,7 @@
     'required' => false,
     'fieldName' => 'name_of_institution',
     'disabled' => false,
+    'typeid' => null,
 ])
 <div class="form-control-wrap form-group">
     <label for="select-name_of_institution" class="form-label">Name of Tertiary Institution</label>
@@ -22,30 +23,90 @@
         @if($selected !== null)
             window.institutionsMap[{{ $selected->id }}] = @json($selected);
         @endif
+        @if($typeid !== null)
+            fetchInstitutionsByType({{ $typeid }})
+        @else
+            fetchInstitutions()
+        @endif
 
-        $('#select-name_of_institution').select2({
-            placeholder: 'Select and begin typing',
-            ajax: {
+        function fetchInstitutionsByType(type) {
+            $('#select-name_of_institution').select2({
+                placeholder: 'Select and begin typing',
+                ajax: {
+                    url: '/api/tertiray-institutions/' + type,
+                    delay: 250,
+                    cache: true,
+                    data: function (params) {
+                        return {
+                            search: params.term,
+                        }
+                    },
+                    processResults: function (result) {
+                        return {
+                            results: result.map(function (institution) {
+                                window.institutionsMap[institution.id] = institution
+                                return {
+                                    id: institution.id,
+                                    text: institution.name,
+                                }
+                            })
+                        }
+                    },
+                }
+            });
+        }
+
+        function fetchInstitutions() {
+            $('#select-name_of_institution').select2({
+                placeholder: 'Select and begin typing',
+                ajax: {
                 url: '{{ route('tertiray.list') }}',
                 delay: 250,
-                cache: true,
-                data: function (params) {
-                    return {
-                        search: params.term,
-                    }
-                },
-                processResults: function (result) {
-                    return {
-                        results: result.map(function (institution) {
-                            window.institutionsMap[institution.id] = institution
-                            return {
-                                id: institution.id,
-                                text: institution.name,
-                            }
-                        })
-                    }
-                },
-            }
-        });
+                    cache: true,
+                    data: function (params) {
+                        return {
+                            search: params.term,
+                        }
+                    },
+                    processResults: function (result) {
+                        return {
+                            results: result.map(function (institution) {
+                                window.institutionsMap[institution.id] = institution
+                                return {
+                                    id: institution.id,
+                                    text: institution.name,
+                                }
+                            })
+                        }
+                    },
+                }
+            });
+        }
+            
+
+        // $('#select-name_of_institution').select2({
+        //     placeholder: 'Select and begin typing',
+        //     ajax: {
+        //         url: '{{ route('tertiray.list') }}',
+        //         delay: 250,
+        //         cache: true,
+        //         data: function (params) {
+        //             return {
+        //                 search: params.term,
+        //             }
+        //         },
+        //         processResults: function (result) {
+        //             return {
+        //                 results: result.map(function (institution) {
+        //                     window.institutionsMap[institution.id] = institution
+        //                     return {
+        //                         id: institution.id,
+        //                         text: institution.name,
+        //                     }
+        //                 })
+        //             }
+        //         },
+        //     }
+        // });
     </script>
 @endpush

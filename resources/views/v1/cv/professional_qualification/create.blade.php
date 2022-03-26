@@ -91,7 +91,21 @@ Qualifications
                         </div>
 
                         <div class="form-group mb-3">
-                            <x-professional-qualification-type-select />
+                            <label class="form-label" for="type_of_qualification">Type of Qualification</label>
+                            <select class="form-select form-input" name="type_of_qualification" id="select-type_of_qualification" required data-live-search="true">
+                                <option value="" selected disabled>Type of Qualification</option>
+                                @foreach ($qualification_types as $type)
+                                    <option
+                                        value="{{ $type->id }}"
+                                        @if (old('type_of_qualification') == $type->id)
+                                            selected
+                                        @endif
+                                    >
+                                        {{ $type->name }}
+                                    </option>
+                                @endforeach
+                                <option value="others">Others</option>
+                            </select>
 
                             @error('type_of_qualification')
                                 <span class="invalid-feedback" role="alert">
@@ -137,7 +151,21 @@ Qualifications
                         </div>
 
                         <div class="form-group mb-3">
-                            <x-professional-institutions-select />
+                            <label class="form-label" for="awarding_institution">Awarding Institution</label>
+                            <select class="form-select form-input" name="awarding_institution" id="select-awarding_institution" required data-live-search="true">
+                                <option value="" selected disabled>Type of Qualification</option>
+                                @foreach ($awarding_institutions as $institution)
+                                    <option
+                                        value="{{ $institution->id }}"
+                                        @if (old('awarding_institution') == $institution->id)
+                                            selected
+                                        @endif
+                                    >
+                                        {{ $institution->name }}
+                                    </option>
+                                @endforeach
+                                <option value="others">Others</option>
+                            </select>
 
                             @error('awarding_institution')
                                 <span class="invalid-feedback" role="alert">

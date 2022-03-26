@@ -1,13 +1,14 @@
 @props([
     'selected' => null,
     'required' => false,
-    'fieldName' => 'qualification',
+    'fieldName' => 'industry_sector',
     'disabled' => false,
+    'label' => 'Industry Sector',
 ])
 <div class="form-control-wrap form-group">
-    <label for="select-qualification" class="form-label">Type of Qualification</label>
+    <label for="select-industry_sector" class="form-label">{{ $label }}</label>
     <select name="{{ $fieldName }}" class="form-select form-input"
-            data-search="on" id="select-qualification" {{ $required ? 'required': '' }} {{ $disabled ? 'disabled' : '' }}>
+            data-search="on" id="select-industry_sector" {{ $required ? 'required': '' }} {{ $disabled ? 'disabled' : '' }}>
         @if($selected !== null)
             <option value="{{ $selected->id }}">
                 {{ $selected->name }}
@@ -18,15 +19,14 @@
 
 @push('javascript')
     <script>
-        window.tertirayQualificationMap = [];
+        window.industryMap = [];
         @if($selected !== null)
-            window.tertirayQualificationMap[{{ $selected->id }}] = @json($selected);
+            window.industryMap[{{ $selected->id }}] = @json($selected);
         @endif
-
-        $('#select-qualification').select2({
+        $('#select-industry_sector').select2({
             placeholder: 'Select and begin typing',
             ajax: {
-                url: '{{ route('tertiary.qualification') }}',
+                url: '{{ route('industry.list') }}',
                 delay: 250,
                 cache: true,
                 data: function (params) {
@@ -36,11 +36,11 @@
                 },
                 processResults: function (result) {
                     return {
-                        results: result.map(function (qualification) {
-                            window.tertirayQualificationMap[qualification.id] = qualification
+                        results: result.map(function (industry) {
+                            window.industryMap[industry.id] = industry
                             return {
-                                id: qualification.id,
-                                text: qualification.name,
+                                id: industry.id,
+                                text: industry.name,
                             }
                         })
                     }

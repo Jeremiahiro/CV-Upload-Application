@@ -207,10 +207,9 @@ class CVController extends Controller
     */
     public function tertiary_institution(Cv $cv) 
     {
-
         $tertiary_educations = $this->otherServices->get_tertiary_education($cv);
 
-        return view('v1.cv.tertiary-institution', compact([
+        return view('v1.cv.tertiary_education.create', compact([
             'cv',
             'tertiary_educations'
         ]));
@@ -233,6 +232,11 @@ class CVController extends Controller
         return redirect()->back()->with('success', 'Operation Successful');
     }
 
+    public function edit_tertiary_institution(Cv $cv, TertiaryEducation $tertiary_education) 
+    {
+        return view('v1.cv.tertiary_education.edit', compact(['cv', 'tertiary_education']));
+    }
+
     /**
      * Update for tertiary institution
      * 
@@ -241,12 +245,13 @@ class CVController extends Controller
      * @param  \App\Models\Cv  $cv
      * 
     */
-    public function update_tertiary_institution(TertiaryInstitutionRequest $request, Cv $cv, TertiaryEducation $tertiary_edu) 
+    public function update_tertiary_institution(TertiaryInstitutionRequest $request, Cv $cv, TertiaryEducation $tertiary_education) 
     {
-        if(!$this->cvServices->handle_update_tertiary_education($request, $cv, $tertiary_edu)){
+        if(!$this->cvServices->handle_update_tertiary_education($request, $cv, $tertiary_education)){
             return back()->with('error', 'An error occured! Refresh and try again');
         }
-        return redirect()->back()->with('success', 'Operation Successful');
+        
+        return redirect()->route('cv.tertiary-institution', $cv);
     }
 
     /**
@@ -256,9 +261,9 @@ class CVController extends Controller
      * @param  \App\Models\TertiaryEducation  $tertiary_edu
      * 
     */
-    public function delete_tertiary_institution(Cv $cv, TertiaryEducation $tertiary_edu) 
+    public function delete_tertiary_institution(Cv $cv, TertiaryEducation $tertiary_education) 
     {
-        if(!$tertiary_edu->delete()) {
+        if(!$tertiary_education->delete()) {
             return redirect()->back()->with('success', 'OOPS Something went wrong');
         }
         return redirect()->back()->with('success', 'Operation Successful');
@@ -271,11 +276,8 @@ class CVController extends Controller
     */
     public function professional_qualification(Cv $cv) 
     {
-        $qualification_types = $this->otherServices->get_professional_qualification_types($cv);
-        $awarding_institutions = $this->otherServices->get_professional_institutions($cv);
         $professional_qualifications = $this->otherServices->get_professional_qualifications($cv);
-
-        return view('v1.cv.professional-qualification', compact(['cv', 'qualification_types', 'awarding_institutions', 'professional_qualifications']));
+        return view('v1.cv.professional-qualification', compact(['cv', 'professional_qualifications']));
     }
     
     /**
@@ -332,8 +334,7 @@ class CVController extends Controller
     */
     public function nysc_details(Cv $cv) 
     {
-        $states = $this->otherServices->get_states_in_nigeria();
-        return view('v1.cv.nysc-details', compact(['cv', 'states']));
+        return view('v1.cv.nysc-details', compact(['cv']));
     }
     
     /**
@@ -360,10 +361,9 @@ class CVController extends Controller
     */
     public function employement_history(Cv $cv, $type) 
     {
-        $industry_sector = $this->otherServices->get_industry_sector($cv);
         $previous_experiecne = $this->otherServices->get_previous_experiecne($cv);
 
-        return view('v1.cv.employment-history', compact(['cv', 'industry_sector', 'previous_experiecne', 'type']));
+        return view('v1.cv.employment-history', compact(['cv', 'previous_experiecne', 'type']));
     }
     
     /**
@@ -432,9 +432,8 @@ class CVController extends Controller
     */
     public function employement_role(Cv $cv, JobExperience $employement) 
     {
-        $industry_sector = $this->otherServices->get_industry_sector($cv);
         $roles = $this->otherServices->get_employment_roles($employement);
-        return view('v1.cv.employment-role', compact(['cv', 'industry_sector', 'employement', 'roles']));
+        return view('v1.cv.employment-role', compact(['cv', 'employement', 'roles']));
     }
 
     
@@ -553,9 +552,7 @@ class CVController extends Controller
     */
     public function location_preference(Cv $cv) 
     {
-        $states = $this->otherServices->get_states_in_nigeria();
-        $industry_sector = $this->otherServices->get_industry_sector($cv);
-        return view('v1.cv.location-preference', compact(['cv', 'states', 'industry_sector']));
+        return view('v1.cv.location-preference', compact(['cv']));
     }
 
     /**

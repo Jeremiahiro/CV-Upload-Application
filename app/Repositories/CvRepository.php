@@ -17,6 +17,8 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
+use function PHPUnit\Framework\isTrue;
+
 class CvRepository
 {
 
@@ -64,13 +66,13 @@ class CvRepository
         return $this->handle_update_secondary_education($request, $cv, $secondary_education, true);
     }
 
-    public function handle_update_secondary_education(Request $request, Cv $cv, SecondaryEducation $secondary_education, $new = false)
+    public function handle_update_secondary_education(Request $request, Cv $cv, SecondaryEducation $secondary_education, $new = false): bool
     {  
         try {
             DB::beginTransaction();
             $secondary_education->name = $request['name'] ?: $secondary_education->name;
             $secondary_education->no_of_subjects = $request['no_of_subjects'] ?: $secondary_education->no_of_subjects;
-;
+
             $start_date = Carbon::parse($request['start_date'])->format('M-Y');
             $end_date = Carbon::parse($request['end_date'])->format('M-Y');
 
@@ -107,7 +109,7 @@ class CvRepository
 
             DB::commit();
     
-            return $secondary_education;
+            return true;
         } catch (\Throwable $th) {
             DB::rollback();
             dd($th->getMessage());
@@ -118,33 +120,67 @@ class CvRepository
     public function handle_create_tertiary_education(Request $request, Cv $cv)
     {   
         $tertiary_education = new TertiaryEducation();
-        return $this->handle_update_tertiary_education($request, $cv, $tertiary_education);
+        return $this->handle_update_tertiary_education($request, $cv, $tertiary_education, true);
     }
 
-    public function handle_update_tertiary_education(Request $request, Cv $cv, TertiaryEducation $tertiary_education)
+    public function handle_update_tertiary_education(Request $request, Cv $cv, TertiaryEducation $tertiary_education, $new = false): bool
     {   
-        if($request['type_of_institution'] === 'others') {
-            $tertiary_education->other_type = $request['other_tertiary_institution_type'];
-        } else {
-            $tertiary_education->tertiary_types_id = $request['type_of_institution'];
+        try {
+            if(!$request['name_of_institution'] || $request['name_of_institution'] === 'others') {
+                $tertiary_education->other_tertiary_institution = $request['other_tertiary_institution'];
+            } else {
+                $tertiary_education->tertiary_institutions_id = $request['name_of_institution'];
+            }
+    
+            if(!$request['type_of_institution'] || $request['type_of_institution'] === 'others') {
+                $tertiary_education->other_tertiary_type = $request['other_tertiary_institution_type'];
+            } else {
+                $tertiary_education->tertiary_types_id = $request['type_of_institution'];
+            }
+    
+            if(!$request['qualification'] || $request['qualification'] === 'others') {
+                $tertiary_education->other_tertiary_qualification_type = $request['other_qualifiation_obtained'];
+            } else {
+                $tertiary_education->tertiary_qualification_types_id = $request['qualification'];
+            }
+    
+            if(!$request['grade'] || $request['grade'] === 'others') {
+                $tertiary_education->other_tertiary_qualification = $request['other_grade'];
+            } else {
+                $tertiary_education->tertiary_qualifications_id = $request['grade'];
+            }
+    
+            if(!$request['course_type'] || $request['course_type'] === 'others') {
+                $tertiary_education->other_tertiary_course_type = $request['other_course_type'];
+            } else {
+                $tertiary_education->tertiary_course_types_id = $request['course_type'];
+            }
+    
+            if(!$request['course'] || $request['course'] === 'others') {
+                $tertiary_education->other_tertiary_course = $request['other_course'];
+            } else {
+                $tertiary_education->tertiary_courses_id = $request['course'];
+            }
+    
+            $start_date = Carbon::parse($request['start_date'])->format('M-Y');
+            $end_date = Carbon::parse($request['end_date'])->format('M-Y');
+    
+            $tertiary_education->start_date = Carbon::createFromFormat('M-Y', $start_date);
+            $tertiary_education->end_date = Carbon::createFromFormat('M-Y', $end_date);
+    
+            $tertiary_education->cv_id = $cv['id'];
+    
+            if($new) {
+                $cv->update([
+                    'professional_qualification' => $request['professional_qualification'] ?: $cv->professional_qualification,
+                ]);
+            }
+            $tertiary_education->save();
+
+            return true;
+        } catch (\Throwable $th) {
+            return false;
         }
-        // TODO: update this session
-        // if($request['qualification'] === 'other') {
-        //     $tertiary_education->other_qualification = $request['other_qualifiation_obtained'];
-        // } else {
-            $tertiary_education->tertiary_qualifications_id = 1; 
-            // $tertiary_education->secondary_qualifications_id = $request['qualification'];
-        // }
-        $tertiary_education->tertiary_institutions_id = $request['name_of_institution'];
-        $tertiary_education->start_date = Carbon::createFromFormat('Y-m', $request['start_date']);
-        $tertiary_education->end_date = Carbon::createFromFormat('Y-m', $request['end_date']);;
-        $tertiary_education->cv_id = $cv['id'];
-
-        $cv->update([
-            'professional_qualification' => $request['professional_qualification'] ?: $cv->professional_qualification,
-        ]);
-
-        return $tertiary_education->save();
     }
 
     public function handle_create_professional_qualification(Request $request, Cv $cv)
@@ -153,30 +189,45 @@ class CvRepository
         return $this->handle_update_professional_qualification($request, $cv, $qualification);
     }
     
-    public function handle_update_professional_qualification(Request $request, Cv $cv, Qualifications $qualification)
+    public function handle_update_professional_qualification(Request $request, Cv $cv, Qualifications $qualification): bool
     {   
+        try {
+            DB::beginTransaction();
 
-        if($request['type_of_qualification'] === 'others') {
-            $qualification->other_qualification_type = $request['other_qualification_type'];
-        } else {
-            $qualification->professional_qualifications_id = $request['type_of_qualification'];
+            if($request['type_of_qualification'] === 'others') {
+                $qualification->other_qualification_type = $request['other_qualification_type'];
+            } else {
+                $qualification->professional_qualifications_id = $request['type_of_qualification'];
+            }
+    
+            if($request['awarding_institution'] === 'others') {
+                $qualification->other_institutions_type = $request['other_awarding_institution'];
+            } else {
+                $qualification->professional_institutions_id = $request['awarding_institution'];
+            }
+    
+            $qualification->name = $request['name_of_qualification'];
+    
+            $qualification_date = Carbon::parse($request['qualification_date'])->format('M-Y');
+    
+            $qualification->date = Carbon::createFromFormat('M-Y', $qualification_date);
+            $qualification->cv_id = $cv['id'];
+    
+            $cv->update([
+                'completed_nysc' => $request['nysc_check'] ?: $cv->completed_nysc,
+            ]);
+
+            $qualification->save();
+
+            DB::commit();
+    
+            return isTrue();
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollback();
+            return false;
         }
-
-        if($request['awarding_institution'] === 'others') {
-            $qualification->other_institutions_type = $request['other_awarding_institution'];
-        } else {
-            $qualification->professional_institutions_id = $request['awarding_institution'];
-        }
-
-        $qualification->name = $request['name_of_qualification'];
-        $qualification->date = Carbon::createFromFormat('Y-m', $request['qualification_date']);
-        $qualification->cv_id = $cv['id'];
-
-        $cv->update([
-            'completed_nysc' => $request['nysc_check'] ?: $cv->completed_nysc,
-        ]);
-
-        return $qualification->save();
     }
 
 
@@ -185,7 +236,8 @@ class CvRepository
         $nysc_detail = NyscDetails::where('cv_id', $cv['id'])->first() ?? new NyscDetails();
 
         $nysc_detail->state_id = $request['nysc_state'];
-        $nysc_detail->date = $request['comencement_date'];
+        $date = Carbon::parse($request['comencement_date'])->format('M-Y');
+        $nysc_detail->date = Carbon::createFromFormat('M-Y', $date);
         $nysc_detail->cv_id = $cv['id'];
 
         $cv->update([
@@ -205,22 +257,35 @@ class CvRepository
     public function handle_update_job_experience(Request $request, Cv $cv, JobExperience $experience)
     {   
 
-        if($request['industry_sector'] === 'others') {
-            $experience->other_industry = $request['other_industry_sector'];
-        } else {
-            $experience->industrial_sectors_id = $request['industry_sector'];
+        try {
+            DB::beginTransaction();
+
+            if($request['industry_sector'] === 'others') {
+                $experience->other_industry = $request['other_industry_sector'];
+            } else {
+                $experience->industrial_sectors_id = $request['industry_sector'];
+            }
+    
+            $experience->employer = $request['name_of_employer'];
+    
+            $employment_date = Carbon::parse($request['employment_date'])->format('M-Y');
+            $experience->date = Carbon::createFromFormat('M-Y', $employment_date);
+    
+            $experience->role = $request['role'];
+            $experience->job_description = $request['job_description'];
+            $experience->no_of_positions = $request['no_of_positions'];
+            $experience->is_current = $request['is_current'] == 'current' ? true : false;
+            $experience->cv_id = $cv['id'];
+            $experience->save();
+
+            DB::commit();
+
+            return $experience;
+            
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return false;
         }
-
-        $experience->employer = $request['name_of_employer'];
-        $experience->date = $request['employment_date'];
-        $experience->role = $request['role'];
-        $experience->job_description = $request['job_description'];
-        $experience->no_of_positions = $request['no_of_positions'];
-        $experience->is_current = $request['is_current'] == 'current' ? true : false;
-        $experience->cv_id = $cv['id'];
-        $experience->save();
-
-        return $experience;
     }
 
     public function handle_create_referee(Request $request, Cv $cv)

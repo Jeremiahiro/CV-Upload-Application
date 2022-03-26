@@ -166,19 +166,7 @@ Employment History
                         </div>
 
                         <div class="form-group mb-3">
-                            <label class="form-label" for="select-industry_sector">Industry Sector</label>
-                            <select class="form-select form-input" name="industry_sector" id="select-industry_sector" required data-live-search="true">
-                                <option value="" selected disabled>Select Industry</option>
-                                @foreach ($industry_sector as $sector)
-                                    <option
-                                        value="{{ $sector->id }}"
-                                        {{ old('industry_sector') == $sector->id ? 'selected' : '' }}
-                                    >
-                                        {{ $sector->name }}
-                                    </option>
-                                @endforeach
-                                <option value="others">Others</option>
-                            </select>
+                            <x-industry-sector-select-field :required="true" />
                             
                             @error('industry_sector')
                                 <span class="invalid-feedback" role="alert">
@@ -208,11 +196,11 @@ Employment History
                             <label class="form-label" for="employment_date">Employement Date</label>
                             <input
                                 id="employment_date"
-                                type="date"
+                                type="month"
                                 class="form-control form-input input-round @error('employment_date') is-invalid @enderror"
                                 name="employment_date"
                                 value="{{ old('employment_date') }}"
-                                max="{{ now()->toDateString('Y-m-d') }}"
+                                max="{{ now()->toDateString('M-Y') }}"
                                 required
                             >
                             @error('employment_date')

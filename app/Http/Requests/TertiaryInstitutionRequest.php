@@ -24,12 +24,20 @@ class TertiaryInstitutionRequest extends FormRequest
     public function rules()
     {
         return [
-            'professional_qualification' => 'nullable|string',
-            'name_of_institution' => 'required|string',
-            'type_of_institution' => 'required|string',
+            'type_of_institution'             => 'nullable|string',
             'other_tertiary_institution_type' => 'required_if:type_of_institution,others',
-            'start_date' => 'required|date|before:end_date',
-            'end_date' => 'nullable|date|after:start_date',
+            'name_of_institution'             => 'nullable|string',
+            'other_tertiary_institution'      => 'required_if:name_of_institution,others',
+            'qualification'                   => 'nullable|string',
+            'other_qualifiation_obtained'     => 'required_if:qualification,others',
+            'course_type'                     => 'nullable|string',
+            'other_course_type'               => 'required_if:course_type,others',
+            'course'                          => 'nullable|string',
+            'other_course'                    => 'required_if:course,others',
+            'grade'                           => 'nullable|string',
+            'other_grade'                     => 'required_if:grade,others',
+            'start_date'                      => 'required|date|before:end_date',
+            'end_date'                        => 'nullable|date|after:start_date',
         ];
 
     }

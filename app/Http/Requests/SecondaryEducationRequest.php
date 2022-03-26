@@ -31,7 +31,7 @@ class SecondaryEducationRequest extends FormRequest
             'end_date'                      => 'nullable|date|after:start_date',
             'qualification'                 => 'required|string',
             'other_qualifiation_obtained'   => 'required_if:qualification,others',
-            // 'tertiary_institution'          => 'required|string',
+            'tertiary_institution'          => 'nullable|string',
             'has_more'                      => 'nullable|string',
             'no_of_subjects'                => 'required_unless:qualification,others',
             'subject'                       => ['required_unless:qualification,others', 'array'],

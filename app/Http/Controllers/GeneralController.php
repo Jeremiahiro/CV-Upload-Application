@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Country;
+use App\Models\TertiaryTypes;
 use App\Repositories\OtherDataRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -36,6 +37,17 @@ class GeneralController extends Controller
     public function fetch_states(Request $request, Country $country) 
     {
         $response = $this->otherServices->get_states($request->collect(), $country);
+        return response()->json($response, 200);
+    }
+
+    /**
+     * Fetch States In Nigeria
+     * @param  \Illuminate\Http\Request  $request
+     * 
+    */
+    public function fetch_states_in_nigeria(Request $request) 
+    {
+        $response = $this->otherServices->get_states_in_nigeria($request->collect());
         return response()->json($response, 200);
     }
 
@@ -80,6 +92,18 @@ class GeneralController extends Controller
     public function fetch_tertiary_institutions(Request $request) 
     {
         $response = $this->otherServices->get_tertiary_institutions($request->collect());
+        return response()->json($response, 200);
+    }
+
+        /**
+     * Fetch Tertiary Institutions by Tertiary Type
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\TertiaryTypes  $tertiaryTypes
+     * 
+    */
+    public function fetch_tertiary_institutions_by_type(Request $request, TertiaryTypes $tertiaryTypes) 
+    {
+        $response = $this->otherServices->get_tertiary_institutions_by_type($request->collect(), $tertiaryTypes);
         return response()->json($response, 200);
     }
 
@@ -139,6 +163,39 @@ class GeneralController extends Controller
         $response = $this->otherServices->get_tertiary_grade($request->collect());
         return response()->json($response, 200);
     }
-    
+
+    /**
+     * Fetch Professional Qualification Types
+     * @param  \Illuminate\Http\Request  $request
+     * 
+    */
+    public function fetch_professional_qualification_types(Request $request) 
+    {
+        $response = $this->otherServices->get_professional_qualification_types($request->collect());
+        return response()->json($response, 200);
+    }
+
+    /**
+     * Fetch Professional Institutions
+     * @param  \Illuminate\Http\Request  $request
+     * 
+    */
+    public function fetch_professional_insitutions(Request $request) 
+    {
+        $response = $this->otherServices->get_professional_institutions($request->collect());
+        return response()->json($response, 200);
+    }
+
+    /**
+     * Fetch Industry/Sector
+     * @param  \Illuminate\Http\Request  $request
+     * 
+    */
+    public function fetch_industries(Request $request) 
+    {
+        $response = $this->otherServices->get_industry_sector($request->collect());
+        return response()->json($response, 200);
+    }
+
     
 }
