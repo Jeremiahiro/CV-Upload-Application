@@ -95,7 +95,7 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
         Route::get('/cv/{cv:uuid}/employement-history/{type}', [CVController::class, 'employement_history'])->name('cv.employement_history');
         Route::post('/cv/{cv:uuid}/employement-history', [CVController::class, 'create_employement_history'])->name('cv.employement_history.create');
         Route::post('/cv/{cv:uuid}/employement-history/{employement}', [CVController::class, 'update_employement_history'])->name('cv.employement_history.update');
-        Route::get('/cv/{cv:uuid}/employement-history/{employement}', [CVController::class, 'delete_employement_history'])->name('cv.employement_history.delete');
+        Route::get('/cv/{cv:uuid}/employement-history/{employement}/delete', [CVController::class, 'delete_employement_history'])->name('cv.employement_history.delete');
         
         Route::get('/cv/{cv:uuid}/employement-role/{employement}', [CVController::class, 'employement_role'])->name('cv.employement_role');
         Route::post('/cv/{cv:uuid}/employement-role/{employement}', [CVController::class, 'create_employement_role'])->name('cv.employement_role.create');

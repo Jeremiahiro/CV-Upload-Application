@@ -418,6 +418,9 @@ class CVController extends Controller
     */
     public function delete_employement_history(Cv $cv, JobExperience $employement) 
     {
+        foreach ($employement->roles as $key => $role) {
+            $role->delete();
+        }
         if(!$employement->delete()) {
             return redirect()->back()->with('success', 'OOPS Something went wrong');
         }

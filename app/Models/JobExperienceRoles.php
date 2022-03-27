@@ -17,7 +17,7 @@ class JobExperienceRoles extends Model
 
     public function position(): BelongsTo
     {
-        return $this->belongsTo(ExperienceRole::class, 'employement_roles_id');
+        return $this->belongsTo(EmployementRole::class, 'employement_roles_id');
     }
 
 }

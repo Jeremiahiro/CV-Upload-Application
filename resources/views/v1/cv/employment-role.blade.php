@@ -33,7 +33,7 @@ Employment Roles
                                         <div class="m-2 d-flex justify-content-between p-2 bg-warning text-dark">
                                             <div class=" ">
                                                 <span class="font-bold">
-                                                    {{ Str::limit($role->employement_roles_id ? $role->position_name : $role->other_employement_role, 30) }} 
+                                                    {{ Str::limit($role->employement_roles_id ? $role->position->name : $role->other_employement_role, 30) }} 
                                                 </span>
                                                 <br>
                                                 <small>
@@ -71,7 +71,7 @@ Employment Roles
                         </div>
 
                         <div class="form-group mb-3">
-                            <x-industry-sector-select-field :required="true" />
+                            <x-employment-roles-select-field :required="true" />
 
                         </div>
 
@@ -83,7 +83,7 @@ Employment Roles
                                 class="form-control form-input input-round @error('other_employment_roles') is-invalid @enderror"
                                 name="other_employment_roles"
                                 value="{{ old('other_employment_roles') }}"
-                                placeholder="Other Industry"
+                                placeholder="Other Position / Role"
                             >
                             @error('other_employment_roles')
                                 <span class="invalid-feedback" role="alert">

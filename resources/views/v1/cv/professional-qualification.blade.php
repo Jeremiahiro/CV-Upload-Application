@@ -199,7 +199,7 @@ Qualifications
                                     value="1"
                                     required
                                     @if ($cv)
-                                        {{ $cv->professional_qualification == '1' ? 'checked' : '' }}   
+                                        {{ $cv->completed_nysc == '1' ? 'checked' : '' }}   
                                     @else
                                         {{ old('nysc_check') == '1' ? 'checked' : '' }}
                                     @endif
@@ -215,7 +215,7 @@ Qualifications
                                     value="0"
                                     required
                                     @if ($cv)
-                                    {{ $cv->professional_qualification == '0' ? 'checked' : '' }}   
+                                    {{ $cv->completed_nysc == '0' ? 'checked' : '' }}   
                                     @else
                                         {{ old('nysc_check') == '0' ? 'checked' : '' }}
                                     @endif

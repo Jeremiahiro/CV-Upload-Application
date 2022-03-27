@@ -40,7 +40,9 @@ Employment History
                                         <div class="d-flex justify-content-between p-2 bg-warning text-dark">
                                             <div class=" ">
                                                 <span class="font-bold">
-                                                    {{ Str::limit($experience->employer, 30) }} - <i>{{ $role->employement_roles_id ? $role->position_name : $role->other_employement_role }}</i>
+                                                    {{ Str::limit($experience->employer, 30) }}
+                                                    <br>
+                                                    <i>{{ $experience->employement_roles_id ? $experience->position->name : $experience->other_employement_role }}</i>
                                                 </span>
                                                 <br>
                                                 <small class="">
@@ -95,7 +97,9 @@ Employment History
                                         <div class="d-flex justify-content-between p-2 bg-warning text-dark">
                                             <div class=" ">
                                                 <span class="font-bold">
-                                                    {{ Str::limit($experience->employer, 30) }} - <i>{{ $experience->role }}</i>
+                                                    {{ Str::limit($experience->employer, 30) }}
+                                                    <br>
+                                                    <i>{{ $experience->employement_roles_id ? $experience->position->name : $experience->other_employement_role }}</i>
                                                 </span>
                                                 <br>
                                                 <small class="">
@@ -220,17 +224,17 @@ Employment History
                             @enderror
                         </div>
 
-                        <div class="form-group mb-3" id="other_employment_roles-container">
-                            <label class="form-label" for="other_employment_roles">If the position / role is unlisted, please enter it here</label>
+                        <div class="form-group mb-3" id="other_employement_role-container">
+                            <label class="form-label" for="other_employement_role">If the position / role is unlisted, please enter it here</label>
                             <input
-                                id="other_employment_roles"
+                                id="other_employement_role"
                                 type="text"
-                                class="form-control form-input input-round @error('other_employment_roles') is-invalid @enderror"
-                                name="other_employment_roles"
-                                value="{{ old('other_employment_roles') }}"
-                                placeholder="Other Industry"
+                                class="form-control form-input input-round @error('other_employement_role') is-invalid @enderror"
+                                name="other_employement_role"
+                                value="{{ old('other_employement_role') }}"
+                                placeholder="Other Position / Role"
                             >
-                            @error('other_employment_roles')
+                            @error('other_employement_role')
                                 <span class="invalid-feedback" role="alert">
                                 <small>{{ $message }}</small>
                                 </span>
@@ -298,10 +302,10 @@ Employment History
             const submitBtn = $('#submit_btn');
             submitBtn.hide();
             
-            const other_employment_roles = $('#other_employment_roles-container');
+            const other_employement_role = $('#other_employement_role-container');
             const other_industrial_sector = $('#other_industrial_sector');
             other_industrial_sector.hide()
-            other_employment_roles.hide()
+            other_employement_role.hide()
             
 
             $('#name_of_employer').on('input', function () {
@@ -321,9 +325,9 @@ Employment History
             $('#select-role').on('change', function () {
                 var sector = this.value;
                 if(sector === 'others') {
-                    other_employment_roles.show(500)
+                    other_employement_role.show(500)
                 } else {
-                    other_employment_roles.hide(500)
+                    other_employement_role.hide(500)
                 }
             });
 

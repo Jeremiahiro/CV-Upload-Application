@@ -106,7 +106,7 @@ Referee
                             <label class="form-label" for="referee_phone_number">Referee Phone Number</label>
                             <input
                                 id="referee_phone_number"
-                                type="text"
+                                type="tel"
                                 class="form-control form-input input-round @error('referee_phone_number') is-invalid @enderror"
                                 name="referee_phone_number"
                                 value="{{ old('referee_phone_number') }}"
