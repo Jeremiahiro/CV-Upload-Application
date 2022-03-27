@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
         $this->call(IndustrialSectorSeeder::class);
         $this->call(SecondarySubjectsSeeder::class);
         $this->call(SecondaryGradesSeeder::class);
+        $this->call(EmploymentRoleSeeder::class);
 
     }
 }

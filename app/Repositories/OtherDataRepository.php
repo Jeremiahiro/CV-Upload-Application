@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Country;
 use App\Models\Cv;
+use App\Models\EmployementRole;
 use App\Models\IndustrialSector;
 use App\Models\JobExperience;
 use App\Models\JobExperienceRoles;
@@ -154,6 +155,12 @@ class OtherDataRepository
         return Qualifications::with(['qualification', 'awarding_institution'])->where('cv_id', $cv['id'])->get();
     }
 
+    public function get_all_employment_roles(Collection $data)
+    {
+        $response = EmployementRole::search($data)->get(['id', 'name'])->toArray();
+        return $this->with_others($response);
+    }
+
     public function get_industry_sector(Collection $data)
     {
         $response = IndustrialSector::search($data)->get(['id', 'name'])->toArray();
@@ -185,7 +192,7 @@ class OtherDataRepository
     
             return collect(array_merge($data, ['-1' => $others]));
         } else {
-            return $data;
+            return collect($data);
         }
     }
 }

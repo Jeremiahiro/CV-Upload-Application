@@ -27,7 +27,10 @@ NYSC Details
                         </div>
 
                         <div class="form-group mb-3">
-                            <x-states-in-nigeria-select-field :required="true" :label="What state did you serve for your National Service?" />
+                            <x-states-in-nigeria-select-field
+                                :required="true"
+                                label="What state did you serve for your National Service?"
+                            />
                                 
                             @error('nysc_state')
                                 <span class="invalid-feedback" role="alert">

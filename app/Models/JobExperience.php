@@ -25,6 +25,11 @@ class JobExperience extends Model
         return $this->hasMany(JobExperienceRoles::class, 'job_experience_id');
     }
 
+    public function position(): BelongsTo
+    {
+        return $this->belongsTo(ExperienceRole::class, 'employement_roles_id');
+    }
+
     public function sector(): BelongsTo
     {
         return $this->belongsTo(IndustrialSector::class, 'industrial_sectors_id');

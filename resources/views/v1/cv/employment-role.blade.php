@@ -33,7 +33,7 @@ Employment Roles
                                         <div class="m-2 d-flex justify-content-between p-2 bg-warning text-dark">
                                             <div class=" ">
                                                 <span class="font-bold">
-                                                    {{ Str::limit($role->position, 30) }} 
+                                                    {{ Str::limit($role->employement_roles_id ? $role->position_name : $role->other_employement_role, 30) }} 
                                                 </span>
                                                 <br>
                                                 <small>
@@ -71,17 +71,21 @@ Employment Roles
                         </div>
 
                         <div class="form-group mb-3">
-                            <label class="form-label" for="position">Position / Role</label>
+                            <x-industry-sector-select-field :required="true" />
+
+                        </div>
+
+                        <div class="form-group mb-3" id="other_employment_roles-container">
+                            <label class="form-label" for="other_employment_roles">If the position / role is unlisted, please enter it here</label>
                             <input
-                                id="position"
+                                id="other_employment_roles"
                                 type="text"
-                                class="form-control form-input input-round @error('position') is-invalid @enderror"
-                                name="position"
-                                value="{{ old('position') }}"
-                                placeholder="Position / Role"
-                                required
+                                class="form-control form-input input-round @error('other_employment_roles') is-invalid @enderror"
+                                name="other_employment_roles"
+                                value="{{ old('other_employment_roles') }}"
+                                placeholder="Other Industry"
                             >
-                            @error('ropositionle')
+                            @error('other_employment_roles')
                                 <span class="invalid-feedback" role="alert">
                                 <small>{{ $message }}</small>
                                 </span>
@@ -93,11 +97,11 @@ Employment Roles
                                 <label class="form-label" for="from_date">Date in Position / Role</label>
                                 <input
                                     id="from_date"
-                                    type="date"
+                                    type="month"
                                     class="form-control form-input input-round @error('from_date') is-invalid @enderror"
                                     name="from_date"
                                     value="{{ old('from_date') }}"
-                                    max="{{ now()->toDateString('Y-m-d') }}"
+                                    max="{{ now()->toDateString('M-Y') }}"
                                     required
                                 >
                                 
@@ -111,11 +115,11 @@ Employment Roles
                                 <label class="form-label invisible" for="role"></label>
                                 <input
                                     id="to_date"
-                                    type="date"
+                                    type="month"
                                     class="form-control form-input input-round @error('to_date') is-invalid @enderror"
                                     name="to_date"
                                     value="{{ old('to_date') }}"
-                                    max="{{ now()->toDateString('Y-m-d') }}"
+                                    max="{{ now()->toDateString('M-Y') }}"
                                     format="d-m-y"
                                     required
                                 >
@@ -222,8 +226,10 @@ Employment Roles
     <script>
         $(document).ready(function () {
 
+            const other_employment_roles = $('#other_employment_roles-container');
             const updateBtn = $('#update');
             updateBtn.hide();
+            other_employment_roles.hide()
 
             $('#previousBtn').click(function(e) {
                 var href = $(this).attr('href');
@@ -233,6 +239,14 @@ Employment Roles
                 }
             });
 
+            $('#select-role').on('change', function () {
+                var sector = this.value;
+                if(sector === 'others') {
+                    other_employment_roles.show(500)
+                } else {
+                    other_employment_roles.hide(500)
+                }
+            });
             
             $('.edit-role-data').click(function(e) {
                 updateBtn.show(500);

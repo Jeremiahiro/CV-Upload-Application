@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('job_experience_roles', function (Blueprint $table) {
             $table->id();
-            $table->string('position');
+            $table->foreignId('employement_roles_id')->nullable()->constrained();
+            $table->string('other_employement_role')->nullable();
             $table->date('start_date');
             $table->date('end_date')->nullable();
             $table->longText('job_description');

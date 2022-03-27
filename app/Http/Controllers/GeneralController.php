@@ -185,6 +185,18 @@ class GeneralController extends Controller
         $response = $this->otherServices->get_professional_institutions($request->collect());
         return response()->json($response, 200);
     }
+    
+    /**
+     * Fetch Employment Roles
+     * @param  \Illuminate\Http\Request  $request
+     * 
+    */
+    public function fetch_employment_roles(Request $request) 
+    {
+        $response = $this->otherServices->get_all_employment_roles($request->collect());
+        return response()->json($response, 200);
+    }
+
 
     /**
      * Fetch Industry/Sector

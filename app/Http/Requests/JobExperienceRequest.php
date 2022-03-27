@@ -24,13 +24,14 @@ class JobExperienceRequest extends FormRequest
     public function rules()
     {
         return [
-            'name_of_employer' => 'required|string',
-            'industry_sector' => 'required|string',
-            'other_industry_sector' => 'required_if:industry_sector,others',
-            'employment_date' => 'required|date',
-            'role' => 'required|string',
-            'job_description' => 'required|string',
-            'no_of_positions' => 'required|string',
+            'name_of_employer'          => 'required|string',
+            'industry_sector'           => 'required|string',
+            'other_industry_sector'     => 'required_if:industry_sector,others',
+            'employment_date'           => 'required|date',
+            'role'                      => 'required|string',
+            'other_employment_roles'     => 'required_if:role,others',
+            'job_description'           => 'required|string',
+            'no_of_positions'           => 'required|string',
         ];
     }
 }

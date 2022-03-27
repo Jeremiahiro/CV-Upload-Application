@@ -17,10 +17,11 @@ return new class extends Migration
             $table->id();
             $table->string('employer');
             $table->date('date');
-            $table->string('role');
             $table->longText('job_description');
             $table->string('no_of_positions');
             $table->boolean('is_current')->default(false);
+            $table->foreignId('employement_roles_id')->nullable()->constrained();
+            $table->string('other_employement_role')->nullable();
             $table->foreignId('industrial_sectors_id')->nullable()->constrained();
             $table->string('other_industry')->nullable();
             $table->foreignId('cv_id')->constrained();

@@ -164,8 +164,11 @@ Contact Details
                 fetchStates(country_id);
             });
 
+            window.statesMap = [];
+
             function fetchStates(country) {
                 $('#select-state').select2({
+                    allowClear: true,
                     placeholder: 'Select and begin typing',
                     ajax: {
                         url: '/api/country/' + country + '/fetch-states',
@@ -176,13 +179,13 @@ Contact Details
                                 search: params.term,
                             }
                         },
-                        processResults: function (result) {
+                        processResults: function (res) {
                             return {
-                                results: result.map(function (country) {
-                                    window.statesMap[country.id] = country
+                                results: res.map(function (state) {
+                                    window.statesMap[state.id] = state
                                     return {
-                                        id: country.id,
-                                        text: country.name,
+                                        id: state.id,
+                                        text: state.name,
                                     }
                                 })
                             }
@@ -190,6 +193,8 @@ Contact Details
                     }
                 });
             }
+
+            $('#select-state').select2();
 
             $('#previousBtn').click(function(e) {
                 if($('#town').val().length > 0) {

@@ -23,33 +23,33 @@
 
 @push('javascript')
     <script>
-        window.countriesMap = [];
+        window.statesMap = [];
         @if($selected !== null)
-            window.countriesMap[{{ $selected->id }}] = @json($selected);
+            window.statesMap[{{ $selected->id }}] = @json($selected);
         @endif
-        $('#country-select').select2({
-            placeholder: 'Select and begin typing',
-            ajax: {
-                url: '{{ route('states.list', $country_id ) }}',
-                delay: 250,
-                cache: true,
-                data: function (params) {
-                    return {
-                        search: params.term,
-                    }
-                },
-                processResults: function (result) {
-                    return {
-                        results: result.map(function (country) {
-                            window.countriesMap[country.id] = country
-                            return {
-                                id: country.id,
-                                text: country.name,
-                            }
-                        })
-                    }
-                },
-            }
-        });
+        // $('#country-select').select2({
+        //     placeholder: 'Select and begin typing',
+        //     ajax: {
+        //         url: '{{ route('states.list', $country_id ) }}',
+        //         delay: 250,
+        //         cache: true,
+        //         data: function (params) {
+        //             return {
+        //                 search: params.term,
+        //             }
+        //         },
+        //         processResults: function (result) {
+        //             return {
+        //                 results: result.map(function (country) {
+        //                     window.countriesMap[country.id] = country
+        //                     return {
+        //                         id: country.id,
+        //                         text: country.name,
+        //                     }
+        //                 })
+        //             }
+        //         },
+        //     }
+        // });
     </script>
 @endpush

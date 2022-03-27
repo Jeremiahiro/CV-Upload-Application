@@ -24,11 +24,12 @@ class JobExperiecneRoleRequest extends FormRequest
     public function rules()
     {
         return [
-            'position' => 'required|string',
-            'from_date' => 'required|date|before:to_date',
-            'to_date' => 'nullable|date|after:from_date',
-            'job_description' => 'required|string',
-            'referees' => 'required|string',
+            'role'                          => 'required|string',
+            'other_employment_roles'        => 'required_if:role,others',
+            'from_date'                     => 'required|date|before:to_date',
+            'to_date'                       => 'nullable|date|after:from_date',
+            'job_description'               => 'required|string',
+            'referees'                      => 'required|string',
         ];
     }
 }

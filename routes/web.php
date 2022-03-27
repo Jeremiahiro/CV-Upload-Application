@@ -57,6 +57,7 @@ Route::get('/api/tertiary-grade', [GeneralController::class, 'fetch_tertiary_gra
 Route::get('/api/professional-qualification-type', [GeneralController::class, 'fetch_professional_qualification_types'])->name('professional.qualification.type');
 Route::get('/api/professional-institutions', [GeneralController::class, 'fetch_professional_insitutions'])->name('professional.institutions');
 
+Route::get('/api/employment-roles', [GeneralController::class, 'fetch_employment_roles'])->name('employment.roles');
 Route::get('/api/industry-sector', [GeneralController::class, 'fetch_industries'])->name('industry.list');
 
 

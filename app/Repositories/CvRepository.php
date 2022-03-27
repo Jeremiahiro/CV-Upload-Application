@@ -221,7 +221,7 @@ class CvRepository
 
             DB::commit();
     
-            return isTrue();
+            return true;
 
         } catch (\Throwable $th) {
             //throw $th;
@@ -265,13 +265,18 @@ class CvRepository
             } else {
                 $experience->industrial_sectors_id = $request['industry_sector'];
             }
+
+            if($request['role'] === 'others') {
+                $experience->other_employement_role = $request['other_employement_role'];
+            } else {
+                $experience->employement_roles_id = $request['role'];
+            }
     
             $experience->employer = $request['name_of_employer'];
     
             $employment_date = Carbon::parse($request['employment_date'])->format('M-Y');
             $experience->date = Carbon::createFromFormat('M-Y', $employment_date);
     
-            $experience->role = $request['role'];
             $experience->job_description = $request['job_description'];
             $experience->no_of_positions = $request['no_of_positions'];
             $experience->is_current = $request['is_current'] == 'current' ? true : false;
@@ -316,9 +321,18 @@ class CvRepository
     public function handle_update_employement_role(Request $request, JobExperience $experience, JobExperienceRoles $role)
     {   
 
-        $role->position = $request['position'];
-        $role->start_date = $request['from_date'];
-        $role->end_date = $request['to_date'];
+        if($request['role'] === 'others') {
+            $role->other_employement_role = $request['other_employement_role'];
+        } else {
+            $role->employement_roles_id = $request['role'];
+        }
+
+        $start_date = Carbon::parse($request['from_date'])->format('M-Y');
+        $end_date = Carbon::parse($request['to_date'])->format('M-Y');
+
+        $role->start_date = Carbon::createFromFormat('M-Y', $start_date);
+        $role->end_date = Carbon::createFromFormat('M-Y', $end_date);
+
         $role->job_description = $request['job_description'];
         $role->referees = $request['referees'];
         $role->job_experience_id = $experience['id'];

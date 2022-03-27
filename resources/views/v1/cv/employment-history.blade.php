@@ -40,7 +40,7 @@ Employment History
                                         <div class="d-flex justify-content-between p-2 bg-warning text-dark">
                                             <div class=" ">
                                                 <span class="font-bold">
-                                                    {{ Str::limit($experience->employer, 30) }} - <i>{{ $experience->role }}</i>
+                                                    {{ Str::limit($experience->employer, 30) }} - <i>{{ $role->employement_roles_id ? $role->position_name : $role->other_employement_role }}</i>
                                                 </span>
                                                 <br>
                                                 <small class="">
@@ -211,17 +211,26 @@ Employment History
                         </div>
 
                         <div class="form-group mb-3">
-                            <label class="form-label" for="role">Position / Role</label>
-                            <input
-                                id="role"
-                                type="text"
-                                class="form-control form-input input-round @error('role') is-invalid @enderror"
-                                name="role"
-                                value="{{ old('role') }}"
-                                placeholder="Role"
-                                required
-                            >
+                            <x-employment-roles-select-field :required="true" />
+
                             @error('role')
+                                <span class="invalid-feedback" role="alert">
+                                <small>{{ $message }}</small>
+                                </span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-3" id="other_employment_roles-container">
+                            <label class="form-label" for="other_employment_roles">If the position / role is unlisted, please enter it here</label>
+                            <input
+                                id="other_employment_roles"
+                                type="text"
+                                class="form-control form-input input-round @error('other_employment_roles') is-invalid @enderror"
+                                name="other_employment_roles"
+                                value="{{ old('other_employment_roles') }}"
+                                placeholder="Other Industry"
+                            >
+                            @error('other_employment_roles')
                                 <span class="invalid-feedback" role="alert">
                                 <small>{{ $message }}</small>
                                 </span>
@@ -289,8 +298,11 @@ Employment History
             const submitBtn = $('#submit_btn');
             submitBtn.hide();
             
+            const other_employment_roles = $('#other_employment_roles-container');
             const other_industrial_sector = $('#other_industrial_sector');
             other_industrial_sector.hide()
+            other_employment_roles.hide()
+            
 
             $('#name_of_employer').on('input', function () {
                 nextBtn.hide(500);
@@ -303,6 +315,15 @@ Employment History
                     other_industrial_sector.show(500)
                 } else {
                     other_industrial_sector.hide(500)
+                }
+            });
+
+            $('#select-role').on('change', function () {
+                var sector = this.value;
+                if(sector === 'others') {
+                    other_employment_roles.show(500)
+                } else {
+                    other_employment_roles.hide(500)
                 }
             });
 
