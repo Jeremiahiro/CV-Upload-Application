@@ -29,9 +29,10 @@ class JobExperienceRequest extends FormRequest
             'other_industry_sector'     => 'required_if:industry_sector,others',
             'employment_date'           => 'required|date',
             'role'                      => 'required|string',
-            'other_employment_roles'     => 'required_if:role,others',
+            'other_employment_role'    => 'required_if:role,others',
             'job_description'           => 'required|string',
-            'no_of_positions'           => 'required|string',
+            'have_prior_role'           => 'required|string',
+            'no_of_positions'           => 'required_if:have_prior_role,1|string',
         ];
     }
 }

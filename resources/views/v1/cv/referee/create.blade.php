@@ -15,7 +15,7 @@ Referee
             <section>
                 <div class="">
                     <form
-                        action="{{ $cv ? route('cv.referee.create', $cv['uuid']) : route('cv.store') }}"
+                        action="{{ route('cv.referee.create', $cv['uuid']) }}"
                         method="post"
                         class="col-12 col-lg-8 mx-auto my-4 bg-white p-5 shadow rounded"
                         onsubmit="$('.submit__btn').attr('disabled', true)"
@@ -42,12 +42,14 @@ Referee
                                             <div class="data__action mx-3">
                                                 <div class="d-flex flex-column">
                                                     <span class="cursor-pointer mx-2">
-                                                        <i
-                                                            class="fa fa-edit text-dark edit-referee-data"
-                                                            data-referee="{{ $referee }}"
-                                                            data-cv="{{ $cv }}"
+                                                        <a
+                                                            href="{{ route('cv.referee.edit', [$cv['uuid'], $referee['id']]) }}"
                                                             data-toggle="tooltip"
-                                                            title="Edit Data"></i>
+                                                            title="Edit Data"
+                                                            class="text-dark"
+                                                        >
+                                                            <i class="fa fa-edit text-dark delete-referee-data"></i>
+                                                        </a>
                                                     </span>
                                                     <span class="cursor-pointer mx-2">
                                                         <a
@@ -104,16 +106,39 @@ Referee
 
                         <div class="form-group mb-3">
                             <label class="form-label" for="referee_phone_number">Referee Phone Number</label>
-                            <input
-                                id="referee_phone_number"
-                                type="tel"
-                                class="form-control form-input input-round @error('referee_phone_number') is-invalid @enderror"
-                                name="referee_phone_number"
-                                value="{{ old('referee_phone_number') }}"
-                                placeholder="Input Referees Phone Number"
-                                required
-                            >
+                            <x-phone-number-input
+                                fieldName="referee_phone_number"
+                                placeholder="e.g +1 702 123 4567"
+                                index="3"
+                            />
+
                             @error('referee_phone_number')
+                                <span class="invalid-feedback" role="alert">
+                                <small>{{ $message }}</small>
+                                </span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <x-country-select-field
+                                :required="true"
+                                label="Country "
+                                fieldName="referee_country"
+                            />
+                                
+                            @error('referee_country')
+                                <span class="invalid-feedback" role="alert">
+                                <small>{{ $message }}</small>
+                                </span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="select-state">State</label>
+                            <select class="form-select form-input" name="referee_state" id="select-state" required>
+                            </select>
+                                
+                            @error('referee_state')
                                 <span class="invalid-feedback" role="alert">
                                 <small>{{ $message }}</small>
                                 </span>
@@ -131,30 +156,30 @@ Referee
                         </div>
 
                         <div class="form-group mb-3">
-                            <label class="form-label">For Industry Type</label><br>
+                            <label class="form-label">Do you have industry and location preferences for employment</label><br>
                             <div class="form-check form-check-inline">
                                 <input
                                     class="form-check-input"
                                     type="radio"
-                                    name="for_industry_type"
-                                    id="for_industry_type"
+                                    name="has_prefered_location"
+                                    id="has_prefered_location"
                                     value="1"
                                     required
-                                    {{ old('for_industry_type') === '1' ? 'checked' : '' }}
+                                    {{ old('has_prefered_location') === '1' ? 'checked' : '' }}
                                 >
-                                <label class="form-check-label" for="for_industry_type">Yes</label>
+                                <label class="form-check-label" for="has_prefered_location">Yes</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input
                                     class="form-check-input"
                                     type="radio"
-                                    name="for_industry_type"
-                                    id="not_for_industry_type"
+                                    name="has_prefered_location"
+                                    id="not_has_prefered_location"
                                     value="0"
                                     required
-                                    {{ old('for_industry_type') === '0' ? 'checked' : '' }}
+                                    {{ old('has_prefered_location') === '0' ? 'checked' : '' }}
                                 >
-                                <label class="form-check-label" for="not_for_industry_type">No</label>
+                                <label class="form-check-label" for="not_has_prefered_location">No</label>
                             </div>
                         </div>
 
@@ -186,7 +211,7 @@ Referee
                         <div class="d-flex mt-4" >
                             <a href="{{ url()->previous() }}" id="previousBtn" class="submit__btn btn btn-light btn-outline-secondary px-4 font-bold mx-2">Prev</a>
                             <a
-                                href="{{ route('cv.location_preference', $cv['uuid']) }}"
+                                href="{{ $cv->has_prefered_location ? route('cv.location_preference', $cv['uuid']) : route('cv.hobbies', $cv['uuid']) }}"
                                 id="nextForm"
                                 class="submit__btn btn btn-warning px-4 font-bold mx-2 @if(!$referees->count()) disabled-link disabled @endif"
                             >
@@ -210,32 +235,45 @@ Referee
 
             updateData.hide()
 
-            $('.edit-referee-data').click(function(e) {
-                updateData.show(500)
-                addMore.hide(500)
-              
-                const data = $(this).data('referee');
-                const cv = $(this).data('cv');
-                const form_action = '/cv/'+cv.uuid+'/referees/'+data.id
-
-                if($('#referee_name').val().length < 2) {
-                    if(confirm('Changes you made may not be saved')) {
-                        handleUpdateData(data);
-                    }
-                }
-
-                function handleUpdateData(data) {
-                    $('#referee_form').attr('action', form_action);
-                    $('#referee_name').val(data.name);
-                    $('#referee_phone_number').val(data.phone);
-                    $('#referee_address').val(data.address);
-                    if(data.for_industry_type == 1) {
-                        $('#for_industry_type').prop('checked', true);
-                    } else {
-                        $('#not_for_industry_type').prop('checked', true);
-                    }
-                };
+            var country_id = '';
+            $('.country-select').on('change', function () {
+                country_id = this.value;
+                $("#select-state").html('');
+                fetchStates(country_id);
             });
+
+            window.statesMap = [];
+
+            function fetchStates(country) {
+                $('#select-state').select2({
+                    allowClear: true,
+                    placeholder: 'Select and begin typing',
+                    ajax: {
+                        url: '/api/country/' + country + '/fetch-states',
+                        delay: 250,
+                        cache: true,
+                        data: function (params) {
+                            return {
+                                search: params.term,
+                            }
+                        },
+                        processResults: function (res) {
+                            return {
+                                results: res.map(function (state) {
+                                    window.statesMap[state.id] = state
+                                    return {
+                                        id: state.id,
+                                        text: state.name,
+                                    }
+                                })
+                            }
+                        },
+                    }
+                });
+            }
+
+            $('#select-state').select2();
+
 
             $('#nextForm').click(function(e) {
                 confirmAction(e);

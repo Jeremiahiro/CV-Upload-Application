@@ -9,7 +9,7 @@
             >
                 @csrf
                 <div class="text-left mb-4">
-                    <p class="font-bold text-dark m-0 p-0">Employement Roles</p>
+                    <p class="font-bold text-dark m-0 p-0">employment Roles</p>
                     <small class="font-bold text-warning">Please provide the following information</small>
                 </div>
 
@@ -111,7 +111,7 @@
 
                 <div class="d-flex mt-4" >
                     <a
-                        href="{{ route('cv.employement_history', [$cv['uuid'], $cv->employment_status ? 'current' : 'previous']) }}"
+                        href="{{ route('cv.employment_history', [$cv['uuid'], $cv->employment_status ? 'current' : 'previous']) }}"
                         id="previousBtn"
                         class="submit__btn btn btn-light btn-outline-secondary px-4 font-bold mx-2"
                     >

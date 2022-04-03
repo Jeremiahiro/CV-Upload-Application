@@ -34,7 +34,7 @@ Tertiary Institutions
                                         <div class="m-2 d-flex justify-content-between p-2 bg-warning text-dark">
                                             <div class=" ">
                                                 <span class="font-bold">
-                                                    {{ Str::limit($tertiary_education->tertiary_institutions_id ? $tertiary_education->institution->name : $tertiary_education->other_tertiary_institution, 40) }} 
+                                                    {{ Str::limit($tertiary_education->tertiary_institutions_id ? $tertiary_education->institution->name : $tertiary_education->other_tertiary_institution, 28) }} 
                                                     <br />
                                                     <small>({{ $tertiary_education->tertiary_types_id ? $tertiary_education->tertiary_type->name : $tertiary_education->other_tertiary_type }})</small>
                                                 </span>
@@ -84,7 +84,7 @@ Tertiary Institutions
                          </div>
  
                          <div class="form-group mb-3" id="other_tertiary_institution_type-container">
-                             <label class="form-label" for="other_tertiary_institution_type">if others please specify</label>
+                             <label class="form-label" for="other_tertiary_institution_type">If others please specify</label>
                              <input
                                  id="other_tertiary_institution_type"
                                  type="text"
@@ -111,7 +111,7 @@ Tertiary Institutions
                         </div>
 
                         <div class="form-group mb-3" id="other_tertiary_institution-container">
-                            <label class="form-label" for="other_tertiary_institution">Please specify others</label>
+                            <label class="form-label" for="other_tertiary_institution">Please enter the name of the institution</label>
                             <input
                                 id="other_tertiary_institution"
                                 type="text"
@@ -335,7 +335,7 @@ Tertiary Institutions
                         <div class="d-flex mt-4" >
                             <a href="{{ route('cv.secondary-education', $cv['uuid']) }}" id="previousBtn" class="submit__btn btn btn-light btn-outline-secondary px-4 font-bold mx-2">Prev</a>
                             <a
-                                href="{{ $cv->professional_qualification == 1 ? route('cv.professional-qualification', $cv['uuid']) : route('cv.employement_history', [$cv['uuid'], $cv->employment_status ? 'current' : 'previous']) }}"
+                                href="{{ $cv->professional_qualification == 1 ? route('cv.professional-qualification', $cv['uuid']) : route('cv.employment_history', [$cv['uuid'], $cv->employment_status ? 'current' : 'previous']) }}"
                                 id="nextForm"
                                 class="submit__btn btn btn-warning px-4 font-bold mx-2 @if(!$cv->tertiary_educations->count())  disabled @endif"
                             >

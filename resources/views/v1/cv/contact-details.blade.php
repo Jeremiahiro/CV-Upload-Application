@@ -48,6 +48,8 @@ Contact Details
                                 <x-country-select-field
                                     :required="true"
                                     :selected="$cv->country"
+                                    class="country"
+                                    index="0"
                                 />
                                 
                                 @error('country')
@@ -91,15 +93,13 @@ Contact Details
                         </div>
 
                         <div class="form-group mb-3">
-                            <label class="form-label" for="street">Mobile Phone Number</label>
-                            <input
-                                id="mobile_phone"
-                                type="tel"
-                                class="form-control form-input input-round @error('mobile_phone') is-invalid @enderror"
-                                name="mobile_phone"
-                                value="{{ old('mobile_phone', $cv->mobile_phone ?? '') }}"
-                                placeholder="Enter Mobile Phone Number"
-                            >
+                            <label class="form-label" for="mobile_phone">Mobile Phone Number</label>
+                            <x-phone-number-input
+                                fieldName="mobile_phone"
+                                placeholder="e.g +1 702 123 4567"
+                                :value="$cv->mobile_phone"
+                                index="1"
+                            />
                             @error('mobile_phone')
                                 <span class="invalid-feedback" role="alert">
                                 <small>{{ $message }}</small>
@@ -109,14 +109,12 @@ Contact Details
 
                         <div class="form-group mb-3">
                             <label class="form-label" for="street">Home Phone Number</label>
-                            <input
-                                id="home_phone"
-                                type="tel"
-                                class="form-control form-input input-round @error('home_phone') is-invalid @enderror"
-                                name="home_phone"
-                                value="{{ old('home_phone', $cv->home_phone ?? '') }}"
-                                placeholder="Enter Home Phone Number"
-                            >
+                            <x-phone-number-input
+                                fieldName="home_phone"
+                                placeholder="e.g +1 702 123 4567"
+                                :value="$cv->home_phone"
+                                index="2"
+                            />
                             @error('home_phone')
                                 <span class="invalid-feedback" role="alert">
                                 <small>{{ $message }}</small>
@@ -158,7 +156,7 @@ Contact Details
         $(document).ready(function () {
 
             var country_id = '';
-            $('#country-select').on('change', function () {
+            $('.country-select').on('change', function () {
                 country_id = this.value;
                 $("#select-state").html('');
                 fetchStates(country_id);

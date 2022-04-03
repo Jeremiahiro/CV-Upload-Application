@@ -33,7 +33,7 @@
             </div>
         </div>
     </td>
-    <td>
+    {{-- <td>
         <button
             type="button"
             class="btn add-item-row btn-icon btn-outline-success @if(!$last) d-none @endif"
@@ -47,7 +47,7 @@
             onclick="delete_subject_row(this)"
             data-number="plus"><em
                 class="fas fa-trash"></em></button>
-    </td>
+    </td> --}}
 </tr>
 @push('javascript')
     <script>
@@ -131,7 +131,6 @@
 
         function add_new_subject_row(el, subjectItem, gradeItem) {
             let index = $('.subject-item-row').length;
-            console.log(index)
             let subjectId = '', gradeId = '', secondaryId = '', subjectName = '', gradeName = '';
 
             if (typeof subjectItem !== 'undefined') {
@@ -163,21 +162,6 @@
                             </select>
                         </div>
                     </div>
-                </td>
-                <td>
-                    <button
-                        type="button"
-                        class="btn add-item-row btn-icon btn-outline-success"
-                        onclick="add_new_subject_row(this)"
-                        data-number="plus"><em
-                            class="fas fa-plus"></em></button>
-
-                    <button
-                        type="button"
-                        class="btn remove-item-row d-none btn-icon btn-danger"
-                        onclick="delete_subject_row(this)"
-                        data-number="plus"><em
-                            class="fas fa-trash"></em></button>
                 </td>
             </tr>
             `;

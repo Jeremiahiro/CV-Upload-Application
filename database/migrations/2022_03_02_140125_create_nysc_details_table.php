@@ -15,8 +15,10 @@ return new class extends Migration
     {
         Schema::create('nysc_details', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('country_id')->nullable()->constrained();
             $table->foreignId('state_id')->constrained();
-            $table->date('date');
+            $table->date('comencement_date');
+            $table->date('completion_date');
             $table->foreignId('cv_id')->constrained();
             $table->timestamps();
         });

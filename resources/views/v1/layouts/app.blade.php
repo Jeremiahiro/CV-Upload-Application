@@ -13,6 +13,13 @@
 		<link rel="stylesheet" href="{{ asset('assets/fonts/ionicons.min.css') }}">
 		<link rel="stylesheet" href="{{ asset('assets/css/Multi-step-form.css') }}">
 		<link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"
+		/>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+
 	</head>
 	<body id="page-top">
 		<div id="wrapper" class="w-100">
@@ -45,7 +52,6 @@
 		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>  
-
 		@stack('javascript')
 
 	</body>

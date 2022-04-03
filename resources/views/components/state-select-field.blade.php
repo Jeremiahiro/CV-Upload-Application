@@ -4,12 +4,13 @@
     'fieldName' => 'state_id',
     'country_id' => null,
     'disabled' => false,
+    'class' => '.state_class'
 ])
 <div class="form-control-wrap form-group">
     <label for="country-select" class="form-label">State</label>
     <select
         name="{{ $fieldName }}"
-        class="form-select form-input"
+        class="form-select form-input {{ $class }}"
         data-search="on"
         id="state-select" {{ $required ? 'required': '' }} {{ $disabled ? 'disabled' : '' }}
     >

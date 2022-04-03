@@ -27,10 +27,29 @@ NYSC Details
                         </div>
 
                         <div class="form-group mb-3">
-                            <x-states-in-nigeria-select-field
+                            <x-country-select-field
                                 :required="true"
-                                label="What state did you serve for your National Service?"
+                                label="Country of National Service "
+                                fieldName="nysc_country"
+                                class="nysc_country"
+                                index="3"
+                                :selected="$cv->nysc_detail ? $cv->nysc_detail->country : null"
                             />
+                                
+                            @error('nysc_country')
+                                <span class="invalid-feedback" role="alert">
+                                <small>{{ $message }}</small>
+                                </span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="select-state">What state did you serve for your National Service?</label>
+                            <select class="form-select form-input" name="nysc_state" id="select-state" required>
+                                @if ($cv->nysc_detail)
+                                    <option value="{{ $cv->nysc_detail->state->id }}" selected>{{ $cv->nysc_detail->state->name }}</option>
+                                @endif
+                            </select>
                                 
                             @error('nysc_state')
                                 <span class="invalid-feedback" role="alert">
@@ -44,14 +63,35 @@ NYSC Details
                             <input
                                 id="comencement_date"
                                 type="{{ $cv->nysc_detail ? 'text' : 'month' }}"
-                                class="form-control form-input input-round @error('end_date') is-invalid @enderror"
+                                class="form-control form-input input-round @error('comencement_date') is-invalid @enderror"
                                 name="comencement_date"
-                                value="{{ old('comencement_date', $cv->nysc_detail->date ?? '') }}"
+                                value="{{ old('comencement_date', date('F Y', strtotime($cv->nysc_detail ? $cv->nysc_detail->comencement_date : '')) ?: '') }}"
                                 max="{{ now()->toDateString('M-Y') }}"
                                 required
                             >
                             
                             @error('comencement_date')
+                                <span class="invalid-feedback" role="alert">
+                                    <small>{{ $message }}</small>
+                                </span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="completion_date">
+                                Month and Year of Completion or Estimated Completion of National Service 
+                            </label>
+                            <input
+                                id="completion_date"
+                                type="{{ $cv->nysc_detail ? 'text' : 'month' }}"
+                                class="form-control form-input input-round @error('completion_date') is-invalid @enderror"
+                                name="completion_date"
+                                value="{{ old('completion_date', date('F Y', strtotime($cv->nysc_detail ? $cv->nysc_detail->completion_date : '')) ?: '') }}"
+                                max="{{ now()->toDateString('M-Y') }}"
+                                required
+                            >
+                            
+                            @error('completion_date')
                                 <span class="invalid-feedback" role="alert">
                                     <small>{{ $message }}</small>
                                 </span>
@@ -147,6 +187,45 @@ NYSC Details
     <script>
         $(document).ready(function () {
 
+            var country_id = '';
+            $('.country-select').on('change', function () {
+                country_id = this.value;
+                $("#select-state").html('');
+                fetchStates(country_id);
+            });
+
+            window.statesMap = [];
+
+            function fetchStates(country) {
+                $('#select-state').select2({
+                    allowClear: true,
+                    placeholder: 'Select and begin typing',
+                    ajax: {
+                        url: '/api/country/' + country + '/fetch-states',
+                        delay: 250,
+                        cache: true,
+                        data: function (params) {
+                            return {
+                                search: params.term,
+                            }
+                        },
+                        processResults: function (res) {
+                            return {
+                                results: res.map(function (state) {
+                                    window.statesMap[state.id] = state
+                                    return {
+                                        id: state.id,
+                                        text: state.name,
+                                    }
+                                })
+                            }
+                        },
+                    }
+                });
+            }
+
+            $('#select-state').select2();
+
             $('#nextForm').click(function(e) {
                 confirmAction(e);
             });
@@ -155,7 +234,11 @@ NYSC Details
                 confirmAction(e);
             });
 
-            $('#end_date').focus(function(e) {
+            $('#comencement_date').focus(function(e) {
+                $(this).attr('type','month');
+            });
+
+            $('#completion_date').focus(function(e) {
                 $(this).attr('type','month');
             });
 

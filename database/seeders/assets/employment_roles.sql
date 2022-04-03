@@ -1,4 +1,4 @@
-INSERT INTO `employement_roles` (`name`) VALUES
+INSERT INTO `employment_roles` (`name`) VALUES
 
 ('Administrative and Clerical'),
 ('Business Development'),

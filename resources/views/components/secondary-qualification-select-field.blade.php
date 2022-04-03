@@ -2,12 +2,12 @@
     'selected' => null,
     'required' => false,
     'fieldName' => 'qualification',
-    'disabled' => false,
+    'readonly' => false,
 ])
 <div class="form-control-wrap form-group">
     <label for="select-secondary_qualification" class="form-label">Qualification Obtained</label>
     <select name="{{ $fieldName }}" class="form-select form-input"
-            data-search="on" id="select-secondary_qualification" {{ $required ? 'required': '' }} {{ $disabled ? 'disabled' : '' }}>
+            data-search="on" id="select-secondary_qualification" {{ $required ? 'required': '' }} {{ $readonly ? 'readonly' : '' }}>
         @if($selected !== null)
             <option value="{{ $selected->id }}">
                 {{ $selected->name }}

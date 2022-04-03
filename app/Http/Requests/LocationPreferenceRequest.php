@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class LocationPreferenceRequest extends FormRequest
 {
@@ -24,9 +25,18 @@ class LocationPreferenceRequest extends FormRequest
     public function rules()
     {
         return [
-            'preferred_state' => 'required|string',
-            'preferred_industry' => 'required|string',
-            'hobbies' => 'required|string',
+            'most_preferred_country'            => ['required', 'string', Rule::exists('countries', 'id')],
+            'most_preferred_state'              => ['required', 'string', Rule::exists('states', 'id')],
+            'most_preferred_industry'           => ['required', 'string'],
+            'other_preferred_industry_first'    => 'required_if:most_preferred_industry,others',
+
+            'preferred_country'                 => ['required', 'string', Rule::exists('countries', 'id')],
+            'preferred_state'                   => ['required', 'string', Rule::exists('states', 'id')],
+            'preferred_industry'                => ['required', 'string'],
+            'other_preferred_industry_second'   => 'required_if:preferred_industry,others',
+
+            'hobbies'                           => 'required|string',
+
         ];
     }
 }

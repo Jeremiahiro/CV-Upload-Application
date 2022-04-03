@@ -34,7 +34,6 @@
                     }
                 },
                 processResults: function (result) {
-                    console.log(result);
                     return {
                         results: result.map(function (role) {
                             window.employmentRolesMap[role.id] = role

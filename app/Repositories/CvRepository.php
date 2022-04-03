@@ -80,17 +80,30 @@ class CvRepository
             $secondary_education->end_date = Carbon::createFromFormat('M-Y', $end_date);
     
             // TODO: update this session
-            if($request['qualification'] === 'others') {
-                $secondary_education->other_qualification = $request['other_qualifiation_obtained'];
-            } else {
-                $secondary_education->secondary_qualifications_id = $request['qualification'];
+            switch ($request['qualification']) {
+                case 'others':
+                    $secondary_education->other_qualification = $request['other_qualifiation_obtained'];
+                    break;
+                case 'none':
+                    //
+                    break;
+                
+                default:
+                    $secondary_education->secondary_qualifications_id = $request['qualification'];
+                    break;
             }
+
+            // if($request['qualification'] === 'others') {
+            //     $secondary_education->other_qualification = $request['other_qualifiation_obtained'];
+            // } else {
+            //     $secondary_education->secondary_qualifications_id = $request['qualification'];
+            // }
 
             $secondary_education->cv_id = $cv['id'];
             $secondary_education->save();
     
-            $secondary_education->qualifications()->delete();
             if($request->subject){
+                $secondary_education->qualifications()->delete();
                 foreach($request->subject as $subject) {
                     $qualification = new SecondaryEducationQualifications();
                     $qualification->secondary_subject = $subject['subject_id'];
@@ -230,14 +243,19 @@ class CvRepository
         }
     }
 
-
     public function handle_update_nysc_details(Request $request, Cv $cv)
     {   
         $nysc_detail = NyscDetails::where('cv_id', $cv['id'])->first() ?? new NyscDetails();
 
+        $nysc_detail->country_id = $request['nysc_country'];
         $nysc_detail->state_id = $request['nysc_state'];
-        $date = Carbon::parse($request['comencement_date'])->format('M-Y');
-        $nysc_detail->date = Carbon::createFromFormat('M-Y', $date);
+
+        $comencement_date = Carbon::parse($request['comencement_date'])->format('M-Y');
+        $completion_date = Carbon::parse($request['completion_date'])->format('M-Y');
+
+        $nysc_detail->comencement_date = Carbon::createFromFormat('M-Y', $comencement_date);
+        $nysc_detail->completion_date = Carbon::createFromFormat('M-Y', $completion_date);
+
         $nysc_detail->cv_id = $cv['id'];
 
         $cv->update([
@@ -267,9 +285,9 @@ class CvRepository
             }
 
             if($request['role'] === 'others') {
-                $experience->other_employement_role = $request['other_employement_role'];
+                $experience->other_employment_role = $request['other_employment_role'];
             } else {
-                $experience->employement_roles_id = $request['role'];
+                $experience->employment_roles_id = $request['role'];
             }
     
             $experience->employer = $request['name_of_employer'];
@@ -277,6 +295,7 @@ class CvRepository
             $employment_date = Carbon::parse($request['employment_date'])->format('M-Y');
             $experience->date = Carbon::createFromFormat('M-Y', $employment_date);
     
+            $experience->have_prior_role = $request['have_prior_role'];
             $experience->job_description = $request['job_description'];
             $experience->no_of_positions = $request['no_of_positions'];
             $experience->is_current = $request['is_current'] == 'current' ? true : false;
@@ -305,26 +324,30 @@ class CvRepository
         $referee->email = $request['referee_email'];
         $referee->phone = $request['referee_phone_number'];
         $referee->address = $request['referee_address'];
-        $referee->for_industry_type = $request['for_industry_type'];
         $referee->name = $request['referee_name'];
+        $referee->country_id = $request['referee_country'];
+        $referee->state_id = $request['referee_state'];
         $referee->cv_id = $cv['id'];
+
+        $cv->update([
+            'has_prefered_location' => $request['has_prefered_location'] ?: $cv->has_prefered_location,
+        ]);
 
         return $referee->save();
     }
 
-    public function handle_create_employement_role(Request $request, JobExperience $experience,)
+    public function handle_create_employment_role(Request $request, JobExperience $experience,)
     {   
         $role = new JobExperienceRoles();
-        return $this->handle_update_employement_role($request, $experience, $role);
+        return $this->handle_update_employment_role($request, $experience, $role);
     }
 
-    public function handle_update_employement_role(Request $request, JobExperience $experience, JobExperienceRoles $role)
+    public function handle_update_employment_role(Request $request, JobExperience $experience, JobExperienceRoles $role)
     {   
-
         if($request['role'] === 'others') {
-            $role->other_employement_role = $request['other_employement_role'];
+            $role->other_employment_role = $request['other_employment_role'];
         } else {
-            $role->employement_roles_id = $request['role'];
+            $role->employment_roles_id = $request['role'];
         }
 
         $start_date = Carbon::parse($request['from_date'])->format('M-Y');
@@ -342,11 +365,27 @@ class CvRepository
 
     public function handle_update_location_preference(Request $request, Cv $cv)
     {   
-        return $cv->update([
-            'preferred_state_id' => $request['preferred_state'] ?: $cv->preferred_state,
-            'preferred_industry_id' => $request['preferred_industry'] ?: $cv->preferred_industry,
-            'has_hobbies' => $request['hobbies'] ?: $cv->hobbies,
-        ]);
+        if($request['most_preferred_industry'] === 'others') {
+            $cv->other_most_preferred_industry = $request['other_preferred_industry_first'];
+        } else {
+            $cv->most_preferred_industry_id = $request['most_preferred_industry'];
+        }
+
+        if($request['preferred_industry'] === 'others') {
+            $cv->other_preferred_industry = $request['other_preferred_industry_second'];
+        } else {
+            $cv->preferred_industry_id = $request['preferred_industry'];
+        }
+
+        $cv->most_preferred_country_id = $request['most_preferred_country'] ?: $cv->most_preferred_country_id;
+        $cv->most_preferred_state_id = $request['most_preferred_state'] ?: $cv->most_preferred_state_id;
+
+        $cv->preferred_country_id = $request['preferred_country'] ?: $cv->preferred_country_id;
+        $cv->preferred_state_id = $request['preferred_state'] ?: $cv->preferred_state_id;
+
+        $cv->has_hobbies = $request['hobbies'] ?: $cv->has_hobbies;
+
+        return $cv->save();
     }
 
     public function handle_update_hobbies(Request $request, Cv $cv)

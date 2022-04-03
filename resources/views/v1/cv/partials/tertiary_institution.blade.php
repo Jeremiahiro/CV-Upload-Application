@@ -151,7 +151,7 @@
                 <div class="d-flex mt-4" >
                     <a href="{{ route('cv.secondary-education', $cv['uuid']) }}" id="previousBtn" class="submit__btn btn btn-light btn-outline-secondary px-4 font-bold mx-2">Prev</a>
                     <a
-                        href="{{ $cv->professional_qualification == 1 ? route('cv.professional-qualification', $cv['uuid']) : route('cv.employement_history', [$cv['uuid'], $cv->employment_status ? 'current' : 'previous']) }}"
+                        href="{{ $cv->professional_qualification == 1 ? route('cv.professional-qualification', $cv['uuid']) : route('cv.employment_history', [$cv['uuid'], $cv->employment_status ? 'current' : 'previous']) }}"
                         id="nextForm"
                         class="submit__btn btn btn-warning px-4 font-bold mx-2 @if(!$cv->tertiary_educations->count()) disabled-link disabled @endif"
                     >

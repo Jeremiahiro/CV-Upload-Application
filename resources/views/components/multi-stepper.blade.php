@@ -35,12 +35,12 @@
                 <a
                     class="btn multisteps-form__progress-btn @if($step > 6) js-active @endif"
                     role="button"
-                    title="Employement History"
+                    title="employment History"
                 ></a>
                 <a
                     class="btn multisteps-form__progress-btn @if($step > 7) js-active @endif"
                     role="button"
-                    title="Employement Role"
+                    title="employment Role"
                 ></a>
                 <a
                     class="btn multisteps-form__progress-btn @if($step > 8) js-active @endif"

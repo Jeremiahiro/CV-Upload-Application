@@ -22,7 +22,7 @@ Employment Roles
                     >
                         @csrf
                         <div class="text-left mb-4">
-                            <p class="font-bold text-dark m-0 p-0">employment Roles</p>
+                            <p class="font-bold text-dark m-0 p-0">Employment Roles</p>
                             <small class="font-bold text-warning">Please provide the following information</small>
                         </div>
 
@@ -44,13 +44,14 @@ Employment Roles
                                             <div class="data__action mx-3">
                                                 <div class="d-flex flex-column">
                                                     <span class="cursor-pointer mx-2">
-                                                        <i
-                                                            class="fa fa-edit text-dark edit-role-data cursor-pointer"
-                                                            data-role="{{ $role }}"
-                                                            data-employment="{{ $employment }}"
-                                                            data-cv="{{ $cv }}"
+                                                        <a
+                                                            href="{{ route('cv.employment_role.edit', [$cv['uuid'], $employment['id'], $role['id']]) }}"
                                                             data-toggle="tooltip"
-                                                            title="Edit Data"></i>
+                                                            title="Edit Data"
+                                                            class="text-dark"
+                                                        >
+                                                            <i class="fa fa-edit text-dark"></i>
+                                                        </a>
                                                     </span>
                                                     <span class="cursor-pointer mx-2">
                                                         <a
@@ -75,17 +76,17 @@ Employment Roles
 
                         </div>
 
-                        <div class="form-group mb-3" id="other_employment_roles-container">
-                            <label class="form-label" for="other_employment_roles">If the position / role is unlisted, please enter it here</label>
+                        <div class="form-group mb-3" id="other_employment_role-container">
+                            <label class="form-label" for="other_employment_role">If the position / role is unlisted, please enter it here</label>
                             <input
-                                id="other_employment_roles"
+                                id="other_employment_role"
                                 type="text"
-                                class="form-control form-input input-round @error('other_employment_roles') is-invalid @enderror"
-                                name="other_employment_roles"
-                                value="{{ old('other_employment_roles') }}"
+                                class="form-control form-input input-round @error('other_employment_role') is-invalid @enderror"
+                                name="other_employment_role"
+                                value="{{ old('other_employment_role') }}"
                                 placeholder="Other Position / Role"
                             >
-                            @error('other_employment_roles')
+                            @error('other_employment_role')
                                 <span class="invalid-feedback" role="alert">
                                 <small>{{ $message }}</small>
                                 </span>
@@ -142,8 +143,29 @@ Employment Roles
                             @enderror
                         </div>
 
+                        <div>
+                            <div class="form-group mb-3" id="addMore">
+                                @if ($employment->roles->count() != $employment->no_of_positions)
+                                    <button type="submit" class="submit__btn text-warning font-bold btn btn-clear">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                            fill="currentColor" viewBox="0 0 16 16"
+                                            class="bi bi-plus-circle fs-4"
+                                            style="color: var(--bs-yellow);font-weight: bold;border-width: 2px;">
+                                            <path
+                                                d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z">
+                                            </path>
+                                            <path
+                                                d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z">
+                                            </path>
+                                        </svg>
+                                        Add
+                                    </button>
+                                @endif
+                            </div>
+                        </div>
+
                         <div class="form-group mb-3">
-                            <label class="form-label">Do you have any referees that an employer may contact?</label><br>
+                            <label class="form-label">Do you want to provide any references that a potential employer may contact?</label><br>
                             <div class="form-check form-check-inline">
                                 <input
                                     class="form-check-input"
@@ -167,33 +189,6 @@ Employment Roles
                                     {{ old('referees') === '0' ? 'checked' : '' }}
                                 >
                                 <label class="form-check-label" for="no_contact">No</label>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="form-group mb-3" id="addMore">
-                                @if ($employment->roles->count() != $employment->no_of_positions)
-                                    <button type="submit" class="submit__btn text-warning font-bold btn btn-clear">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-                                            fill="currentColor" viewBox="0 0 16 16"
-                                            class="bi bi-plus-circle fs-4"
-                                            style="color: var(--bs-yellow);font-weight: bold;border-width: 2px;">
-                                            <path
-                                                d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z">
-                                            </path>
-                                            <path
-                                                d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z">
-                                            </path>
-                                        </svg>
-                                        Add
-                                    </button>
-                                @endif
-                            </div>
-                            <div class="form-group mb-3" id="update">
-                                <button type="submit" class="submit__btn text-warning font-bold btn btn-clear">
-                                    <i class="fa fa-check"></i>
-                                    <span class="update_text">Update</span>
-                                </button>
                             </div>
                         </div>
 
@@ -226,10 +221,10 @@ Employment Roles
     <script>
         $(document).ready(function () {
 
-            const other_employment_roles = $('#other_employment_roles-container');
+            const other_employment_role = $('#other_employment_role-container');
             const updateBtn = $('#update');
             updateBtn.hide();
-            other_employment_roles.hide()
+            other_employment_role.hide()
 
             $('#previousBtn').click(function(e) {
                 var href = $(this).attr('href');
@@ -242,9 +237,9 @@ Employment Roles
             $('#select-role').on('change', function () {
                 var sector = this.value;
                 if(sector === 'others') {
-                    other_employment_roles.show(500)
+                    other_employment_role.show(500)
                 } else {
-                    other_employment_roles.hide(500)
+                    other_employment_role.hide(500)
                 }
             });
             

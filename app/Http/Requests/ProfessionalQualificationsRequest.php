@@ -30,7 +30,7 @@ class ProfessionalQualificationsRequest extends FormRequest
             'qualification_date' => 'required|date',
             'awarding_institution' => 'required|string',
             'other_awarding_institution' => 'required_if:awarding_institution,others',
-            'nysc_check' => 'required|string',
+            'nysc_check' => 'nullable|string',
         ];
     }
 }

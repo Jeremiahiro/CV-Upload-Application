@@ -178,7 +178,7 @@
                     <a
                         href="{{ $cv->tertiary_institution ? route('cv.tertiary-institution', $cv['uuid']) : route('cv.secondary-education', $cv['uuid']) }}" id="previousBtn" class="submit__btn btn btn-light btn-outline-secondary px-4 font-bold mx-2">Prev</a>
                     <a
-                        href="{{ $cv->completed_nysc == 1 ? route('cv.nysc_details', $cv['uuid']) : route('cv.employement_history', [$cv['uuid'], 'current']) }}"
+                        href="{{ $cv->completed_nysc == 1 ? route('cv.nysc_details', $cv['uuid']) : route('cv.employment_history', [$cv['uuid'], 'current']) }}"
                         id="nextForm"
                         class="submit__btn btn btn-warning px-4 font-bold mx-2 @if(!$cv->qualifications->count()) disabled @endif"
                     >

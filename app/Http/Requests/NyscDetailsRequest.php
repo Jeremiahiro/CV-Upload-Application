@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class NyscDetailsRequest extends FormRequest
 {
@@ -24,8 +25,10 @@ class NyscDetailsRequest extends FormRequest
     public function rules()
     {
         return [
-            'nysc_state' => 'required|string',
+            'nysc_country' => ['required', 'string', Rule::exists('countries', 'id')],
+            'nysc_state' => ['required', 'string', Rule::exists('states', 'id')],
             'comencement_date' => 'required|date',
+            'completion_date' => 'required|date',
             'location_preference' => 'required|string',
             'employment_status' => 'required|string',
         ];

@@ -85,15 +85,33 @@ Secondary Education
 
                         @if ($secondary_education->secondary_qualifications_id)
                         <div class="form-group mb-3">
-                            <x-secondary-qualification-select-field :required="true" :selected="$secondary_education->qualification" :disabled="true" />
+                            <x-secondary-qualification-select-field
+                                :required="true"
+                                :selected="$secondary_education->qualification"
+                                :readonly="true"
+                            />
                             @error('qualification')
                                 <span class="invalid-feedback" role="alert">
                                 <small>{{ $message }}</small>
                                 </span>
                             @enderror
                         </div>
+                        @else
+                        <div class="form-control-wrap form-group">
+                            <label for="select-secondary_qualification" class="form-label">Qualification Obtained</label>
+                            <input
+                                id="qualification"
+                                type="text"
+                                class="form-control form-input input-round @error('qualification') is-invalid @enderror"
+                                value="{{ $secondary_education->other_qualification ? 'Others' : 'None' }}"
+                                placeholder="Qualification Obtained"
+                                readonly
+                            >
+                            <input type="hidden" name="qualification" value="{{ $secondary_education->other_qualification ? 'others' : 'none' }}" />
+                        </div>
                         @endif
 
+                        @if ($secondary_education->other_qualification)
                         <div class="form-group mb-3" id="update_other_qualifiation_obtained-container">
                             <label class="form-label" for="other_qualifiation_obtained">Other Qualification Obtained</label>
                             <input
@@ -110,6 +128,7 @@ Secondary Education
                                 </span>
                             @enderror
                         </div>
+                        @endif
 
                         @if ($secondary_education->secondary_qualifications_id)
                         <div id="update_no_of_subjects-container">
@@ -132,7 +151,7 @@ Secondary Education
                                 @enderror
                             </div>
 
-                            <div class="table-responsive mb-3 w-100">
+                            <div class="table-responsive mb-3 w-100" id="secondary_subjects-container">
                                 <table class="table">
                                     <thead>
                                       <tr>
@@ -168,7 +187,7 @@ Secondary Education
                         <div class="d-flex mt-4" >
                             <a href="{{ route('cv.secondary-education', $cv['uuid']) }}" id="previousBtn" class="submit__btn btn btn-light btn-outline-secondary px-4 font-bold mx-2">Prev</a>
                             <a
-                                href="{{ $cv->tertiary_institution == 1 ? route('cv.tertiary-institution', $cv['uuid']) : route('cv.employement_history', [$cv['uuid'], $cv->employment_status ? 'current' : 'previous']) }}"
+                                href="{{ $cv->tertiary_institution == 1 ? route('cv.tertiary-institution', $cv['uuid']) : route('cv.employment_history', [$cv['uuid'], $cv->employment_status ? 'current' : 'previous']) }}"
                                 id="nextForm"
                                 class="submit__btn btn btn-warning px-4 font-bold mx-2 @if(!$cv->secondary_educations->count()) disabled @endif"
                             >
@@ -196,6 +215,7 @@ Secondary Education
             const no_of_subjects = $('#update_no_of_subjects-container');
             const start_date = $('#update_start_date');
             const end_date = $('#update_end_date');
+            const secondary_subjects = $('#secondary_subjects-container');
 
             const secondary_education = {!! $secondary_education !!};
 
@@ -216,6 +236,25 @@ Secondary Education
                     no_of_subjects.show(500)
                 }
             })
+
+            $('#update_no_of_subjects').keyup(function() {
+                let length = 0;
+                length = this.value;
+                
+                if(length > 0) {
+                    secondary_subjects.show(500)
+                    let subject_row = $('.subject-item-row');
+                    if(subject_row.length > 0){
+                        $('.subject-item-row:not([id*="subject-row-0"])').remove();
+                    }
+
+                    for (let index = 0; index < length-1; index++) {
+                        add_new_subject_row($('#subject-row-' + index))
+                    }
+                } else {
+                    secondary_subjects.hide(500)
+                }
+            });
 
             $('#start_date').focus(function(e) {
                 $(this).attr('type','month');

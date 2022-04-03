@@ -19,8 +19,9 @@ return new class extends Migration
             $table->string('email');
             $table->string('phone');
             $table->longText('address');
-            $table->boolean('for_industry_type')->default(false);
             $table->foreignId('cv_id')->constrained();
+            $table->foreignId('country_id')->nullable()->constrained();
+            $table->foreignId('state_id')->nullable()->constrained();
             $table->timestamps();
         });
     }

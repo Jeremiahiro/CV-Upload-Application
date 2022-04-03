@@ -35,7 +35,7 @@ Secondary Education
                                             <div class=" ">
                                                 <span class="font-bold">
                                                     {{ Str::limit($secondary_education->name, 30) }}
-                                                    <small>({{ $secondary_education->secondary_qualifications_id ? $secondary_education->qualification->name : $secondary_education->other_qualification }})</small>
+                                                    <small>({{ $secondary_education->secondary_qualifications_id ? $secondary_education->qualification->name : ($secondary_education->other_qualification ?: 'No Qualification') }})</small>
                                                 </span>
                                                 <br>
                                                 <small class="">
@@ -183,7 +183,6 @@ Secondary Education
                                     type="number"
                                     class="form-control form-input input-round @error('no_of_subjects') is-invalid @enderror"
                                     name="no_of_subjects"
-                                    value="{{ old('no_of_subjects') }}"
                                     placeholder="No of Subject"
                                 >
                                 @error('no_of_subjects')
@@ -192,14 +191,15 @@ Secondary Education
                                     </span>
                                 @enderror
                             </div>
+                        </div>
 
+                        <div id="secondary_subjects-container">
                             <div class="table-responsive mb-3">
                                 <table class="table">
                                     <thead>
                                       <tr>
                                         <th scope="col">Subject</th>
                                         <th scope="col">Grade</th>
-                                        <th scope="col"></th>
                                       </tr>
                                     </thead>
                                     <tbody>
@@ -276,13 +276,14 @@ Secondary Education
                         <div class="d-flex mt-4" >
                             <a href="{{ route('cv.contact-details', $cv['uuid']) }}" id="previousBtn" class="submit__btn btn btn-light btn-outline-secondary px-4 font-bold mx-2">Prev</a>
                             <a
-                                href="{{ $cv->tertiary_institution == 1 ? route('cv.tertiary-institution', $cv['uuid']) : route('cv.employement_history', [$cv['uuid'], $cv->employment_status ? 'current' : 'previous']) }}"
+                                href="{{ $cv->tertiary_institution == 1 ? route('cv.tertiary-institution', $cv['uuid']) : route('cv.employment_history', [$cv['uuid'], $cv->employment_status ? 'current' : 'previous']) }}"
                                 id="nextForm"
                                 class="submit__btn btn btn-warning px-4 font-bold mx-2 @if(!$cv->secondary_educations->count()) disabled @endif"
                             >
                                 Next
                             </a>
                         </div>
+                        
                     </form>
                 </div>
             </section>
@@ -303,22 +304,53 @@ Secondary Education
             const other_qualifiation_obtained = $('#other_qualifiation_obtained-container');
             const tertiary_institution_check = $('#tertiary_institution-check');
             const no_of_subjects = $('#no_of_subjects-container');
+            const secondary_subjects = $('#secondary_subjects-container');
             const addMore = $('#addMore');
             const updateData = $('#update');
             const start_date = $('#start_date');
             const end_date = $('#end_date');
-
+            
             updateData.hide()
             no_of_subjects.hide()
+            secondary_subjects.hide()
             other_qualifiation_obtained.hide();
 
             $('#select-secondary_qualification').on('change', function () {
-                if(this.value === 'others') {
-                    other_qualifiation_obtained.show(500)
-                    no_of_subjects.hide(500)
+                other_qualifiation_obtained.hide(500)
+                no_of_subjects.hide(500)
+
+                switch (this.value) {
+                    case 'others':
+                        other_qualifiation_obtained.show(500)
+                        no_of_subjects.hide(500)
+                        break;
+                    case 'none':
+                        other_qualifiation_obtained.hide(500)
+                        no_of_subjects.hide(500)
+                        break;
+                    default:
+                        other_qualifiation_obtained.hide(500)
+                        no_of_subjects.show(500)
+                        break;
+                }
+            });
+
+            $('#no_of_subjects').keyup(function() {
+                let length = 0;
+                length = this.value;
+                
+                if(length > 0) {
+                    secondary_subjects.show(500)
+                    let subject_row = $('.subject-item-row');
+                    if(subject_row.length > 0){
+                        $('.subject-item-row:not([id*="subject-row-0"])').remove();
+                    }
+
+                    for (let index = 0; index < length-1; index++) {
+                        add_new_subject_row($('#subject-row-' + index))
+                    }
                 } else {
-                    other_qualifiation_obtained.hide(500)
-                    no_of_subjects.show(500)
+                    secondary_subjects.hide(500)
                 }
             });
             
@@ -345,32 +377,6 @@ Secondary Education
                     }
                 }
             }
-
-            // $('.edit-secondary-data').click(function(e) {
-            //     updateData.show(500)
-            //     addMore.hide(500)
-            //     tertiary_institution_check.hide(500)
-              
-            //     const data = $(this).data('education');
-            //     const cv = $(this).data('cv');
-            //     const form_action = '/cv/'+cv.uuid+'/secondary-education/'+data.id
-
-            //     if(name_of_secondary_school.val().length > 3) {
-            //         if(confirm('Changes you made may not be saved')) {
-            //             handleUpdateData(data);
-            //         }
-            //     } else  {
-            //         handleUpdateData(data);
-            //     };
-
-            //     function handleUpdateData(data) {
-            //         $('#secondary_education_form').attr('action', form_action);
-            //         name_of_secondary_school.val(data.name);
-            //         start_date.val(moment(data.start_date).format('YYYY-MM'));
-            //         end_date.val(moment(data.end_date).format('YYYY-MM'));
-            //         $('#select-qualification').val(data.qualification.id).change();
-            //     };
-            // });
         });
     </script>
 @endpush

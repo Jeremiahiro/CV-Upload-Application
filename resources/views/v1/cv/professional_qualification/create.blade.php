@@ -28,13 +28,13 @@ Qualifications
                         </div>
 
                         <div class="d-flex flex-wrap mb-2">
-                            @foreach ($professional_qualifications as $qualification)
+                            @foreach ($qualification as $qualification)
                                 <div class="col col-lg-6 mb-2">
                                     <div class="w-100 data">
                                         <div class="m-2 d-flex justify-content-between p-2 bg-warning text-dark">
                                             <div class=" ">
                                                 <span class="font-bold">
-                                                    {{ Str::limit($qualification->name, 30) }} 
+                                                    {{ Str::limit($qualification->name, 28) }} 
                                                     <br />
                                                     <small>({{ $qualification->qualification->name ?? $qualification->other_qualification_type }})</small>
                                                 </span>
@@ -46,12 +46,14 @@ Qualifications
                                             <div class="data__action mx-3">
                                                 <div class="d-flex flex-column">
                                                     <span class="cursor-pointer mx-2">
-                                                        <i
-                                                            class="fa fa-edit text-dark edit-qualification-data"
-                                                            data-education="{{ $qualification }}"
-                                                            data-cv="{{ $cv }}"
+                                                        <a
+                                                            href="{{ route('cv.professional-qualification.edit', [$cv['uuid'], $qualification['id']]) }}"
                                                             data-toggle="tooltip"
-                                                            title="Edit Data"></i>
+                                                            title="Edit Data"
+                                                            class="text-danger"
+                                                        >
+                                                            <i class="fa fa-edit text-dark"></i>
+                                                        </a>
                                                     </span>
                                                     <span class="cursor-pointer mx-2">
                                                         <a
@@ -147,8 +149,7 @@ Qualifications
                         </div>
 
                         <div class="form-group mb-3" id="other_awarding_institution-container">
-                            <label class="form-label" for="other_awarding_institution">If others please specify awarding institution</label>
-                            <input
+c                            <input
                                 id="other_awarding_institution"
                                 type="text"
                                 class="form-control form-input input-round @error('other_awarding_institution') is-invalid @enderror"
@@ -189,7 +190,10 @@ Qualifications
                         </div>
 
                         <div class="form-group mb-3" id="nysc-check">
-                            <label class="form-label">Have you completed NYSC?</label><br>
+                            <label class="form-label">
+                                Have you completed or are you currently completing National Service?    
+                            </label>
+                            <br >
                             <div class="form-check form-check-inline">
                                 <input
                                     class="form-check-input"
@@ -228,9 +232,9 @@ Qualifications
                             <a
                                 href="{{ $cv->tertiary_institution ? route('cv.tertiary-institution', $cv['uuid']) : route('cv.secondary-education', $cv['uuid']) }}" id="previousBtn" class="submit__btn btn btn-light btn-outline-secondary px-4 font-bold mx-2">Prev</a>
                             <a
-                                href="{{ $cv->completed_nysc == 1 ? route('cv.nysc_details', $cv['uuid']) : route('cv.employement_history', [$cv['uuid'], 'current']) }}"
+                                href="{{ $cv->completed_nysc == 1 ? route('cv.nysc_details', $cv['uuid']) : route('cv.employment_history', [$cv['uuid'], 'current']) }}"
                                 id="nextForm"
-                                class="submit__btn btn btn-warning px-4 font-bold mx-2 @if(!$professional_qualifications->count()) disabled @endif"
+                                class="submit__btn btn btn-warning px-4 font-bold mx-2 @if(!$qualification->count()) disabled @endif"
                             >
                                 Next
                             </a>
@@ -272,46 +276,46 @@ Qualifications
                 }
             });
 
-            $('.edit-qualification-data').click(function(e) {
-                updateData.show(500)
-                addMore.hide(500)
-                $('#nysc-check').hide(500)
+            // $('.edit-qualification-data').click(function(e) {
+            //     updateData.show(500)
+            //     addMore.hide(500)
+            //     $('#nysc-check').hide(500)
               
-                const data = $(this).data('education');
-                const cv = $(this).data('cv');
-                const form_action = '/cv/'+cv.uuid+'/professional-qualification/'+data.id
+            //     const data = $(this).data('education');
+            //     const cv = $(this).data('cv');
+            //     const form_action = '/cv/'+cv.uuid+'/professional-qualification/'+data.id
 
-                if(confirm('Changes you made may not be saved')) {
-                    handleUpdateData(data);
-                }
+            //     if(confirm('Changes you made may not be saved')) {
+            //         handleUpdateData(data);
+            //     }
 
-                function handleUpdateData(data) {
-                    var qualification_type = 'others';
-                    if(data.professional_qualifications_id != null) {
-                        qualification_type = data.qualification.id;
-                    }
+            //     function handleUpdateData(data) {
+            //         var qualification_type = 'others';
+            //         if(data.professional_qualifications_id != null) {
+            //             qualification_type = data.qualification.id;
+            //         }
 
-                    var institution_type = 'others';
-                    if(data.professional_institutions_id != null) {
-                        institution_type = data.awarding_institution.id;
-                    }
+            //         var institution_type = 'others';
+            //         if(data.professional_institutions_id != null) {
+            //             institution_type = data.awarding_institution.id;
+            //         }
 
-                    $('#tertiary_education_form').attr('action', form_action);
-                    $('#name_of_qualification').val(data.name);
-                    $('#select-type_of_qualification').val(qualification_type).change();
-                    $('#select-awarding_institution').val(institution_type).change();
-                    $('#qualification_date').val(data.date);
+            //         $('#tertiary_education_form').attr('action', form_action);
+            //         $('#name_of_qualification').val(data.name);
+            //         $('#select-type_of_qualification').val(qualification_type).change();
+            //         $('#select-awarding_institution').val(institution_type).change();
+            //         $('#qualification_date').val(data.date);
 
-                    start_date.val(data.start_date);
-                    end_date.val(data.end_date);
-                    if(qualification_type == 'others') {
-                        $('#other_qualification_type').val(data.other_qualification_type);
-                    }
-                    if(institution_type == 'others') {
-                        $('#other_awarding_institution').val(data.other_institutions_type);
-                    }
-                };
-            });
+            //         start_date.val(data.start_date);
+            //         end_date.val(data.end_date);
+            //         if(qualification_type == 'others') {
+            //             $('#other_qualification_type').val(data.other_qualification_type);
+            //         }
+            //         if(institution_type == 'others') {
+            //             $('#other_awarding_institution').val(data.other_institutions_type);
+            //         }
+            //     };
+            // });
 
             $('#nextForm').click(function(e) {
                 confirmAction(e);

@@ -37,7 +37,6 @@ Preview CV
                                 <div class="col-md-4 d-xl-flex justify-content-xl-between align-items-xl-center position-relative"
                                     style="background: var(--bs-yellow);">
                                     <div class="p-1 bg-white h-100 position-absolute left-0" style="left: 85px;"></div>
-                                    {{-- <div style="height: 102px;width: 4px;background: #ffffff;margin-left: -77px;"></div> --}}
                                     <div>
                                         <div class="d-xl-flex justify-content-xl-center align-items-xl-center"
                                             style="padding: 0px;height: 80px;">
@@ -50,7 +49,7 @@ Preview CV
                                 </div>
                                 <div class="col-md-4 d-xxl-flex align-items-xxl-center" style="padding-left: 20px;">
                                     <div>
-                                        <p class="d-xxl-flex align-items-xxl-center"
+                                        <p class="d-xxl-flex align-items-xxl-center text-capitalize"
                                             style="margin-bottom: 10px;color: black;font-family: Poppins, sans-serif;font-size: 14px;">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
                                                 fill="currentColor" viewBox="0 0 16 16" class="bi bi-geo-alt fs-4"
@@ -64,10 +63,14 @@ Preview CV
                                             </svg>
                                             {{ Str::limit(($cv->street . ', ' . $cv->state->name . ', ' . $cv->country->name), 50) }}
                                         </p>
-                                        <p class="d-xxl-flex align-items-xxl-center"
-                                            style="margin-bottom: 10px;color: black;font-family: Poppins, sans-serif;font-size: 14px;">
-                                            <i class="fa fa-calendar fs-4"
-                                                style="color: var(--bs-yellow);margin-right: 15px;"></i>&nbsp;
+                                        <p
+                                            class="d-xxl-flex align-items-xxl-center"
+                                            style="margin-bottom: 10px;color: black;font-family: Poppins, sans-serif;font-size: 14px;"
+                                        >
+                                            <i
+                                                class="fa fa-calendar fs-4"
+                                                style="color: var(--bs-yellow);margin-right: 15px;"
+                                            ></i>&nbsp;
                                             {{ \Carbon\Carbon::parse($cv->dob)->format('d/m/Y') }}
                                         </p>
                                         <p class="d-xxl-flex align-items-xxl-center text-capitalize"
@@ -134,21 +137,21 @@ Preview CV
                                             <div class="d-flex">
                                                 <i class="fa fa-circle fs-5 text-start d-inline-block"
                                                     style="color: var(--bs-yellow);width: 17px;margin-right: 24px; margin-top: 6px"></i>
-                                                <h4 class="d-inline-block font-bold text-uppercase">
+                                                <h5 class="d-inline-block font-bold text-uppercase">
                                                     Secondary Education
-                                                </h4>
+                                                </h5>
                                             </div>
                                             @foreach ($cv->secondary_educations as $secondary_education)
                                             <div class="mb-2"
                                                 style="margin-left: 47px;font-family: Poppins, sans-serif;color: black;font-size: 13px;">
-                                                <h5 class="font-bold">{{ $secondary_education->name }}</h5>
+                                                <h6 class="font-bold text-capitalize">{{ $secondary_education->name }}</h6>
                                                 <p class="m-1">
                                                     {{ date('M-Y', strtotime($secondary_education->start_date)) }}
                                                     -
                                                     {{ date('M-Y', strtotime($secondary_education->end_date)) }}
                                                 </p>
-                                                <h5>{{ $secondary_education->secondary_qualifications_id ? $secondary_education->qualification->name : $secondary_education->other_qualification }}
-                                                </h5>
+                                                <h6>{{ $secondary_education->secondary_qualifications_id ? $secondary_education->qualification->name : $secondary_education->other_qualification }}
+                                                </h6>
                                             </div>
 
                                             @endforeach
@@ -169,16 +172,16 @@ Preview CV
                                             <div class="d-flex">
                                                 <i class="fa fa-circle fs-5 text-start d-inline-block"
                                                     style="color: var(--bs-yellow);width: 17px;margin-right: 24px; margin-top: 6px"></i>
-                                                <h4 class="d-inline-block font-bold text-uppercase">
+                                                <h5 class="d-inline-block font-bold text-uppercase">
                                                     Tertiary Institutions
-                                                </h4>
+                                                </h5>
                                             </div>
                                             @foreach ($cv->tertiary_educations as $institution)
                                             <div class="mb-2"
                                                 style="margin-left: 47px;font-family: Poppins, sans-serif;color: black;font-size: 13px;">
-                                                <h5 class="font-bold">
+                                                <h6 class="font-bold text-capitalize">
                                                     {{ $institution->tertiary_institutions_id ? $institution->institution->name : $institution->other_tertiary_institution }}
-                                                </h5>
+                                                </h6>
                                                 <p class="m-1">
                                                     {{ $institution->tertiary_types_id ? $institution->tertiary_type->name : $institution->other_tertiary_type }}
                                                 </p>
@@ -187,7 +190,7 @@ Preview CV
                                                     -
                                                     {{ date('M-Y', strtotime($institution->start_date)) }}
                                                 </p>
-                                                <h5>{{ $institution->tertiary_qualifications_id ? $institution->qualification->name : $institution->other_qualification }}</h5>
+                                                <h6>{{ $institution->tertiary_qualifications_id ? $institution->qualification->name : $institution->other_qualification }}</h6>
                                             </div>
                                             @endforeach
                                         </div>
@@ -207,14 +210,14 @@ Preview CV
                                             <div class="d-flex">
                                                 <i class="fa fa-circle fs-5 text-start d-inline-block"
                                                     style="color: var(--bs-yellow);width: 17px;margin-right: 24px; margin-top: 6px"></i>
-                                                <h4 class="d-inline-block font-bold text-uppercase">
+                                                <h5 class="d-inline-block font-bold text-uppercase">
                                                     Referees
-                                                </h4>
+                                                </h5>
                                             </div>
                                             @foreach ($cv->referees as $referee)
                                             <div class="mb-2"
                                                 style="margin-left: 47px;font-family: Poppins, sans-serif;color: black;font-size: 13px;">
-                                                <h5 class="">{{ $referee->name }}</h5>
+                                                <h6 class=" text-capitalize">{{ $referee->name }}</h6>
                                                 <p class="m-1">
                                                     {{ $referee->email }}
                                                 </p>
@@ -248,14 +251,14 @@ Preview CV
                                             <div class="d-flex">
                                                 <i class="fa fa-circle fs-5 text-start d-inline-block"
                                                     style="color: var(--bs-yellow);width: 17px;margin-right: 24px; margin-top: 6px"></i>
-                                                <h4 class="d-inline-block font-bold text-uppercase">
+                                                <h5 class="d-inline-block font-bold text-uppercase">
                                                     Professional Qualifications
-                                                </h4>
+                                                </h5>
                                             </div>
                                             @foreach ($cv->qualifications as $qualification)
                                             <div class="mb-2"
                                                 style="margin-left: 47px;font-family: Poppins, sans-serif;color: black;font-size: 13px;">
-                                                <h5 class="font-bold">{{ $qualification->name }}</h5>
+                                                <h6 class="font-bold text-capitalize">{{ $qualification->name }}</h6>
                                                 <p class="m-1">
                                                     {{ $qualification->qualification ? $qualification->qualification->name : $qualification->other_qualification_type }}
                                                 </p>
@@ -287,15 +290,15 @@ Preview CV
                                             <div class="d-flex">
                                                 <i class="fa fa-circle fs-5 text-start d-inline-block"
                                                     style="color: var(--bs-yellow);width: 17px;margin-right: 24px; margin-top: 6px"></i>
-                                                <h4 class="d-inline-block font-bold text-uppercase">
+                                                <h5 class="d-inline-block font-bold text-uppercase">
                                                     NYSC Service Year
-                                                </h4>
+                                                </h5>
                                             </div>
                                             <div class="mb-2"
                                                 style="margin-left: 47px;font-family: Poppins, sans-serif;color: black;font-size: 13px;">
-                                                <h5 class="font-bold">
+                                                <h6 class="font-bold text-capitalize">
                                                     {{ $cv->nysc_detail->state->name }}
-                                                </h5>
+                                                </h6>
                                                 <p class="m-1">
                                                     {{ \Carbon\Carbon::parse($cv->nysc_detail->date)->format('d/m/Y') }}
                                                 </p>
@@ -311,7 +314,7 @@ Preview CV
                                 @endif
 
                                 {{-- My Location and Industry Employment Preferences --}}
-                                @if ($cv->preferred_state || $cv->preferred_industry)
+                                @if ($cv->most_preferred_country_id || $cv->preferred_country_id)
                                 <div class="col"
                                     style="margin-top: 30px;padding-right: 30px;padding-left: 30px;border-bottom-width: 3px;border-bottom-color: var(--bs-yellow);">
                                     <div>
@@ -319,18 +322,40 @@ Preview CV
                                             <div class="d-flex">
                                                 <i class="fa fa-circle fs-5 text-start d-inline-block"
                                                     style="color: var(--bs-yellow);width: 17px;margin-right: 24px; margin-top: 6px"></i>
-                                                <h4 class="d-inline-block font-bold text-uppercase">
+                                                <h5 class="d-inline-block font-bold text-uppercase">
                                                     My Location and Industry Employment Preferences
-                                                </h4>
+                                                </h5>
                                             </div>
 
                                             <div class="mb-2"
                                                 style="margin-left: 47px;font-family: Poppins, sans-serif;color: black;font-size: 13px;">
+                                                <h6 class="font-bold text-capitalize">
+                                                    Most Preferred
+                                                </h6>
                                                 <p class="m-1">
-                                                    {{ $cv->preferred_state->name }}
+                                                    Country: {{ $cv->most_preferred_country->name }}
                                                 </p>
                                                 <p class="m-1">
-                                                    {{ $cv->preferred_industry->name }}
+                                                    State: {{ $cv->most_preferred_state->name }}
+                                                </p>
+                                                <p class="m-1">
+                                                    Industry: {{ $cv->most_preferred_industry_id ? $cv->most_preferred_industry->name : $cv->other_most_preferred_industry }}
+                                                </p>
+                                            </div>
+
+                                            <div class="mb-2"
+                                                style="margin-left: 47px;font-family: Poppins, sans-serif;color: black;font-size: 13px;">
+                                                <h6 class="font-bold text-capitalize">
+                                                    Preferred
+                                                </h6>
+                                                <p class="m-1">
+                                                    Country: {{ $cv->preferred_country->name }}
+                                                </p>
+                                                <p class="m-1">
+                                                    State: {{ $cv->preferred_state->name }}
+                                                </p>
+                                                <p class="m-1">
+                                                    Industry: {{ $cv->preferred_industry_id ? $cv->preferred_industry->name : $cv->other_preferred_industry }}
                                                 </p>
                                             </div>
                                         </div>
@@ -356,15 +381,15 @@ Preview CV
                                             <div class="d-flex">
                                                 <i class="fa fa-circle fs-5 text-start d-inline-block"
                                                     style="color: var(--bs-yellow);width: 17px;margin-right: 24px; margin-top: 6px"></i>
-                                                <h4 class="d-inline-block font-bold text-uppercase">
+                                                <h5 class="d-inline-block font-bold text-uppercase">
                                                     Experience
-                                                </h4>
+                                                </h5>
                                             </div>
                                             @foreach ($cv->job_expereinces as $expereince)
                                             @if ($expereince->is_current)
                                             <div class="mb-2"
                                                 style="margin-left: 47px;font-family: Poppins, sans-serif;color: black;font-size: 13px;">
-                                                <h5 class="font-bold">{{ $expereince->employer }}</h5>
+                                                <h6 class="font-bold text-capitalize">{{ $expereince->employer }}</h6>
                                                 <p class="m-1">
                                                     {{ $expereince->role }}
                                                 </p>
@@ -384,7 +409,7 @@ Preview CV
                                             @else
                                             <div class="mb-2"
                                                 style="margin-left: 47px;font-family: Poppins, sans-serif;color: black;font-size: 13px;">
-                                                <h5 class="font-bold">{{ $expereince->employer }}</h5>
+                                                <h6 class="font-boldn text-capitalize">{{ $expereince->employer }}</h6>
                                                 <p class="m-1">
                                                     {{ $expereince->role }}
                                                 </p>
@@ -422,9 +447,9 @@ Preview CV
                                             <div class="d-flex">
                                                 <i class="fa fa-circle fs-5 text-start d-inline-block"
                                                     style="color: var(--bs-yellow);width: 17px;margin-right: 24px; margin-top: 6px"></i>
-                                                <h4 class="d-inline-block font-bold text-uppercase">
+                                                <h5 class="d-inline-block font-bold text-uppercase">
                                                     Hobbies
-                                                </h4>
+                                                </h5>
                                             </div>
                                             <div class="mb-2"
                                                 style="margin-left: 47px;font-family: Poppins, sans-serif;color: black;font-size: 13px;">

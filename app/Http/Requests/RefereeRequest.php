@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class RefereeRequest extends FormRequest
 {
@@ -26,9 +27,11 @@ class RefereeRequest extends FormRequest
         return [
             'referee_name' => 'required|string',
             'referee_email' => 'required|email',
-            'referee_phone_number' => 'required|string',
+            'referee_phone_number' => 'nullable|regex:/^\+(?:[0-9]?){6,14}[0-9]{10}$/',
             'referee_address' => 'required|string',
-            'for_industry_type' => 'required|string',
+            'has_prefered_location' => 'required|string',
+            'referee_country' => ['required', 'string', Rule::exists('countries', 'id')],
+            'referee_state' => ['required', 'string', Rule::exists('states', 'id')],
         ];
     }
 }

@@ -25,7 +25,7 @@ class JobExperiecneRoleRequest extends FormRequest
     {
         return [
             'role'                          => 'required|string',
-            'other_employement_role'        => 'required_if:role,others',
+            'other_employment_role'        => 'required_if:role,others',
             'from_date'                     => 'required|date|before:to_date',
             'to_date'                       => 'nullable|date|after:from_date',
             'job_description'               => 'required|string',

@@ -91,7 +91,6 @@ Tertiary Institutions
                         </div>
                         @endif
 
-                        @if ($tertiary_education->tertiary_qualification_types_id)
                         <div class="form-group mb-3">
                             <x-tertiary-qualification-select-field :required="true" :selected="$tertiary_education->qualification_type" />
  
@@ -101,7 +100,7 @@ Tertiary Institutions
                                  </span>
                              @enderror
                         </div>
-                        @else
+
                         <div class="form-group mb-3" id="other_qualifiation_obtained-container">
                             <label class="form-label" for="other_qualifiation_obtained">Type of Qualification</label>
                             <input
@@ -118,9 +117,7 @@ Tertiary Institutions
                                 </span>
                             @enderror
                         </div>
-                        @endif
 
-                        @if ($tertiary_education->tertiary_course_types_id)
                         <div class="form-group mb-3">
                             <x-tertiary-course-type-select-field :required="true" :selected="$tertiary_education->tertiary_course_type"/>
  
@@ -130,7 +127,7 @@ Tertiary Institutions
                                  </span>
                              @enderror
                         </div>
-                        @else
+
                         <div class="form-group mb-3" id="other_course_type-container">
                             <label class="form-label" for="other_course_type">Course Type</label>
                             <input
@@ -147,11 +144,9 @@ Tertiary Institutions
                                 </span>
                             @enderror
                         </div>
-                        @endif
 
-                        @if ($tertiary_education->tertiary_courses_id)
                         <div class="form-group mb-3">
-                            <x-tertiary-course-select-field :required="true" :selecte="$tertiary_education->tertiary_course" />
+                            <x-tertiary-course-select-field :required="true" :selected="$tertiary_education->tertiary_course" />
  
                              @error('course')
                                  <span class="invalid-feedback" role="alert">
@@ -159,7 +154,7 @@ Tertiary Institutions
                                  </span>
                              @enderror
                         </div>
-                        @else
+
                         <div class="form-group mb-3" id="other_course-container">
                             <label class="form-label" for="other_course">Course of Study</label>
                             <input
@@ -176,9 +171,7 @@ Tertiary Institutions
                                 </span>
                             @enderror
                         </div>
-                        @endif
 
-                        @if ($tertiary_education->tertiary_courses_id)
                         <div class="form-group mb-3">
                             <x-tertiary-grade-select-field :required="true" :selected="$tertiary_education->qualification" />
  
@@ -188,7 +181,7 @@ Tertiary Institutions
                                  </span>
                              @enderror
                         </div>
-                        @else
+
                         <div class="form-group mb-3" id="other_grade-container">
                             <label class="form-label" for="other_grade">Grade of Qualification</label>
                             <input
@@ -205,7 +198,6 @@ Tertiary Institutions
                                 </span>
                             @enderror
                         </div>
-                        @endif
                         
 
                         <div class="text-warning font-bold mb-3">
@@ -261,7 +253,7 @@ Tertiary Institutions
                         <div class="d-flex mt-4" >
                             <a href="{{ route('cv.tertiary-institution', $cv['uuid']) }}" id="previousBtn" class="submit__btn btn btn-light btn-outline-secondary px-4 font-bold mx-2">Prev</a>
                             <a
-                                href="{{ $cv->professional_qualification == 1 ? route('cv.professional-qualification', $cv['uuid']) : route('cv.employement_history', [$cv['uuid'], $cv->employment_status ? 'current' : 'previous']) }}"
+                                href="{{ $cv->professional_qualification == 1 ? route('cv.professional-qualification', $cv['uuid']) : route('cv.employment_history', [$cv['uuid'], $cv->employment_status ? 'current' : 'previous']) }}"
                                 id="nextForm"
                                 class="submit__btn btn btn-warning px-4 font-bold mx-2 @if(!$cv->tertiary_educations->count()) disabled-link disabled @endif"
                             >
@@ -300,43 +292,48 @@ Tertiary Institutions
             const tertiary_education = {!! $tertiary_education !!};
 
             if(tertiary_education.tertiary_institutions_id == null) {
+                var otherOption = new Option('Others', 'others', true, true);
+                $('#select-type_of_institution').append(otherOption).trigger('change');
                 other_tertiary_institution.show(500)
-                $('#select-type_of_institution').val('others').change();
             } else {
                 other_tertiary_institution.hide(500)
             }
 
             if(tertiary_education.tertiary_types_id == null) {
+                var otherOption = new Option('Others', 'others', true, true);
+                $('#select-name_of_institution').append(otherOption).trigger('change');
                 other_tertiary_institution_type.show(500)
-                $("#select-name_of_institution").select2("val", "others");
-                // $('#select-name_of_institution').val('others').change();
             } else {
                 other_tertiary_institution_type.hide(500)
             }
 
             if(tertiary_education.tertiary_qualification_types_id == null) {
-                $('#select-qualification').val('others').change();
+                var otherOption = new Option('Others', 'others', true, true);
+                $('#select-qualification').append(otherOption).trigger('change');
                 other_qualifiation_obtained.show(500)
             } else {
                 other_qualifiation_obtained.hide(500)
             }
 
             if(tertiary_education.tertiary_course_types_id == null) {
-                $('#select-course_type').val('others').change();
+                var otherOption = new Option('Others', 'others', true, true);
+                $('#select-course_type').append(otherOption).trigger('change');
                 other_course_type.show(500)
             } else {
                 other_course_type.hide(500)
             }
 
             if(tertiary_education.tertiary_courses_id == null) {
-                $('#select-course').val('others').change();
+                var otherOption = new Option('Others', 'others', true, true);
+                $('#select-course').append(otherOption).trigger('change');
                 other_course.show(500)
             } else {
                 other_course.hide(500)
             }
 
             if(tertiary_education.tertiary_qualifications_id == null) {
-                $('#select-grade').val('others').change();
+                var otherOption = new Option('Others', 'others', true, true);
+                $('#select-grade').append(otherOption).trigger('change');
                 other_grade.show(500)
             } else {
                 other_grade.hide(500)

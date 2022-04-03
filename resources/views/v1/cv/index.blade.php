@@ -88,11 +88,11 @@ CV View
                     <div>
                         <p
                             style="color: black;font-weight: bold;font-family: Poppins, sans-serif;margin-bottom: 12px;font-size: 13px;">
-                            Current Employement History</p>
+                            Current employment History</p>
                     </div>
-                    <div class="htmlContents" data-link="{{ route('cv.employement_history', [$cv, 'current']) }}"
+                    <div class="htmlContents" data-link="{{ route('cv.employment_history', [$cv, 'current']) }}"
                         style="cursor:pointer; overflow: hidden">
-                        @include('v1.cv.partials.employement_history', [$cv, $type = 'current'])
+                        @include('v1.cv.partials.employment_history', [$cv, $type = 'current'])
                     </div>
                 </div>
                 @endif
@@ -101,11 +101,11 @@ CV View
                     <div>
                         <p
                             style="color: black;font-weight: bold;font-family: Poppins, sans-serif;margin-bottom: 12px;font-size: 13px;">
-                            Previous Employement History</p>
+                            Previous employment History</p>
                     </div>
-                    <div class="htmlContents" data-link="{{ route('cv.employement_history', [$cv, 'previous']) }}"
+                    <div class="htmlContents" data-link="{{ route('cv.employment_history', [$cv, 'previous']) }}"
                         style="cursor:pointer; overflow: hidden">
-                        @include('v1.cv.partials.employement_history', [$cv, $type = 'previous'])
+                        @include('v1.cv.partials.employment_history', [$cv, $type = 'previous'])
                     </div>
                 </div>
                 @endif
@@ -116,9 +116,9 @@ CV View
                             style="color: black;font-weight: bold;font-family: Poppins, sans-serif;margin-bottom: 12px;font-size: 13px;">
                             Professional Qualification</p>
                     </div>
-                    <div class="htmlContents" data-link="{{ route('cv.employement_role', [$cv, 1]) }}"
+                    <div class="htmlContents" data-link="{{ route('cv.employment_role', [$cv, 1]) }}"
                         style="cursor:pointer; overflow: hidden">
-                        @include('v1.cv.partials.employement_role', $cv)
+                        @include('v1.cv.partials.employment_role', $cv)
                     </div>
                 </div>
                 @endif
@@ -187,7 +187,7 @@ CV View
                         src="{{ asset('assets/img/clipboard-image.png') }}">
                 </div>
                 <div class="col-md-3" style="margin-bottom: 20px;"
-                    data-link="{{ route('cv.employement_history', [$cv, 'current']) }}">
+                    data-link="{{ route('cv.employment_history', [$cv, 'current']) }}">
                     <p
                         style="color: black;font-weight: bold;font-family: Poppins, sans-serif;margin-bottom: 12px;font-size: 13px;">
                         Tertiary Institution</p><img class="img-thumbnail img-fluid"
@@ -207,21 +207,21 @@ CV View
                         src="{{ asset('assets/img/clipboard-image.png') }}">
                 </div>
                 <div class="col-md-3" style="margin-bottom: 20px;"
-                    data-link="{{ route('cv.employement_history', [$cv, 'previous']) }}">
+                    data-link="{{ route('cv.employment_history', [$cv, 'previous']) }}">
                     <p
                         style="color: black;font-weight: bold;font-family: Poppins, sans-serif;margin-bottom: 12px;font-size: 13px;">
                         Your previous employment History</p><img class="img-thumbnail img-fluid"
                         src="{{ asset('assets/img/clipboard-image.png') }}">
                 </div>
                 <div class="col-md-3" style="margin-bottom: 20px;"
-                    data-link="{{ route('cv.employement_role', [$cv, 1]) }}">
+                    data-link="{{ route('cv.employment_role', [$cv, 1]) }}">
                     <p
                         style="color: black;font-weight: bold;font-family: Poppins, sans-serif;margin-bottom: 12px;font-size: 13px;">
                         Employment roles</p><img class="img-thumbnail img-fluid"
                         src="{{ asset('assets/img/clipboard-image.png') }}">
                 </div>
                 <div class="col-md-3" style="margin-bottom: 20px;"
-                    data-link="{{ route('cv.employement_history', [$cv, 'current']) }}">
+                    data-link="{{ route('cv.employment_history', [$cv, 'current']) }}">
                     <p
                         style="color: black;font-weight: bold;font-family: Poppins, sans-serif;margin-bottom: 12px;font-size: 13px;">
                         Current Employment roles<br></p><img class="img-thumbnail img-fluid"

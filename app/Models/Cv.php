@@ -70,6 +70,26 @@ class Cv extends Model
         return $this->hasMany(Referees::class, 'cv_id');
     }
 
+    public function most_preferred_country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class, 'most_preferred_country_id', 'id');
+    }
+
+    public function most_preferred_state(): BelongsTo
+    {
+        return $this->belongsTo(State::class, 'most_preferred_state_id', 'id');
+    }
+
+    public function most_preferred_industry(): BelongsTo
+    {
+        return $this->belongsTo(IndustrialSector::class, 'most_preferred_industry_id', 'id');
+    }
+
+    public function preferred_country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class, 'preferred_country_id', 'id');
+    }
+
     public function preferred_state(): BelongsTo
     {
         return $this->belongsTo(State::class, 'preferred_state_id', 'id');
@@ -80,6 +100,7 @@ class Cv extends Model
         return $this->belongsTo(IndustrialSector::class, 'preferred_industry_id', 'id');
     }
 
+
     public function title()
     {
         $current_role = $this->job_expereinces()->where('is_current', true)->first(); 
@@ -89,11 +110,11 @@ class Cv extends Model
         $previous_title = null;
 
         if($current_role) {
-            $current_title = $current_role->employement_roles_id ? $current_role->position->name : $current_role->other_employement_role;
+            $current_title = $current_role->employment_roles_id ? $current_role->position->name : $current_role->other_employment_role;
         }
 
         if($previous_role) {
-            $previous_title = $previous_role->employement_roles_id ? $previous_role->position->name : $previous_role->other_employement_role;
+            $previous_title = $previous_role->employment_roles_id ? $previous_role->position->name : $previous_role->other_employment_role;
         }
 
         

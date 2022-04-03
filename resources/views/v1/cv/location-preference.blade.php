@@ -27,25 +27,138 @@ Location Preference
                             <small class="font-bold text-warning">Please provide the following information</small>
                         </div>
 
+                        <div>
+                            <div class="text-warning font-bold mb-3">
+                                Most Prefered Preference
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <x-country-select-field
+                                    :required="true"
+                                    label="My Most Prefered Country for Employment"
+                                    fieldName="most_preferred_country"
+                                    class="preferred_country_first"
+                                    index="1"
+                                    :selected="$cv->most_preferred_country_id ? $cv->most_preferred_country : null"
+                                />
+                                    
+                                @error('most_preferred_country')
+                                    <span class="invalid-feedback" role="alert">
+                                    <small>{{ $message }}</small>
+                                    </span>
+                                @enderror
+                            </div>
+    
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="select-preferred_state_first">Most Preferred State</label>
+                                <select
+                                    class="form-select form-input preferred_state_first"
+                                    name="most_preferred_state"
+                                    id="select-preferred_state_first"
+                                    required
+                                >
+                                    @if ($cv->most_preferred_state_id)
+                                        <option value="{{ $cv->most_preferred_state->id }}" selected>{{ $cv->most_preferred_state->name }}</option>
+                                    @endif
+                                </select>
+                                    
+                                @error('most_preferred_state')
+                                    <span class="invalid-feedback" role="alert">
+                                        <small>{{ $message }}</small>
+                                    </span>
+                                @enderror
+                            </div>
+    
+                            <div class="form-group mb-3">
+                                <x-industry-sector-select-field
+                                    :required="true"
+                                    label="My Most Preferred Industry for Employment is"
+                                    fieldName="most_preferred_industry"
+                                    class="preferred_industry_first"
+                                    index="1"
+                                    :selected="$cv->most_preferred_industry_id ? $cv->most_preferred_industry : null"
+                                />
+    
+                                @error('most_preferred_industry')
+                                    <span class="invalid-feedback" role="alert">
+                                    <small>{{ $message }}</small>
+                                    </span>
+                                @enderror
+                            </div>
+    
+                            <div class="form-group mb-3" id="other_preferred_industry_first-container">
+                                <label class="form-label" for="other_preferred_industry_first">Specify other most preferred industry</label>
+                                <input
+                                    id="other_preferred_industry_first"
+                                    type="text"
+                                    class="form-control form-input input-round @error('other_preferred_industry_first') is-invalid @enderror"
+                                    name="other_preferred_industry_first"
+                                    value="{{ old('other_preferred_industry_first', $cv->other_most_preferred_industry) }}"
+                                    placeholder="Other Most Preferred Industry"
+                                >
+                                @error('other_preferred_industry_first')
+                                    <span class="invalid-feedback" role="alert">
+                                    <small>{{ $message }}</small>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <hr>
+                        
+                        <div class="text-warning font-bold mb-3">
+                            Prefered Preference
+                        </div>
+
                         <div class="form-group mb-3">
-                            <x-states-in-nigeria-select-field
+                            <x-country-select-field
                                 :required="true"
-                                label="My preferred location for employment is"
-                                fieldName="preferred_state"
+                                label="My Prefered Country for Employment"
+                                fieldName="preferred_country"
+                                class="preferred_country_second"
+                                index="2"
+                                :selected="$cv->preferred_country_id ? $cv->preferred_country : null"
+
                             />
+                                
+                            @error('preferred_country')
+                                <span class="invalid-feedback" role="alert">
+                                <small>{{ $message }}</small>
+                                </span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="select-preferred_state_second">Prefereed State</label>
+                            <select
+                                class="form-select form-input preferred_state_second"
+                                name="preferred_state"
+                                id="select-preferred_state_second"
+                                required
+                            >
+                                @if ($cv->preferred_state_id)
+                                    <option value="{{ $cv->preferred_state->id }}" selected>{{ $cv->preferred_state->name }}</option>
+                                @endif
+                            </select>
+                                
                             @error('preferred_state')
                                 <span class="invalid-feedback" role="alert">
                                 <small>{{ $message }}</small>
                                 </span>
                             @enderror
                         </div>
-                        
+
+
                         <div class="form-group mb-3">
                             <x-industry-sector-select-field
                                 :required="true"
-                                label="My preferred industry for employment is"
+                                label="My Preferred Industry for Employment is"
                                 fieldName="preferred_industry"
+                                class="preferred_industry_second"
+                                index="2"
+                                :selected="$cv->preferred_industry_id ? $cv->preferred_industry : null"
                             />
+
 
                             @error('preferred_industry')
                                 <span class="invalid-feedback" role="alert">
@@ -54,8 +167,25 @@ Location Preference
                             @enderror
                         </div>
 
+                        <div class="form-group mb-3" id="other_preferred_industry_second-container">
+                            <label class="form-label" for="other_preferred_industry_second">Specify other most preferred industry</label>
+                            <input
+                                id="other_preferred_industry_second"
+                                type="text"
+                                class="form-control form-input input-round @error('other_preferred_industry_second') is-invalid @enderror"
+                                name="other_preferred_industry_second"
+                                value="{{ old('other_preferred_industry_second', $cv->other_preferred_industry) }}"
+                                placeholder="Other Preferred Industry"
+                            >
+                            @error('other_preferred_industry_second')
+                                <span class="invalid-feedback" role="alert">
+                                <small>{{ $message }}</small>
+                                </span>
+                            @enderror
+                        </div>
+
                         <div class="form-group mb-3">
-                            <label class="form-label">Do you have any hobbies?</label><br>
+                            <label class="form-label">Do you want to list any hobbies or provide any additional information?</label><br>
                             <div class="form-check form-check-inline">
                                 <input
                                     class="form-check-input"
@@ -64,7 +194,7 @@ Location Preference
                                     id="has_hobbies"
                                     value="1"
                                     required
-                                    {{ old('hobbies', $cv->has_hobbies) === true ? 'checked' : '' }}
+                                    {{ old('hobbies', $cv->has_hobbies) == true ? 'checked' : '' }}
                                 >
                                 <label class="form-check-label" for="has_hobbies">Yes</label>
                             </div>
@@ -75,7 +205,7 @@ Location Preference
                                     name="hobbies"
                                     id="not_has_hobbies"
                                     value="0"
-                                    {{ old('hobbies', $cv->has_hobbies) === false ? 'checked' : '' }}
+                                    {{ old('hobbies', $cv->has_hobbies) == false ? 'checked' : '' }}
                                 >
                                 <label class="form-check-label" for="not_has_hobbies">No</label>
                             </div>
@@ -97,37 +227,131 @@ Location Preference
     <script>
         $(document).ready(function () {
 
+            const other_preferred_industry_first = $('#other_preferred_industry_first-container');
+            const other_preferred_industry_second = $('#other_preferred_industry_second-container');
             const addMore = $('#addMore');
             const updateData = $('#update');
 
+            other_preferred_industry_first.hide()
+            other_preferred_industry_second.hide()
             updateData.hide()
 
-            $('.edit-referee-data').click(function(e) {
-                updateData.show(500)
-                addMore.hide(500)
-              
-                const data = $(this).data('referee');
-                const cv = $(this).data('cv');
-                const form_action = '/cv/'+cv.uuid+'/referees/'+data.id
+            var country_id_first = '';
+            var country_id_second = '';
 
-                if(confirm('Changes you made may not be saved')) {
-                    handleUpdateData(data);
-                }
-
-                function handleUpdateData(data) {
-                    $('#referee_form').attr('action', form_action);
-                    $('#referee_name').val(data.name);
-                    $('#referee_phone_number').val(data.phone);
-                    $('#referee_address').val(data.address);
-                    if(data.for_industry_type == 1) {
-                        $('#for_industry_type').prop('checked', true);
-                    } else {
-                        $('#not_for_industry_type').prop('checked', true);
-                    }
-                };
+            $('.preferred_country_first').on('change', function () {
+                country_id_first = this.value;
+                $(".preferred_state_first").html('');
+                fetchMostPreferedStates(country_id_first);
             });
 
-            
+            window.statesMap = [];
+
+            function fetchMostPreferedStates(country) {
+                $('.preferred_state_first').select2({
+                    allowClear: true,
+                    placeholder: 'Select and begin typing',
+                    ajax: {
+                        url: '/api/country/' + country + '/fetch-states',
+                        delay: 250,
+                        cache: true,
+                        data: function (params) {
+                            return {
+                                search: params.term,
+                            }
+                        },
+                        processResults: function (res) {
+                            return {
+                                results: res.map(function (state) {
+                                    window.statesMap[state.id] = state
+                                    return {
+                                        id: state.id,
+                                        text: state.name,
+                                    }
+                                })
+                            }
+                        },
+                    }
+                });
+            }
+
+            $('.preferred_state_first').select2();
+
+            $('.preferred_country_second').on('change', function () {
+                country_id_first = this.value;
+                $(".preferred_state_second").html('');
+                fetchPreferedStates(country_id_first);
+            });
+
+            window.prefStatesMap = [];
+
+            function fetchPreferedStates(country) {
+                $('.preferred_state_second').select2({
+                    allowClear: true,
+                    placeholder: 'Select and begin typing',
+                    ajax: {
+                        url: '/api/country/' + country + '/fetch-states',
+                        delay: 250,
+                        cache: true,
+                        data: function (params) {
+                            return {
+                                search: params.term,
+                            }
+                        },
+                        processResults: function (res) {
+                            return {
+                                results: res.map(function (state) {
+                                    window.prefStatesMap[state.id] = state
+                                    return {
+                                        id: state.id,
+                                        text: state.name,
+                                    }
+                                })
+                            }
+                        },
+                    }
+                });
+            }
+
+            $('.preferred_state_second').select2();
+
+            $('.preferred_industry_first').on('change', function () {
+                var sector = this.value;
+                if(sector === 'others') {
+                    other_preferred_industry_first.show(500)
+                } else {
+                    other_preferred_industry_first.hide(500)
+                }
+            });
+
+            const cv = {!! $cv !!};
+
+            if(cv.most_preferred_industry_id == null) {
+                var otherOption = new Option('Others', 'others', true, true);
+                $('.preferred_industry_first').append(otherOption).trigger('change');
+                other_preferred_industry_first.show(500)
+            } else {
+                other_preferred_industry_first.hide(500)
+            }
+
+            if(cv.preferred_industry_id == null) {
+                var otherOption = new Option('Others', 'others', true, true);
+                $('.preferred_industry_second').append(otherOption).trigger('change');
+                other_preferred_industry_second.show(500)
+            } else {
+                other_preferred_industry_second.hide(500)
+            }
+
+
+            $('.preferred_industry_second').on('change', function () {
+                var sector = this.value;
+                if(sector === 'others') {
+                    other_preferred_industry_second.show(500)
+                } else {
+                    other_preferred_industry_second.hide(500)
+                }
+            });
+
             $('#nextForm').click(function(e) {
                 var href = $(this).attr('href');
                 e.preventDefault();

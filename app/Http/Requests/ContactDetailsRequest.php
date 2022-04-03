@@ -27,9 +27,17 @@ class ContactDetailsRequest extends FormRequest
             'town' => 'required|string',
             'country' => 'required|string',
             'state' => 'required|string',
-            'mobile_phone' => 'nullable|string',
-            'home_phone' => 'nullable|string|required_if:mobile_phone,null',
+            'mobile_phone' => 'nullable|regex:/^\+(?:[0-9]?){6,14}[0-9]{10}$/',
+            'home_phone' => 'required_if:mobile_phone,null|nullable|regex:/^\+(?:[0-9]?){6,14}[0-9]{10}$/',
             'email' => 'required|email',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'mobile_phone' => 'Mobile phone number is requird and must be valid',
+            'home_phone' => 'Home phone number is requird when mobile phone number is empty and must be valid',
         ];
     }
 }

@@ -66,7 +66,7 @@
                 </div>
 
                 <div class="form-group mb-3">
-                    <label class="form-label" for="employment_date">Employement Date</label>
+                    <label class="form-label" for="employment_date">employment Date</label>
                     <input
                         id="employment_date"
                         type="date"

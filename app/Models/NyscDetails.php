@@ -21,6 +21,11 @@ class NyscDetails extends Model
         return $this->belongsTo(Cv::class);
     }
 
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class);
+    }
+
     public function state(): BelongsTo
     {
         return $this->belongsTo(State::class);

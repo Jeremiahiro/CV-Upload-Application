@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class SecondaryEducationRequest extends FormRequest
+class UpdateSecondaryEducationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,7 +29,7 @@ class SecondaryEducationRequest extends FormRequest
             'name'                          => 'required|string',
             'start_date'                    => 'required|date|before:end_date',
             'end_date'                      => 'nullable|date|after:start_date',
-            'qualification'                 => 'required|string',
+            'qualification'                 => 'nullable|string',
             'other_qualifiation_obtained'   => 'required_if:qualification,others',
             'tertiary_institution'          => 'nullable|string',
             'has_more'                      => 'nullable|string',
@@ -48,5 +48,4 @@ class SecondaryEducationRequest extends FormRequest
             'subject.*.subject_id' => 'Check for duplicate subject',
         ];
     }
-
 }

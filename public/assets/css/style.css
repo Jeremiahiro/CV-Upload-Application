@@ -14,12 +14,17 @@ body{
     font-weight: bold;
 }
 
-.form-input {
+.form-input, .iti {
     height: 40px;
+    width: 100%;
 }
 
 .select2-container--default .select2-selection--single {
     height: 40px !important;
+}
+
+.select2-container {
+    width: 100% !important;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {

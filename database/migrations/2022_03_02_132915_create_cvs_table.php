@@ -32,16 +32,26 @@ return new class extends Migration
             $table->string('status')->default(CvStatus::active());
             $table->string('preferred_employment_industry')->nullable();
             $table->string('no_of_secondary_school')->nullable();
+            
             $table->boolean('tertiary_institution')->nullable();
             $table->boolean('has_hobbies')->nullable();
             $table->boolean('professional_qualification')->nullable();
             $table->boolean('completed_nysc')->nullable();
+            $table->boolean('has_prefered_location')->default(false);
             $table->boolean('location_preference')->nullable();
+            $table->boolean('employment_status')->nullable();
+
+            $table->foreignId('most_preferred_country_id')->nullable()->constrained('countries');
+            $table->foreignId('most_preferred_state_id')->nullable()->constrained('states');
+            $table->foreignId('most_preferred_industry_id')->nullable()->constrained('industrial_sectors');
+            $table->string('other_most_preferred_industry')->nullable();
+
+            $table->foreignId('preferred_country_id')->nullable()->constrained('countries');
             $table->foreignId('preferred_state_id')->nullable()->constrained('states');
             $table->foreignId('preferred_industry_id')->nullable()->constrained('industrial_sectors');
-            $table->boolean('employment_status')->nullable();
+            $table->string('other_preferred_industry')->nullable();
+
             $table->foreignId('user_id')->nullable()->constrained();
-            $table->foreignId('preferred_employment_city')->nullable()->constrained('cities');
             $table->foreignId('country_id')->nullable()->constrained();
             $table->foreignId('state_id')->nullable()->constrained();
             $table->foreignId('city_id')->nullable()->constrained();

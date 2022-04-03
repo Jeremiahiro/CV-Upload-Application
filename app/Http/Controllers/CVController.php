@@ -13,6 +13,7 @@ use App\Http\Requests\ProfessionalQualificationsRequest;
 use App\Http\Requests\RefereeRequest;
 use App\Http\Requests\SecondaryEducationRequest;
 use App\Http\Requests\TertiaryInstitutionRequest;
+use App\Http\Requests\UpdateSecondaryEducationRequest;
 use App\Models\Cv;
 use App\Models\JobExperience;
 use App\Models\JobExperienceRoles;
@@ -175,12 +176,11 @@ class CVController extends Controller
      * @param  \App\Models\Cv  $cv
      * 
     */
-    public function update_secondary_education(SecondaryEducationRequest $request, Cv $cv, SecondaryEducation $secondary_education) 
+    public function update_secondary_education(UpdateSecondaryEducationRequest $request, Cv $cv, SecondaryEducation $secondary_education) 
     {
         if(!$this->cvServices->handle_update_secondary_education($request, $cv, $secondary_education)){
             return back()->with('error', 'An error occured! Refresh and try again');
         }
-
         return redirect()->route('cv.secondary-education', $cv['uuid']);
     }
 
@@ -276,8 +276,8 @@ class CVController extends Controller
     */
     public function professional_qualification(Cv $cv) 
     {
-        $professional_qualifications = $this->otherServices->get_professional_qualifications($cv);
-        return view('v1.cv.professional-qualification', compact(['cv', 'professional_qualifications']));
+        $qualification = $this->otherServices->get_professional_qualifications($cv);
+        return view('v1.cv.professional_qualification.create', compact(['cv', 'qualification']));
     }
     
     /**
@@ -294,6 +294,11 @@ class CVController extends Controller
         }
 
         return redirect()->back()->with('success', 'Operation Successful');
+    }
+
+    public function edit_professional_qualification(Cv $cv, Qualifications $qualification) 
+    {
+        return view('v1.cv.professional_qualification.edit', compact(['cv', 'qualification']));
     }
 
     /**
@@ -351,137 +356,147 @@ class CVController extends Controller
         }
 
         $type = $cv->employment_status ? 'current' : 'previous';
-        return redirect()->route('cv.employement_history', [$cv, $type]);
+        return redirect()->route('cv.employment_history', [$cv, $type]);
     }
 
     /**
-     * Display view for employement history
+     * Display view for employment history
      * @param  \App\Models\Cv  $cv
      * 
     */
-    public function employement_history(Cv $cv, $type) 
+    public function employment_history(Cv $cv, $type) 
     {
         $previous_experiecne = $this->otherServices->get_previous_experiecne($cv);
-
-        return view('v1.cv.employment-history', compact(['cv', 'previous_experiecne', 'type']));
+        return view('v1.cv.employment_history.create', compact(['cv', 'previous_experiecne', 'type']));
     }
     
     /**
-     * Create for employement history
+     * Create for employment history
      * 
      * @param  \App\Http\Requests\ProfessionalQualificationsRequest  $request
      * @param  \App\Models\Cv $cv
      * 
     */
-    public function create_employement_history(JobExperienceRequest $request, Cv $cv) 
+    public function create_employment_history(JobExperienceRequest $request, Cv $cv) 
     {
         if(!$experience = $this->cvServices->handle_create_job_experience($request, $cv)){
             return back()->with('error', 'An error occured! Refresh and try again');
         }
 
-        if($experience->is_current == 'current') {
+        if($request->have_prior_role != '1') {
             $type = 'previous';
-            return redirect()->route('cv.employement_history', [$cv, $type]);
+            return redirect()->route('cv.employment_history', [$cv, $type]);
         }
 
-        return redirect()->route('cv.employement_role', [$cv['uuid'], $experience['id']]);
+        return redirect()->route('cv.employment_role', [$cv['uuid'], $experience['id']]);
+    }
+
+    public function edit_employment_history(CV $cv, JobExperience $employment, $type) 
+    {
+        return view('v1.cv.employment_history.edit', compact(['cv', 'employment', 'type']));
     }
 
     /**
-     * Update for employement history
+     * Update for employment history
      * 
      * @param  \App\Http\Requests\JobExperienceRequest  $request
-     * @param  \App\Models\JobExperience  $employement
+     * @param  \App\Models\JobExperience  $employment
      * @param  \App\Models\CV  $cv
      * 
     */
-    public function update_employement_history(JobExperienceRequest $request, CV $cv, JobExperience $employement) 
+    public function update_employment_history(JobExperienceRequest $request, CV $cv, JobExperience $employment) 
     {
-        if(!$this->cvServices->handle_update_job_experience($request, $cv, $employement)){
+        if(!$this->cvServices->handle_update_job_experience($request, $cv, $employment)){
             return back()->with('error', 'An error occured! Refresh and try again');
         }
 
-        if($employement->is_current == 'current') {
+        if($request->have_prior_role != '1') {
             $type = 'previous';
-            return redirect()->route('cv.employement_history', [$cv, $type]);
+            return redirect()->route('cv.employment_history', [$cv, $type]);
         }
 
         return redirect()->back()->with('success', 'Operation Successful');
     }
         
     /**
-     * Delete for employement history
+     * Delete for employment history
      * 
      * @param  \App\Models\Cv  $cv
-     * @param  \App\Models\JobExperience  $employement
+     * @param  \App\Models\JobExperience  $employment
      * 
     */
-    public function delete_employement_history(Cv $cv, JobExperience $employement) 
+    public function delete_employment_history(Cv $cv, JobExperience $employment) 
     {
-        foreach ($employement->roles as $key => $role) {
+        foreach ($employment->roles as $key => $role) {
             $role->delete();
         }
-        if(!$employement->delete()) {
+        if(!$employment->delete()) {
             return redirect()->back()->with('success', 'OOPS Something went wrong');
         }
         return redirect()->back()->with('success', 'Operation Successful');
     }
 
     /**
-     * Display view for employement role
+     * Display view for employment role
      * @param  \App\Models\Cv  $cv
-     * @param  \App\Models\JobExperience  $employement
+     * @param  \App\Models\JobExperience  $employment
      * 
     */
-    public function employement_role(Cv $cv, JobExperience $employement) 
+    public function employment_role(Cv $cv, JobExperience $employment) 
     {
-        $roles = $this->otherServices->get_employment_roles($employement);
-        return view('v1.cv.employment-role', compact(['cv', 'employement', 'roles']));
+        $roles = $this->otherServices->get_employment_roles($employment);
+        return view('v1.cv.employment_history.roles.create', compact(['cv', 'employment', 'roles']));
     }
 
     
     /**
-     * Create for employement role
+     * Create for employment role
      * @param  \App\Models\Cv  $cv
-     * @param  \App\Models\JobExperience  $employement
+     * @param  \App\Models\JobExperience  $employment
      * @param  \App\Http\Requests\JobExperiecneRoleRequest  $request
      * 
     */
-    public function create_employement_role(JobExperiecneRoleRequest $request, Cv $cv, JobExperience $employement) 
+    public function create_employment_role(JobExperiecneRoleRequest $request, Cv $cv, JobExperience $employment) 
     {
-        if(!$this->cvServices->handle_create_employement_role($request, $employement)){
+        if(!$this->cvServices->handle_create_employment_role($request, $employment)){
             return redirect()->back()->with('success', 'OOPS Something went wrong');
         }
 
-        if($employement->roles->count() != $employement->no_of_positions) {
+        if($employment->roles->count() != $employment->no_of_positions) {
             return redirect()->back()->with('success', 'Operation Successful');
         }
         return redirect()->route('cv.referee', $cv['uuid']);
 
     }
 
+    public function edit_employment_role(CV $cv, JobExperience $employment, JobExperienceRoles $role) 
+    {
+        return view('v1.cv.employment_history.roles.edit', compact(['cv', 'employment', 'role']));
+    }
+
+
     /**
-     * Update for employement role
+     * Update for employment role
      * @param  \App\Models\Cv $cv
-     * @param  \App\Models\JobExperience  $employement
+     * @param  \App\Models\JobExperience  $employment
      * 
     */
-    public function update_employement_role(Request $request, Cv $cv, JobExperience $employement, JobExperienceRoles $role) 
+    public function update_employment_role(JobExperiecneRoleRequest $request, Cv $cv, JobExperience $employment, JobExperienceRoles $role) 
     {
-        if(!$this->cvServices->handle_update_employement_role($request, $employement, $role)){
+        if(!$this->cvServices->handle_update_employment_role($request, $employment, $role)){
             return redirect()->back()->with('success', 'OOPS Something went wrong');
         }
         return redirect()->back()->with('success', 'Operation Successful');
     }
 
     /**
-     * Delete for employement role
+     * Delete for employment role
      * 
      * @param  \App\Models\Cv $cv
-     * @param  \App\Models\JobExperience  $employement
+     * @param  \App\Models\JobExperience  $employment
      * 
     */
-    public function delete_employement_role(Cv $cv, JobExperienceRoles $role) 
+    public function delete_employment_role(Cv $cv, JobExperienceRoles $role) 
     {
         if(!$role->delete()) {
             return redirect()->back()->with('success', 'OOPS Something went wrong');
@@ -497,8 +512,7 @@ class CVController extends Controller
     public function referee(Cv $cv) 
     {
         $referees = $this->otherServices->get_referee($cv);
-
-        return view('v1.cv.referee', compact(['cv', 'referees']));
+        return view('v1.cv.referee.create', compact(['cv', 'referees']));
     }
     
     /**
@@ -515,6 +529,11 @@ class CVController extends Controller
         }
 
         return redirect()->back()->with('success', 'Operation Successful');
+    }
+
+    public function edit_referee(Cv $cv, Referees $referee) 
+    {
+        return view('v1.cv.referee.edit', compact(['cv', 'referee']));
     }
 
     /**
@@ -567,11 +586,12 @@ class CVController extends Controller
     */
     public function update_location_preference(LocationPreferenceRequest $request, Cv $cv) 
     {
+
         if(!$this->cvServices->handle_update_location_preference($request, $cv)){
             return back()->with('error', 'An error occured! Refresh and try again');
         }
 
-        if($cv->has_hobbies == true) {
+        if($cv->has_hobbies == 1) {
             return redirect()->route('cv.hobbies', $cv['uuid']);
         }
         return redirect()->route('cv.show', $cv['uuid']);

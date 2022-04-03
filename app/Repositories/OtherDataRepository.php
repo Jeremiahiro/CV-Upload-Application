@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Country;
 use App\Models\Cv;
-use App\Models\EmployementRole;
+use App\Models\EmploymentRole;
 use App\Models\IndustrialSector;
 use App\Models\JobExperience;
 use App\Models\JobExperienceRoles;
@@ -24,7 +24,6 @@ use App\Models\TertiaryInstitution;
 use App\Models\TertiaryTypes;
 use App\Models\TertiaryQualifications;
 use App\Models\TertiaryQualificationTypes;
-use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
@@ -68,7 +67,7 @@ class OtherDataRepository
     public function get_secondary_qualifications(Collection $data)
     {
         $response = SecondaryQualifications::search($data)->orderBy('name', 'asc')->get(['id', 'name'])->toArray();
-        return $this->with_others($response);
+        return $this->with_others_and_none($response);
     }
 
     public function get_secondary_subjects(Collection $data)
@@ -157,7 +156,7 @@ class OtherDataRepository
 
     public function get_all_employment_roles(Collection $data)
     {
-        $response = EmployementRole::search($data)->get(['id', 'name'])->toArray();
+        $response = EmploymentRole::search($data)->get(['id', 'name'])->toArray();
         return $this->with_others($response);
     }
 
@@ -172,9 +171,9 @@ class OtherDataRepository
         return JobExperience::with(['roles', 'sector'])->where('cv_id', $cv['id'])->get();
     }
 
-    public function get_employment_roles(JobExperience $employement)
+    public function get_employment_roles(JobExperience $employment)
     {
-        return JobExperienceRoles::where('job_experience_id', $employement['id'])->get();
+        return JobExperienceRoles::where('job_experience_id', $employment['id'])->get();
     }
 
     public function get_referee(Cv $cv)
@@ -191,6 +190,18 @@ class OtherDataRepository
             ];
     
             return collect(array_merge($data, ['-1' => $others]));
+        } else {
+            return collect($data);
+        }
+    }
+
+    public function with_others_and_none($data): Collection
+    {
+        if($data) {
+            $others = ['id' => 'others', 'name' => 'Others'];
+            $none = ['id' => 'none', 'name' => 'None'];
+    
+            return collect(array_merge($data, ['-1' => $others, $none]));
         } else {
             return collect($data);
         }
