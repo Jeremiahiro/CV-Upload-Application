@@ -193,7 +193,7 @@
     #profile_photo-close {
         position: absolute;
         top: 2px;
-        right: 10px;
+        right: 0;
     }
 
  </style>

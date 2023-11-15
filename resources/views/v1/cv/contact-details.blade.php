@@ -93,6 +93,7 @@ Contact Details
                         </div>
 
                         <div class="form-group mb-3">
+                            {{$cv->mobile_phone}}
                             <label class="form-label" for="mobile_phone">Mobile Phone Number</label>
                             <x-phone-number-input
                                 fieldName="mobile_phone"

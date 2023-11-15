@@ -118,6 +118,7 @@ Secondary Education
                                     name="start_date"
                                     value="{{ old('start_date') }}"
                                     max="{{ now()->toDateString('M-Y') }}"
+                                    placeholder=""11-02
                                     required
                                 >
                                 
@@ -138,6 +139,9 @@ Secondary Education
                                     max="{{ now()->toDateString('M-Y') }}"
                                     required
                                 >
+
+                                <input type="text" class="form-control" name="datepicker" id="datepicker" />
+
                                 
                                 @error('end_date')
                                     <span class="invalid-feedback" role="alert">
@@ -297,6 +301,7 @@ Secondary Education
 
 @endsection
 @push('javascript')
+
     <script>
         $(document).ready(function () {
 

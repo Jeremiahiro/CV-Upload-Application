@@ -27,21 +27,28 @@
         var phoneInputField = "#phone-"+{{ $index }};
         var phoneInputField = document.querySelector(phoneInputField);
         var phoneInput = window.intlTelInput(phoneInputField, {
-            // initialCountry: "auto",
-            preferredCountries: ["us", "co", "ng"],
+            initialCountry: "auto",
+            formatOnDisplay: false,
+            // preferredCountries: ["us", "co", "ng"],
             // geoIpLookup: getIp,
+            geoIpLookup: function(success, failure) {
+                $.get("https://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+                  var countryCode = (resp && resp.country) ? resp.country : "us";
+                  success(countryCode);
+                });
+              },
             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
         });
 
-        // function getIp(callback) {
-        //     fetch('https://ipinfo.io/json?token=<your token>', { headers: { 'Accept': 'application/json' }})
-        //     .then((resp) => resp.json())
-        //     .catch(() => {
-        //         return {
-        //             country: 'us',
-        //         };
-        //     })
-        //     .then((resp) => callback(resp.country));
-        // }
+        function getIp(callback) {
+            fetch('https://ipinfo.io/json?token=<your token>', { headers: { 'Accept': 'application/json' }})
+            .then((resp) => resp.json())
+            .catch(() => {
+                return {
+                    country: 'us',
+                };
+            })
+            .then((resp) => callback(resp.country));
+        }
     </script>
 @endpush
